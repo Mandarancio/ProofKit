@@ -2,13 +2,33 @@ import LogicKit
 
 
 
-class Nat{
+public struct Nat: Term{
+
+  fileprivate let value: Int
+
+  private init(_ val: Int) {
+    self.value = val
+  }
+
+  public func getValue() -> Int{
+    return self.value
+  }
 
   //Generator
-  static let zero = Value("0")
+  static public func zero() -> Nat{
+    return Nat(0)
+  }
 
-  static func succ(x: Term) -> Map {
-    return ["succ": x]
+  static public func succ(x: Nat) -> Nat {
+    return Nat(x.getValue()+1)
+  }
+
+  public func equals(_ other: Term) -> Bool {
+      if let rhs = (other as? Nat) {
+          return rhs.value == self.value
+      }
+
+      return false
   }
 
 }
