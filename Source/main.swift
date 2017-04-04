@@ -3,5 +3,4 @@ print(greet)
 
 let test = Nat.succ(x:Nat.zero())
 
-
-print(test)
+print(test.is_even())
