@@ -3,14 +3,28 @@ import LogicKit
 
 public struct Nat{
   //Generator
-  static public func zero() -> Value<Int>{
-    return Value(0)
+  static public func zero() -> Term{
+    return Value<Int>(0)
   }
 
-  static public func succ(x: Term) -> Map {
-    return ["succ": x]
+  static public func succ(x: Term) -> Term {
+    return Map(["succ": x])
   }
 
+  static public func n(_ x: Int) -> Term {
+  	if x==0{
+  		return Nat.zero()
+  	}
+  	
+    var t = Nat.zero()
+	for _ in 1..<x+1 {
+		t = Nat.succ(x: t)
+	}
+	return t
+  	
+  }
+
+  
   //Modifieur
   static  public func is_even(x: Term) -> Goal{
     return (x === Nat.zero()) ||
