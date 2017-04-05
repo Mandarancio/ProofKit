@@ -12,12 +12,26 @@ public struct Nat{
   }
 
   //Modifieur
-  static  public  func is_even(y: Term) -> Goal{
-    return (y === Nat.zero()) ||
-            delayed(fresh {x in
-              y === Nat.succ(x:Nat.succ(x:x)) &&
-              Nat.is_even(y:x)
+  static  public func is_even(x: Term) -> Goal{
+    return (x === Nat.zero()) ||
+            delayed(fresh {y in
+              x === Nat.succ(x:Nat.succ(x:y)) &&
+              Nat.is_even(x:y)
             })
   }
 
+  static public func is_nat(x: Term) -> Goal{
+  	return (x === Nat.zero() || delayed(fresh {y in x === Nat.succ(x:y) && Nat.is_nat(x:y)}))
+  }
+
+  static public func count(_ x: Term) -> Int{
+ 	if x.equals(Nat.zero()){
+ 		return 0
+ 	}
+ 	if let map = (x as? Map){
+ 		return 1+Nat.count(map["succ"]!)
+ 	}
+ 	return -1
+  }
+  
 }
