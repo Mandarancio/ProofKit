@@ -1,3 +1,3 @@
 #! /bin/sh
-swift build
-.build/debug/ProofKit
+./build.sh
+./run.sh
