@@ -1,5 +1,24 @@
 import LogicKit
 
+fileprivate func add_zero_left(_ x: Term,_ lhs: Term,_ rhs: Term) -> Goal {
+   return Nat.is_nat(lhs) && rhs === Nat.zero()
+}
+
+fileprivate func add_zero_right(_ x: Term,_ lhs: Term,_ rhs: Term) -> Goal {
+   return x === lhs
+}
+
+fileprivate func add_succ_left(_ x: Term,_ lhs: Term,_ rhs: Term) -> Goal {
+   return Nat.is_nat(lhs) && delayed(fresh {y in rhs === Nat.succ(x: y)})
+}
+
+fileprivate func add_succ_right(_ x: Term,_ lhs: Term,_ rhs: Term) -> Goal {
+   return delayed(fresh {
+             y in rhs === Nat.succ(x: y) && delayed(fresh {
+                   z in x === Nat.succ(x: z) && operation(z,lhs,y, Nat.Add.axioms)
+               })
+             })
+}
 
 public struct Nat{
   //Generator
@@ -23,7 +42,6 @@ public struct Nat{
     return t
   }
 
-
   //Modifieur
   static  public func is_even(x: Term) -> Goal{
     return (x === Nat.zero()) ||
@@ -33,27 +51,17 @@ public struct Nat{
             })
   }
 
-  //operation
-  // + * - / %
-  // struct add {
-  // }
-  // Add
-  // Nat + Nat -> Nat
-  // x+0=x
-  // Term + nat.zero() = x
-  // x+s(y)=s(x+y)
-
-  // y = lhs+rhs
-  // nat = nat + nat
-  // if rhs == 0 => y === lhs ?
-  // else y ===
-  static public func add(_ y: Term,_ lhs: Term,_ rhs: Term) -> Goal{
-      return Nat.is_nat(y) && Nat.is_nat(lhs) && Nat.is_nat(rhs) &&
-        ((rhs === Nat.zero() && y === lhs) ||
-        delayed(fresh {x in y === Nat.succ(x:x) && delayed(fresh {
-          z in rhs === Nat.succ(x:z) && Nat.add(x,lhs,z)
-        })
-      }))
+  struct Add {
+    public static let axioms : [[String: (Term, Term, Term) -> Goal]] = [
+      [
+        "left" : add_zero_left,
+        "right": add_zero_right
+      ],
+      [
+        "left" : add_succ_left,
+        "right": add_succ_right
+      ]
+    ]
   }
 
   static public func is_nat(_ x: Term) -> Goal{
@@ -71,4 +79,12 @@ public struct Nat{
    	return -1
   }
 
+}
+
+public func operation(_ z: Term, _ lhs: Term, _ rhs: Term,_ axioms:[[String: (Term, Term, Term) -> Goal]]) -> Goal{
+  var g = (axioms[0]["left"]!(z,lhs,rhs) && axioms[0]["right"]!(z,lhs,rhs))
+  for i in 1...axioms.count-1 {
+    g = g || (axioms[i]["left"]!(z,lhs,rhs) && axioms[i]["right"]!(z,lhs,rhs))
+  }
+  return g
 }
