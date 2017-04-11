@@ -16,3 +16,5 @@ for substitution in solve (goal) {
        }
      }
 }
+
+test_petrinets()
