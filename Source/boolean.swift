@@ -1,4 +1,4 @@
-
+import LogicKit
 public struct Boolean {
     public static func True() -> Term{
       return Value<Bool>(true)
