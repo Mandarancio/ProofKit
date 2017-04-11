@@ -17,6 +17,10 @@ public struct Boolean {
     public static func toBoolean(_ x: Bool) -> Term{
       return Value<Bool>(x)
     }
+
+    public static func isTrue(_ x: Term) -> Goal {
+      
+    }
 }
 
 public  let axioms : [String: [Rule]] = [
