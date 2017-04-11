@@ -5,6 +5,20 @@ public enum Direction {
   case left
 }
 
+public struct Boolean {
+    public static func True() -> Term{
+      return Value<Bool>(true)
+    }
+
+    public static func False() -> Term{
+      return Value<Bool>(false)
+    }
+
+    public static func toBoolean(_ x: Bool) -> Term{
+      return Value<Bool>(x)
+    }
+}
+
 public  let axioms : [String: [Rule]] = [
   "N+": [Rule(NatAdd.n(Variable(named: "x"), Value(0)),
               Variable(named: "x")),
@@ -54,6 +68,11 @@ public struct NatAdd{
     let o =  Operator.n(l, r, NatAdd.name)
     return o
   }
+}
+
+
+public func subst(_ t : Term, _ x : Variable, _ st : Term, _ r : Term) -> Goal{
+  return (t===r)
 }
 
 public struct Rule {
