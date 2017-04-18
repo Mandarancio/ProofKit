@@ -1,16 +1,14 @@
 import LogicKit
 
-public enum Direction {
-  case right
-  case left
-}
 
+//// namespace containing all the operations to prove an axiom
 struct Proof {
   public func subst(_ t: Term, _ x: Term, _ st: Term, _ r: Term)-> Goal{
     return x === st && r === t
   }
 }
 
+//// This base class contains all needed information to define a datatype
 public class ADT{
   public let name : String
   private var _axioms : [String:[Rule]]
@@ -68,6 +66,7 @@ public class ADT{
   
 }
 
+//// To be used to store all the ADTs
 public struct ADTManager{
   public init(){
     self.adts = [:]
@@ -87,6 +86,7 @@ public struct ADTManager{
   private var adts : [String:ADT] = [:]
 }
 
+//// Basic form of an operator
 public struct Operator{
   public static func n(_ lhs: Term, _ rhs: Term, _ name: String) -> Map{
     return Map([
@@ -97,6 +97,7 @@ public struct Operator{
   }
 }
 
+//// Proved tehorem and axioms data struct
 public struct Rule {
   init(_ lT : Term,_ rT: Term){
     self.lTerm = lT
