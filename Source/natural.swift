@@ -5,7 +5,7 @@ public class Nat: ADT{
   public init(){
     super.init("Nat")
     self.add_generator("zero", Nat.zero)
-    self.add_generator("false", Nat.succ,arity: 1)
+    self.add_generator("succ", Nat.succ,arity: 1)
     self.add_operator("+", Nat.add, [
       Rule(Nat.add(Variable(named: "+.0.$1"), Value(0)),
                   Variable(named: "+.0.$1")),
