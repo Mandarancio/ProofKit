@@ -1,7 +1,7 @@
 import LogicKit
 public class Boolean : ADT {
     public init(){
-      super.init("Boolean")
+      super.init("boolean")
       self.add_generator("true", Boolean.True)
       self.add_generator("false", Boolean.False)
       self.add_operator("not", Boolean.not, [
