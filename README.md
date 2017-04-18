@@ -1,4 +1,16 @@
 # ProofKit
+Proof verifier based on LogicKit
+
+## To compile and run
+Few helper script are avaiable:
+```bash
+./build.sh
+./run.sh
+```
+or 
+```bash
+./buildandrun.sh
+```
 
 ## ADT
 An ADT is defined as a ```struct``` containing some static public function defining both **generators**, **operations** and a *is_ADTTYPE* function, more over other helper function can be added, for example the *Nat* are defined as:
