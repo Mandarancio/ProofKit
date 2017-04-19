@@ -13,7 +13,7 @@ public class Nat: ADT{
                   Nat.succ(x: Nat.add(Variable(named: "+.1.$1"),Variable(named:"+.1.$2"))))
     ])
   }
-  
+
   //Generator
   static public func zero(_:Term...) -> Term{
     return Value<Int>(0)
@@ -38,25 +38,49 @@ public class Nat: ADT{
     return (x === Nat.zero() || delayed(fresh {y in x === Nat.succ(x:y) && Nat.belong(y)}))
   }
 
+  public override func pprint(_ term: Term) -> String{
+    return Nat.count(term)
+  }
+
+  public override func check(_ term: Term) -> Bool{
+    if term.equals( Nat.zero()){
+      return true
+    }
+    if let m = (term as? Map){
+      return m["succ"] != nil
+    }
+    return false
+  }
+
+
   static public func count(_ x: Term) -> String{
    	if x.equals(Nat.zero()){
    		return "0"
    	}
    	if let map = (x as? Map){
-      let k = Nat.count(map["succ"]!)
-      let f = k.components(separatedBy:"+")
-      if f.count == 1{
-        return String(1+Int(k)!)
+      if map["succ"] != nil{
+        let k = Nat.count(map["succ"]!)
+        let f = k.components(separatedBy:"+")
+        if f.count == 0{
+          return k
+        }
+        if f.count == 1{
+          return String(1+Int(k)!)
+        }
+        if f[0].characters.count == 0 {
+     		   return "succ("+f[1]+")"
+        }
+        if let i = (Int(f[0])){
+          return String(1+i)+" + "+f[1]
+        }
+        return "succ("+k+")"
       }
-      if f[0].characters.count == 0 {
-   		   return "1+"+f[1]
-      }
-      return String(1+Int(f[0])!)+"+"+f[1]
+      return ADTs.pprint(map)
    	}
     if x is Variable {
-      return "+"+(x as! Variable).description
+      return "+"+ADTs.pprint(x)
     }
-   	return "+?"
+   	return ADTs.pprint(x)
   }
 
   public static func add(_ operands: Term...) -> Term{
