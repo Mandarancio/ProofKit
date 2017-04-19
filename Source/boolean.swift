@@ -19,7 +19,7 @@ public class Boolean : ADT {
         Rule(Boolean.or(Boolean.False(),Boolean.False()),Boolean.False())
       ])
     }
-    
+
     public static func True(_:Term...) -> Term{
       return Value<Bool>(true)
     }
@@ -28,6 +28,7 @@ public class Boolean : ADT {
       return Value<Bool>(false)
     }
 
+    ////Helper
     public static func to(_ x: Bool) -> Term{
       return Value<Bool>(x)
     }
@@ -41,21 +42,32 @@ public class Boolean : ADT {
     }
 
     public static func not(_ operands: Term...)->Term{
-      return Map([
-        "name":Value<String>("B.not"),
-        "rhs": operands[0]
-      ])
+      return Operator.n(Value("nil"), operands[0], "not")
     }
 
     public static func or(_ operands: Term...)->Term{
-      return Operator.n(operands[0],operands[1],"B.or")
+      return Operator.n(operands[0],operands[1],"or")
     }
 
     public static func and(_ operands: Term...)->Term{
-      return Operator.n(operands[0],operands[1],"B.and")
+      return Operator.n(operands[0],operands[1],"and")
     }
-    
+
     public class override func belong(_ term: Term ) -> Goal {
           return term === Boolean.True() || term === Boolean.False()
+    }
+
+    public override func pprint(_ term: Term) -> String{
+      if term.equals(Boolean.True()){
+        return "true"
+      }
+      if term.equals(Boolean.False()){
+        return "false"
+      }
+      return "?"
+    }
+
+    public override func check(_ term: Term) -> Bool{
+      return term.equals(Boolean.False()) || term.equals(Boolean.True())
     }
 }
