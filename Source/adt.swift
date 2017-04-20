@@ -3,12 +3,81 @@ import Foundation
 
 //// SINGLETON ADT Manager
 public let ADTs = ADTManager()
+public let vNil = Value("nil")
+public let vFail = Value("fail")
+
+public func get_result(_ goal : Goal, _ x : Variable) -> Term{
+  var res: Term = vNil
+  for s in solve(goal){
+    for (t,v) in s.reified().prefix(10){
+        if t.equals(x) {
+          res = v
+        }
+    }
+  }
+  return res
+}
+
+func resolve(_ op: Term, _ rules: [Rule]) -> Term{
+  let x = Variable(named: "solver.x")
+  var curr = op
+  var res : Term = Value(0)
+
+  while !vNil.equals(res){
+    res = vNil
+    for r in rules{
+      res = get_result(r.applay(curr, x),x)
+      if !vNil.equals(res){
+        curr = res
+        break
+      }
+    }
+  }
+  return curr
+}
+
 
 //// namespace containing all the operations to prove an axiom
 struct Proof {
-  public func subst(_ t: Term, _ x: Term, _ st: Term, _ r: Term)-> Goal{
+
+
+
+
+  public static func subst(_ t: Term, _ x: Term, _ st: Term, _ r: Term)-> Goal{
     return x === st && r === t
   }
+
+  public  static func identity( _ t: Term, _ s: Rule...)-> Term
+  {
+    return t
+  }
+
+  public static func fail( _ t: Term, _ s: Rule...) -> Term{
+    return Value("fail")
+  }
+
+  public static func sequence(_ t: Term,_ s: Rule...) -> Term{
+    let x = Variable(named: "seq.x")
+    var g = s[0].applay(t, x)
+    let r = get_result(g,x)
+    if r.equals(vNil){
+      return Proof.fail(t)
+    }
+    g = s[1].applay(r,x)
+    return get_result(g,x)
+  }
+
+  public static func choice(_ t: Term,_ s: Rule ...)-> Term{
+    let x = Variable(named: "seq.x")
+    var g = s[0].applay(t, x)
+    let r = get_result(g,x)
+    if !r.equals(vNil){
+      return r
+    }
+    g = s[1].applay(t,x)
+    return get_result(g,x)
+  }
+
 }
 
 //// This base class contains all needed information to define a datatype
@@ -39,13 +108,16 @@ public class ADT{
       set{
       }
   }
+  public func eval(_ t: Term)-> Term{
+    return t
+  }
 
   public func get_operators() -> [String]{
     return Array(self._operators.keys)
   }
 
   public func get_generators() -> [String]{
-    return Array(sefl._generators.keys)
+    return Array(self._generators.keys)
   }
 
   //// GOAL To detect if a term belongs to an ADT
@@ -127,8 +199,44 @@ public struct ADTManager{
 
   private var adts : [String:ADT] = [:]
 
+  public func get_adts() -> [String] {
+    return Array(self.adts.keys)
+  }
+
+  public func eval(_ term: Term) -> Term {
+    if term.equals(vNil){
+      return vNil
+    }
+    for (_,adt) in self.adts{
+      if adt.check(term){
+        return adt.eval(term)
+      }
+    }
+
+    if let op = (term as? Map){
+      if op["name"] != nil && op["lhs"] != nil && op["rhs"] != nil {
+
+        let name = (op["name"] as! Value<String>).description
+        let k : Map = [
+          "name" : op["name"]!,
+          "lhs" : self.eval(op["lhs"]!),
+          "rhs" : self.eval(op["rhs"]!)
+        ]
+        for (_,adt) in self.adts{
+          if adt.get_operators().contains(name) {
+            let axioms = adt.a(name)
+            return self.eval(resolve(k, axioms))
+          }
+        }
+
+      }
+      return op
+    }
+    return term
+  }
+
   public func pprint(_ term: Term) -> String{
-    if term.equals(Value("nil")){
+    if term.equals(vNil){
       return ""
     }
     for (_,adt) in self.adts{
