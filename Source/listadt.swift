@@ -31,6 +31,20 @@ public class LList : ADT {
           Nat.succ(x: LList.size(Variable(named:"size.1.$1")))
         )
       ], arity: 1)
+      self.add_operator("pop", LList.pop, [
+        Rule(LList.pop(LList.empty()), LList.empty()),
+        Rule(
+          LList.pop(LList.insert(Variable(named: "pop.1.$0"), Variable(named: "pop.1.$1"))),
+          Variable(named: "pop.1.$1")
+        )
+      ], arity:1)
+      self.add_operator("head", LList.head, [
+        Rule(LList.head(LList.empty()), vNil),
+        Rule(
+          LList.head(LList.insert(Variable(named: "pop.1.$0"), Variable(named: "pop.1.$1"))),
+          Variable(named: "pop.1.$0")
+        )
+      ], arity:1)
     }
 
     public static func empty(_ :Term...) -> Term{
@@ -66,6 +80,14 @@ public class LList : ADT {
     }
     public static func size(_ terms: Term...)->Term{
       return Operator.n(vNil, terms[0], "size")
+    }
+
+    public static func pop(_ terms: Term...)->Term{
+      return Operator.n(vNil, terms[0], "pop")
+    }
+
+    public static func head(_ terms: Term...)-> Term{
+      return Operator.n(vNil, terms[0], "head")
     }
 
     public override func pprint(_ t: Term) -> String{
