@@ -65,7 +65,10 @@ public class Nat: ADT{
           return k
         }
         if f.count == 1{
-          return String(1+Int(k)!)
+          if let i = Int(k){
+            return String(1+i)
+          }
+          return "succ(\(k))"
         }
         if f[0].characters.count == 0 {
      		   return "succ("+f[1]+")"
@@ -73,7 +76,7 @@ public class Nat: ADT{
         if let i = (Int(f[0])){
           return String(1+i)+" + "+f[1]
         }
-        return "succ("+k+")"
+        return "succ(\(k))"
       }
       return ADTs.pprint(map)
    	}
