@@ -39,7 +39,7 @@ public class Nat: ADT{
   }
 
   public override func pprint(_ term: Term) -> String{
-    return Nat.count(term)
+    return Nat.to_string(term)
   }
 
   public override func check(_ term: Term) -> Bool{
@@ -53,13 +53,13 @@ public class Nat: ADT{
   }
 
 
-  static public func count(_ x: Term) -> String{
+  static public func to_string(_ x: Term) -> String{
    	if x.equals(Nat.zero()){
    		return "0"
    	}
    	if let map = (x as? Map){
       if map["succ"] != nil{
-        let k = Nat.count(map["succ"]!)
+        let k = Nat.to_string(map["succ"]!)
         let f = k.components(separatedBy:"+")
         if f.count == 0{
           return k
