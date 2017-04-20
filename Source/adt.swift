@@ -40,6 +40,14 @@ public class ADT{
       }
   }
 
+  public func get_operators() -> [String]{
+    return Array(self._operators.keys)
+  }
+
+  public func get_generators() -> [String]{
+    return Array(sefl._generators.keys)
+  }
+
   //// GOAL To detect if a term belongs to an ADT
   public class func belong(_ term: Term ) -> Goal {
         return Boolean.isTrue(Boolean.True())
