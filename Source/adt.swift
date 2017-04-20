@@ -131,7 +131,7 @@ public struct ADTManager{
     if let op = (term as? Map){
       if op["name"] != nil && op["lhs"] != nil && op["rhs"] != nil {
         let x = (op["name"] as! Value<String>)
-        return self.pprint(op["lhs"]!)+" "+x.description+" "+self.pprint(op["rhs"]!)
+        return "(\(self.pprint(op["lhs"]!)) \(x.description) \(self.pprint(op["rhs"]!)))"
       }
       return op.description
     }
