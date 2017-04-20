@@ -6,55 +6,55 @@ public class LList : ADT {
       super.init("llist")
 
       self.add_generator("empty", LList.empty)
-      self.add_generator("insert", LList.insert, arity:2)
+      self.add_generator("cons", LList.cons, arity:2)
       self.add_operator("concat", LList.concat, [
         Rule(LList.concat(LList.empty(),Variable(named: "concat.0.$0")),Variable(named: "concat.0.$0")),
         Rule(
-          LList.concat(LList.insert(Variable(named: "concat.1.$0"), Variable(named: "concat.1.$1")),Variable(named: "concat.1.$2")),
-          LList.concat(Variable(named: "concat.1.$1"), LList.insert(Variable(named: "concat.1.$0"), Variable(named: "concat.1.$2"))))
+          LList.concat(LList.cons(Variable(named: "concat.1.$0"), Variable(named: "concat.1.$1")),Variable(named: "concat.1.$2")),
+          LList.concat(Variable(named: "concat.1.$1"), LList.cons(Variable(named: "concat.1.$0"), Variable(named: "concat.1.$2"))))
       ])
       self.add_operator("contains", LList.contains, [
         Rule(LList.contains(LList.empty(), Variable(named: "contains.0.$0")), Boolean.False()),
         Rule(
-          LList.contains(LList.insert(Variable(named: "contains.1.$0"), Variable(named: "contains.1.$1")), Variable(named: "contains.1.$0")),
+          LList.contains(LList.cons(Variable(named: "contains.1.$0"), Variable(named: "contains.1.$1")), Variable(named: "contains.1.$0")),
           Boolean.True()
         ),
         Rule(
-          LList.contains(LList.insert(Variable(named: "contains.2.$0"), Variable(named: "contains.2.$1")), Variable(named: "contains.2.$2")),
+          LList.contains(LList.cons(Variable(named: "contains.2.$0"), Variable(named: "contains.2.$1")), Variable(named: "contains.2.$2")),
           LList.contains(Variable(named: "contains.2.$1"), Variable(named: "contains.2.$2"))
         )
       ])
       self.add_operator("size", LList.size, [
         Rule(LList.size(LList.empty()), Nat.zero()),
         Rule(
-          LList.size(LList.insert(Variable(named: "size.1.$0"), Variable(named: "size.1.$1"))),
+          LList.size(LList.cons(Variable(named: "size.1.$0"), Variable(named: "size.1.$1"))),
           Nat.succ(x: LList.size(Variable(named:"size.1.$1")))
         )
       ], arity: 1)
-      self.add_operator("pop", LList.pop, [
-        Rule(LList.pop(LList.empty()), LList.empty()),
+      self.add_operator("rest", LList.rest, [
+        Rule(LList.rest(LList.empty()), LList.empty()),
         Rule(
-          LList.pop(LList.insert(Variable(named: "pop.1.$0"), Variable(named: "pop.1.$1"))),
-          Variable(named: "pop.1.$1")
+          LList.rest(LList.cons(Variable(named: "rest.1.$0"), Variable(named: "rest.1.$1"))),
+          Variable(named: "rest.1.$1")
         )
       ], arity:1)
-      self.add_operator("head", LList.head, [
-        Rule(LList.head(LList.empty()), vNil),
+      self.add_operator("first", LList.first, [
+        Rule(LList.first(LList.empty()), vNil),
         Rule(
-          LList.head(LList.insert(Variable(named: "pop.1.$0"), Variable(named: "pop.1.$1"))),
-          Variable(named: "pop.1.$0")
+          LList.first(LList.cons(Variable(named: "first.1.$0"), Variable(named: "first.1.$1"))),
+          Variable(named: "first.1.$0")
         )
       ], arity:1)
     }
 
     public static func empty(_ :Term...) -> Term{
-      return Value<String>("list.tail")
+      return Value<String>("llist.tail")
     }
 
-    public static func insert(_ terms: Term...) -> Term{
+    public static func cons(_ terms: Term...) -> Term{
       return Map([
-        "data": terms[0],
-        "next": terms[1]
+        "first": terms[0],
+        "rest": terms[1]
       ])
     }
 
@@ -63,11 +63,11 @@ public class LList : ADT {
       if n == 0 {
         return LList.empty()
       }
-      return LList.insert(terms[0],LList.n(Array<Term>(terms.suffix(n-1))))
+      return LList.cons(terms[0],LList.n(Array<Term>(terms.suffix(n-1))))
     }
 
     public class override func belong(_ x: Term) -> Goal{
-      return (x === LList.empty() || delayed(fresh {y in fresh{w in x === LList.insert(y,w) && LList.belong(w)}}))
+      return (x === LList.empty() || delayed(fresh {y in fresh{w in x === LList.cons(y,w) && LList.belong(w)}}))
     }
 
     public static func concat(_ terms: Term...)->Term{
@@ -82,12 +82,12 @@ public class LList : ADT {
       return Operator.n(vNil, terms[0], "size")
     }
 
-    public static func pop(_ terms: Term...)->Term{
-      return Operator.n(vNil, terms[0], "pop")
+    public static func rest(_ terms: Term...)->Term{
+      return Operator.n(vNil, terms[0], "rest")
     }
 
-    public static func head(_ terms: Term...)-> Term{
-      return Operator.n(vNil, terms[0], "head")
+    public static func first(_ terms: Term...)-> Term{
+      return Operator.n(vNil, terms[0], "first")
     }
 
     public override func pprint(_ t: Term) -> String{
@@ -96,12 +96,12 @@ public class LList : ADT {
       while !x.equals(LList.empty()){
         if let m = (x as? Map){
           ////
-          if m["next"] != nil {
+          if m["rest"] != nil {
             if s != "(" {
               s += ", "
             }
-            s += ADTs.pprint(m["data"]!)
-            x = m["next"]!
+            s += ADTs.pprint(m["first"]!)
+            x = m["rest"]!
           }else{
             x = LList.empty()
           }
@@ -109,7 +109,7 @@ public class LList : ADT {
           if s != "(" {
             s += ", "
           }
-          s+="next : \(ADTs.pprint(m))"
+          s+="rest : \(ADTs.pprint(m))"
           x = LList.empty()
         }
       }
@@ -121,7 +121,7 @@ public class LList : ADT {
         return true
       }
       if let m = (term as? Map){
-        return m["next"] != nil && m["data"] != nil
+        return m["rest"] != nil && m["first"] != nil
       }
       return false
     }
@@ -131,10 +131,25 @@ public class LList : ADT {
         return t
       }
       if let m = (t as? Map){
-        let data = m["data"]!
-        let next = m["next"]!
-        return LList.insert(ADTs.eval(data), ADTs.eval(next))
+        let first = m["first"]!
+        let rest = m["rest"]!
+        return LList.cons(ADTs.eval(first), ADTs.eval(rest))
       }
       return t
     }
+}
+
+
+public class AList : ADT {
+  public init(){
+    super.init("alist")
+  }
+
+  public static func empty(_ : Term ...) -> Term{
+    return Value("alist.tail")
+  }
+
+  public static func append(_ : Term...) -> Term{
+    return Value("0")
+  }
 }
