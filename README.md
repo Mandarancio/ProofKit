@@ -75,6 +75,10 @@ public class Boolean : ADT {
 }
 ```
 
+### Evaluator
+
+The ```eval``` method is a simple function to evaluate the generator of the type to be able to evaluate nested operations.
+
 ## ADTManager
 
 Finally to manage the *ADT* and have the possibility to mixit togheter in the future we use an **ADTManager**. This is composed by a dictionary of ADT and some helper function (such as the *pretty printer*).
@@ -94,6 +98,17 @@ let t = nat["+"](nat["succ"](nat["zero"]()),nat["succ"](nat["zero"]))
 print("\(ADTs.pprit(t))") //// 1 + 1
 ```
 
+### Universal Evaluator
+
+A simple inner most universal evaluator is implemented. To use it:
+```swift
+let operation : Term = ADTs["nat"]["*"](Nat.n(2),Nat.n(3))
+let result : Term = ADTs.eval(l0)
+print(" \(ADTs.pprint(operation)) => \(ADTs.pprint(result))")
+//// 2 * 3 => 6
+```
+
+To be able to perform any type of computation it trys to solve the inner most operation first using the operation axioms and the generator evaluator.
 
 ## Example
 
