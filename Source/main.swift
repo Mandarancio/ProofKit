@@ -39,38 +39,37 @@ func print_ax(_ ax: [Rule]){
   }
 }
 
-print("Linked List: Contains")
-print( "axioms:")
+let llist = ADTs["llist"]
 
+for o in llist.get_operators(){
+  print("\nLList - \(o):")
+  print_ax(llist.a(o))
+}
 
 let x = Variable(named: "x")
 var res : Term
 
 let contains = ADTs["llist"].a("contains")
-print_ax(contains)
-var k = LList.insert(Nat.n(2),LList.insert(Nat.n(1),LList.empty()))
+var k = LList.n([Nat.n(2),Nat.n(5),Nat.n(3), Nat.n(1),Nat.n(4)])
 var exists = ADTs["llist"]["contains"](k,Nat.n(1))
 res = resolve(exists, contains)
 print("\n \(ADTs.pprint(exists)) = \(ADTs.pprint(res))\n")
 
 let concat_axioms = ADTs["llist"].a("concat")
 
-print("Linked List: Concatenation")
-print( "axioms:\n 0. \(concat_axioms[0].pprint())\n 1. \(concat_axioms[1].pprint())\n")
-var l0 = LList.insert(Nat.n(1),LList.insert(Nat.n(3),LList.empty()))
-var l1 = LList.insert(Nat.n(5),LList.empty())
+var l0 = LList.n([Nat.n(1),Nat.n(3), Nat.n(8)])
+var l1 = LList.n([Nat.n(7),Nat.n(5)])
 var l2 = LList.concat(l1,l0)
 
 res = resolve(l2, concat_axioms)
 var str = " \(ADTs.pprint(l2)) => \(ADTs.pprint(res))"
-
-print("Example: ")
 print(str)
 
 let o = ADTs["nat"]["+"](Nat.n(2), Nat.n(1))
 print("\nNatural: Add")
 let add_axioms = ADTs["nat"].a("+")
+print_ax(add_axioms)
+
 res = resolve(o, add_axioms)
-print( "axioms:\n 0. \(add_axioms[0].pprint())\n 1. \(add_axioms[1].pprint())\n")
 
 print(" \(ADTs.pprint(o)) => \(ADTs.pprint(res))")
