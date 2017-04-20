@@ -42,5 +42,7 @@ for i in ADTs["nat"].get_operators(){
   print_ax( ADTs["nat"].a(i))
 }
 res = ADTs.eval(o)
-
 print("\n \(ADTs.pprint(o)) => \(ADTs.pprint(res))")
+l0 = ADTs["nat"]["*"](Nat.n(2),Nat.n(3))
+res = ADTs.eval(l0)
+print(" \(ADTs.pprint(l0)) => \(ADTs.pprint(res))")
