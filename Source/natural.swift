@@ -12,6 +12,20 @@ public class Nat: ADT{
              Rule(Nat.add(Variable(named: "+.1.$1"), Nat.succ(x: Variable(named: "+.1.$2"))),
                   Nat.succ(x: Nat.add(Variable(named: "+.1.$1"),Variable(named:"+.1.$2"))))
     ])
+    self.add_operator("*", Nat.mul,[
+      Rule(
+        Nat.mul(Variable(named: "*.0.$0"), Nat.zero()),
+        Nat.zero()
+      ),
+      Rule(
+        Nat.mul(Variable(named: "*.1.$1"), Nat.succ(x: Nat.zero())),
+        Variable(named: "*.1.$1")
+      ),
+      Rule(
+        Nat.mul(Variable(named: "*.2.$1"), Nat.succ(x: Variable(named: "*.2.$2"))),
+        Nat.add(Variable(named: "*.2.$1"), Nat.mul(Variable(named: "*.2.$1"), Variable(named: "*.2.$2")))
+      )
+    ])
   }
 
   //Generator
@@ -99,5 +113,9 @@ public class Nat: ADT{
   public static func add(_ operands: Term...) -> Term{
       let o =  Operator.n(operands[0], operands[1], "+")
       return o
+  }
+
+  public static func mul(_ operands: Term...)-> Term{
+    return Operator.n(operands[0], operands[1],"*")
   }
 }
