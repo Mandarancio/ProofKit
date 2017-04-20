@@ -13,13 +13,24 @@ public class LList : ADT {
           LList.concat(LList.insert(Variable(named: "concat.1.$0"), Variable(named: "concat.1.$1")),Variable(named: "concat.1.$2")),
           LList.concat(Variable(named: "concat.1.$1"), LList.insert(Variable(named: "concat.1.$0"), Variable(named: "concat.1.$2"))))
       ])
+      self.add_operator("contains", LList.contains, [
+        Rule(LList.contains(LList.empty(), Variable(named: "contains.0.$0")), Boolean.False()),
+        Rule(
+          LList.contains(LList.insert(Variable(named: "contains.1.$0"), Variable(named: "contains.1.$1")), Variable(named: "contains.1.$0")),
+          Boolean.True()
+        ),
+        Rule(
+          LList.contains(LList.insert(Variable(named: "contains.2.$0"), Variable(named: "contains.2.$1")), Variable(named: "contains.2.$2")),
+          LList.contains(Variable(named: "contains.2.$1"), Variable(named: "contains.2.$2"))
+        )
+      ])
     }
 
     public static func empty(_ :Term...) -> Term{
       return Value<String>("list.tail")
     }
 
-    public static func insert(_ terms: Term...)->Term{
+    public static func insert(_ terms: Term...) -> Term{
       return Map([
         "data": terms[0],
         "next": terms[1]
@@ -34,6 +45,11 @@ public class LList : ADT {
       let o =  Operator.n(terms[0], terms[1], "concat")
       return o
     }
+
+    public static func contains(_ terms: Term...)->Term{
+      return Operator.n(terms[0], terms[1], "contains")
+    }
+
 
     public override func pprint(_ t: Term) -> String{
       var s : String = "("
@@ -58,7 +74,7 @@ public class LList : ADT {
           x = LList.empty()
         }
       }
-      return s+")"
+      return s + ")"
     }
 
     public override func check(_ term: Term) -> Bool{
