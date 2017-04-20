@@ -24,6 +24,13 @@ public class LList : ADT {
           LList.contains(Variable(named: "contains.2.$1"), Variable(named: "contains.2.$2"))
         )
       ])
+      self.add_operator("size", LList.size, [
+        Rule(LList.size(LList.empty()), Nat.zero()),
+        Rule(
+          LList.size(LList.insert(Variable(named: "size.1.$0"), Variable(named: "size.1.$1"))),
+          Nat.succ(x: LList.size(Variable(named:"size.1.$1")))
+        )
+      ], arity: 1)
     }
 
     public static func empty(_ :Term...) -> Term{
@@ -35,6 +42,14 @@ public class LList : ADT {
         "data": terms[0],
         "next": terms[1]
       ])
+    }
+
+    public static func n(_ terms: [Term]) -> Term{
+      let n = terms.count
+      if n == 0 {
+        return LList.empty()
+      }
+      return LList.insert(terms[0],LList.n(Array<Term>(terms.suffix(n-1))))
     }
 
     public class override func belong(_ x: Term) -> Goal{
@@ -49,7 +64,9 @@ public class LList : ADT {
     public static func contains(_ terms: Term...)->Term{
       return Operator.n(terms[0], terms[1], "contains")
     }
-
+    public static func size(_ terms: Term...)->Term{
+      return Operator.n(Value("nil"), terms[0], "size")
+    }
 
     public override func pprint(_ t: Term) -> String{
       var s : String = "("
@@ -70,7 +87,7 @@ public class LList : ADT {
           if s != "(" {
             s += ", "
           }
-          s+=ADTs.pprint(m)
+          s+="next : \(ADTs.pprint(m))"
           x = LList.empty()
         }
       }
