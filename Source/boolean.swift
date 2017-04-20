@@ -42,7 +42,7 @@ public class Boolean : ADT {
     }
 
     public static func not(_ operands: Term...)->Term{
-      return Operator.n(Value("nil"), operands[0], "not")
+      return Operator.n(vNil, operands[0], "not")
     }
 
     public static func or(_ operands: Term...)->Term{
