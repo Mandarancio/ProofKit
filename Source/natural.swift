@@ -52,6 +52,16 @@ public class Nat: ADT{
     return false
   }
 
+  public override func eval(_ t: Term) -> Term{
+    if t.equals(Nat.zero()){
+      return t
+    }
+    if let m = (t as? Map){
+      let data = m["succ"]!
+      return Nat.succ(x: ADTs.eval(data))
+    }
+    return t
+  }
 
   static public func to_string(_ x: Term) -> String{
    	if x.equals(Nat.zero()){

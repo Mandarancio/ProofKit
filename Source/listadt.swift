@@ -65,7 +65,7 @@ public class LList : ADT {
       return Operator.n(terms[0], terms[1], "contains")
     }
     public static func size(_ terms: Term...)->Term{
-      return Operator.n(Value("nil"), terms[0], "size")
+      return Operator.n(vNil, terms[0], "size")
     }
 
     public override func pprint(_ t: Term) -> String{
@@ -102,5 +102,17 @@ public class LList : ADT {
         return m["next"] != nil && m["data"] != nil
       }
       return false
+    }
+
+    public override func eval(_ t: Term) -> Term{
+      if t.equals(LList.empty()){
+        return t
+      }
+      if let m = (t as? Map){
+        let data = m["data"]!
+        let next = m["next"]!
+        return LList.insert(ADTs.eval(data), ADTs.eval(next))
+      }
+      return t
     }
 }
