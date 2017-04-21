@@ -10,7 +10,7 @@ public class Boolean : ADT {
       ], arity: 1)
       self.add_operator("and", Boolean.and, [
         Rule(Boolean.and(Boolean.False(),Variable(named:"and.0.$1")),Boolean.False()),
-        Rule(Boolean.and(Variable(named:"and.1.$1"),Boolean.True()),Boolean.False()),
+        Rule(Boolean.and(Variable(named:"and.1.$1"),Boolean.False()),Boolean.False()),
         Rule(Boolean.and(Boolean.True(),Boolean.True()),Boolean.True())
       ])
       self.add_operator("or", Boolean.or, [
