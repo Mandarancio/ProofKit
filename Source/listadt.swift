@@ -139,7 +139,8 @@ public class LList : ADT {
     }
 }
 
-
+//// SET
+//// https://en.wikipedia.org/wiki/Set_(abstract_data_type)
 public class Set : ADT {
   public init(){
     super.init("set")
@@ -199,13 +200,27 @@ public class Set : ADT {
         Set.contains(Variable(named: "intersection.1.$2"),Variable(named: "intersection.1.$0"))
       ),
       Rule(
-        Set.intersection(Set.cons(Variable(named: "intersection.1.$0"), Variable(named: "intersection.1.$1")),Variable(named: "intersection.1.$2")),
-        Set.intersection(Variable(named: "intersection.1.$1"),Variable(named: "intersection.1.$2")),
-        Boolean.not(Set.contains(Variable(named: "intersection.1.$2"),Variable(named: "intersection.1.$0")))
+        Set.intersection(Set.cons(Variable(named: "intersection.2.$0"), Variable(named: "intersection.2.$1")),Variable(named: "intersection.2.$2")),
+        Set.intersection(Variable(named: "intersection.2.$1"),Variable(named: "intersection.2.$2")),
+        Boolean.not(Set.contains(Variable(named: "intersection.2.$2"),Variable(named: "intersection.2.$0")))
       )
     ])
-    // [1, 2, 3] int [4,5,1] => [1]
-    // [[1] int [4,5,1]] union [[2,3] int [4,5,1]]
+  	self.add_operator("diff", Set.diff, [
+  		Rule(
+	       Set.diff(Set.empty(),Variable(named: "diff.0.$0")),
+	       Set.empty()
+	     ),
+	     Rule(
+	       Set.diff(Set.cons(Variable(named: "diff.1.$0"), Variable(named: "diff.1.$1")),Variable(named: "diff.1.$2")),
+	       Set.diff(Variable(named: "diff.1.$1"),Variable(named: "diff.1.$2")),
+	       Set.contains(Variable(named: "diff.1.$2"),Variable(named: "diff.1.$0"))
+	     ),
+	     Rule(
+	       Set.diff(Set.cons(Variable(named: "diff.2.$0"), Variable(named: "diff.2.$1")),Variable(named: "diff.2.$2")),
+	       Set.insert(Variable(named: "diff.2.$0"), Set.diff(Variable(named: "diff.2.$1"),Variable(named: "diff.2.$2"))),
+	       Boolean.not(Set.contains(Variable(named: "diff.2.$2"),Variable(named: "diff.2.$0")))
+	     )
+  	])
   }
 
   public static func empty(_ : Term ...) -> Term{
@@ -238,7 +253,11 @@ public class Set : ADT {
   public static func intersection(_ terms: Term...)->Term{
     return Operator.n(terms[0], terms[1], "intersection")
   }
-
+  
+  public static func diff(_ terms: Term...)->Term{
+    return Operator.n(terms[0], terms[1], "diff")
+  }
+  
   public override func check(_ term: Term) -> Bool{
     if term.equals(Set.empty()){
       return true

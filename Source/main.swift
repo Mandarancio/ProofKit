@@ -21,12 +21,14 @@ var s0 = ADTs.eval(Set.n([Nat.n(2),Nat.n(4),Nat.n(2),Nat.n(1)]))
 var s1 = ADTs.eval(Set.n([Nat.n(4),Nat.n(5),Nat.n(3),Nat.n(0),Nat.n(1)]))
 var s3 = Set.union(s0,s1)
 var s4 = Set.intersection(s0,s1)
+var s5 = Set.diff(s1,s0)
 
 res = ADTs.eval(s3)
-
 print("\n \(ADTs.pprint(s3)) => \(ADTs.pprint(res))")
 res = ADTs.eval(s4)
 print(" \(ADTs.pprint(s4)) => \(ADTs.pprint(res))")
+res = ADTs.eval(s5)
+print(" \(ADTs.pprint(s5)) => \(ADTs.pprint(res))")
 
 let llist = ADTs["llist"]
 
