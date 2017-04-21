@@ -1,7 +1,5 @@
 import LogicKit
 
-
-
 func print_ax(_ ax: [Rule]){
   var i = 0
   for a in ax{
@@ -10,6 +8,26 @@ func print_ax(_ ax: [Rule]){
   }
 }
 
+var res : Term
+
+
+let a_set = ADTs["set"]
+for o in a_set.get_operators(){
+  print("\nSet - \(o):")
+  print_ax(a_set.a(o))
+}
+
+var s0 = ADTs.eval(Set.n([Nat.n(2),Nat.n(4),Nat.n(2),Nat.n(1)]))
+var s1 = ADTs.eval(Set.n([Nat.n(4),Nat.n(5),Nat.n(3),Nat.n(0),Nat.n(1)]))
+var s3 = Set.union(s0,s1)
+var s4 = Set.intersection(s0,s1)
+
+res = ADTs.eval(s3)
+
+print("\n \(ADTs.pprint(s3)) => \(ADTs.pprint(res))")
+res = ADTs.eval(s4)
+print(" \(ADTs.pprint(s4)) => \(ADTs.pprint(res))")
+
 let llist = ADTs["llist"]
 
 for o in llist.get_operators(){
@@ -17,8 +35,6 @@ for o in llist.get_operators(){
   print_ax(llist.a(o))
 }
 
-let x = Variable(named: "x")
-var res : Term
 
 var k = LList.n([Nat.n(2),Nat.n(5),Nat.n(3), Nat.n(1),Nat.n(4)])
 var exists = ADTs["llist"]["contains"](k,Nat.n(1))
