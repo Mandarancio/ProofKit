@@ -140,16 +140,164 @@ public class LList : ADT {
 }
 
 
-public class AList : ADT {
+public class Set : ADT {
   public init(){
-    super.init("alist")
+    super.init("set")
+    self.add_generator("empty", Set.empty)
+    self.add_generator("cons", Set.cons, arity:2)
+    self.add_operator("insert", Set.insert, [
+      Rule(
+        Set.insert(Variable(named: "insert.0.$0"), Set.empty()),
+        Set.cons(Variable(named: "insert.0.$0"), Set.empty())
+      ),
+      Rule(
+        Set.insert(Variable(named: "insert.1.$0"), Set.cons(Variable(named: "insert.1.$0"), Variable(named: "insert.1.$1"))),
+        Set.cons(Variable(named: "insert.1.$0"), Variable(named: "insert.1.$1"))
+      ),
+      Rule(
+        Set.insert(Variable(named: "insert.2.$0"), Set.cons(Variable(named: "insert.2.$1"), Variable(named: "insert.2.$2"))),
+        Set.cons(Variable(named: "insert.2.$1"), Set.insert(Variable(named: "insert.2.$0"), Variable(named: "insert.2.$2")))
+      )
+    ])
+
+    self.add_operator("s.contains", Set.contains, [
+      Rule(Set.contains(Set.empty(), Variable(named: "contains.0.$0")), Boolean.False()),
+      Rule(
+        Set.contains(Set.cons(Variable(named: "contains.1.$0"), Variable(named: "contains.1.$1")), Variable(named: "contains.1.$0")),
+        Boolean.True()
+      ),
+      Rule(
+        Set.contains(Set.cons(Variable(named: "contains.2.$0"), Variable(named: "contains.2.$1")), Variable(named: "contains.2.$2")),
+        Set.contains(Variable(named: "contains.2.$1"), Variable(named: "contains.2.$2"))
+      )
+    ])
+    self.add_operator("s.size", Set.size, [
+      Rule(Set.size(Set.empty()), Nat.zero()),
+      Rule(
+        Set.size(Set.cons(Variable(named: "size.1.$0"), Variable(named: "size.1.$1"))),
+        Nat.succ(x: Set.size(Variable(named:"size.1.$1")))
+      )
+    ], arity: 1)
+    self.add_operator("union", Set.union, [
+      Rule(
+        Set.union(Set.empty(),Variable(named: "union.0.$0")),
+        Variable(named: "union.0.$0")
+      ),
+      Rule(
+        Set.union(Set.cons(Variable(named: "union.1.$0"), Variable(named: "union.1.$1")),Variable(named: "union.1.$2")),
+        Set.union(Variable(named: "union.1.$1"), Set.insert(Variable(named: "union.1.$0"), Variable(named: "union.1.$2")))
+      )
+    ])
+    self.add_operator("intersection", Set.intersection, [
+      Rule(
+        Set.intersection(Set.empty(),Variable(named: "intersection.0.$0")),
+        Set.empty()
+      ),
+      Rule(
+        Set.intersection(Set.cons(Variable(named: "intersection.1.$0"), Variable(named: "intersection.1.$1")),Variable(named: "intersection.1.$2")),
+        Set.insert(Variable(named: "intersection.1.$0"),   Set.intersection(Variable(named: "intersection.1.$1"),Variable(named: "intersection.1.$2"))),
+        Set.contains(Variable(named: "intersection.1.$2"),Variable(named: "intersection.1.$0"))
+      ),
+      Rule(
+        Set.intersection(Set.cons(Variable(named: "intersection.1.$0"), Variable(named: "intersection.1.$1")),Variable(named: "intersection.1.$2")),
+        Set.intersection(Variable(named: "intersection.1.$1"),Variable(named: "intersection.1.$2")),
+        Boolean.not(Set.contains(Variable(named: "intersection.1.$2"),Variable(named: "intersection.1.$0")))
+      )
+    ])
+    // [1, 2, 3] int [4,5,1] => [1]
+    // [[1] int [4,5,1]] union [[2,3] int [4,5,1]]
   }
 
   public static func empty(_ : Term ...) -> Term{
-    return Value("alist.tail")
+    return Value("set.empty")
   }
 
-  public static func append(_ : Term...) -> Term{
-    return Value("0")
+  public static func cons(_ t: Term...) -> Term{
+    return Map([
+      "s.first": t[0],
+      "s.rest": t[1]
+    ])
+  }
+
+  public static func insert(_ terms: Term...)->Term{
+    return Operator.n(terms[0], terms[1], "insert")
+  }
+
+  public static func contains(_ terms: Term...)->Term{
+    return Operator.n(terms[0], terms[1], "s.contains")
+  }
+
+  public static func size(_ terms: Term...)->Term{
+    return Operator.n(vNil, terms[0], "s.size")
+  }
+
+  public static func union(_ terms: Term...)->Term{
+    return Operator.n(terms[0], terms[1], "union")
+  }
+
+  public static func intersection(_ terms: Term...)->Term{
+    return Operator.n(terms[0], terms[1], "intersection")
+  }
+
+  public override func check(_ term: Term) -> Bool{
+    if term.equals(Set.empty()){
+      return true
+    }
+    if let m = (term as? Map){
+      return m["s.rest"] != nil && m["s.first"] != nil
+    }
+    return false
+  }
+
+  public override func eval(_ t: Term) -> Term{
+    if t.equals(Set.empty()){
+      return t
+    }
+    if let m = (t as? Map){
+      let first = m["s.first"]!
+      let rest = m["s.rest"]!
+      return Set.cons(ADTs.eval(first), ADTs.eval(rest))
+    }
+    return t
+  }
+
+  public class override func belong(_ x: Term) -> Goal{
+    return (x === Set.empty() || delayed(fresh {y in fresh{w in x === Set.cons(y,w) && Set.belong(w)}}))
+  }
+
+  public override func pprint(_ t: Term) -> String{
+    var s : String = "("
+    var x = t
+    while !x.equals(Set.empty()){
+      if let m = (x as? Map){
+        ////
+        if m["s.rest"] != nil {
+          if s != "(" {
+            s += ", "
+          }
+          s += ADTs.pprint(m["s.first"]!)
+          x = m["s.rest"]!
+        }else{
+          x = Set.empty()
+        }
+      }else if let m = (x as? Variable){
+        if s != "(" {
+          s += ", "
+        }
+        s+="rest : \(ADTs.pprint(m))"
+        x = Set.empty()
+      }
+    }
+    return s + ")"
+  }
+
+
+
+  public static func n(_ terms: [Term]) -> Term{
+    let n = terms.count
+    if n == 0 {
+      return Set.empty()
+    }
+    return Set.insert(terms[0],Set.n(Array<Term>(terms.suffix(n-1))))
   }
 }
