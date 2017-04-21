@@ -221,6 +221,17 @@ public class Set : ADT {
 	       Boolean.not(Set.contains(Variable(named: "diff.2.$2"),Variable(named: "diff.2.$0")))
 	     )
   	])
+
+  	self.add_operator("subSet", Set.subSet, [
+  		Rule(
+  			Set.subSet(Set.empty(), Variable(named: "subset.0.$0")),
+  			Boolean.True()
+  		),
+  		Rule(
+  			Set.subSet(Set.cons(Variable(named: "subset.1.$0"),Variable(named: "subset.1.$1")), Variable(named: "subset.1.$2")),
+  			Boolean.and(Set.contains(Variable(named: "subset.1.$2"),  Variable(named: "subset.1.$0")),Set.subSet( Variable(named: "subset.1.$1"), Variable(named: "subset.1.$2")))
+  		)
+  	])
   }
 
   public static func empty(_ : Term ...) -> Term{
@@ -253,11 +264,15 @@ public class Set : ADT {
   public static func intersection(_ terms: Term...)->Term{
     return Operator.n(terms[0], terms[1], "intersection")
   }
-  
+
   public static func diff(_ terms: Term...)->Term{
     return Operator.n(terms[0], terms[1], "diff")
   }
-  
+
+  public static func subSet(_ terms: Term...)->Term{
+    return Operator.n(terms[0], terms[1], "subSet")
+  }
+
   public override func check(_ term: Term) -> Bool{
     if term.equals(Set.empty()){
       return true
