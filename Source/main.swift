@@ -11,6 +11,30 @@ func print_ax(_ ax: [Rule]){
 var res : Term
 
 
+let bunch = ADTs["bunch"]
+
+for o in bunch.get_operators(){
+  print("\nBunch - \(o):")
+  print_ax(bunch.a(o))
+}
+
+
+var k = Bunch.n([Nat.n(2),Nat.n(5),Nat.n(3), Nat.n(1),Nat.n(4)])
+var exists = ADTs["bunch"]["contains"](k,Nat.n(1))
+res = ADTs.eval(exists)//resolve(exists, contains)
+print("\n \(ADTs.pprint(exists)) = \(ADTs.pprint(res))")
+
+var l0 = Bunch.n([Nat.n(1),Nat.n(3), Nat.n(5), Nat.n(8)])
+var l1 = Bunch.n([Nat.n(7),Nat.n(5)])
+var l2 = Bunch.concat(l1,l0)
+
+res = ADTs.eval(l2)
+print(" \(ADTs.pprint(l2)) => \(ADTs.pprint(res))")
+
+l0 = Bunch.size(Bunch.n([Nat.n(1),Nat.n(3),Nat.n(4)]))
+res = ADTs.eval(l0)
+print(" \(ADTs.pprint(l0)) => \(ADTs.pprint(res))")
+
 let a_set = ADTs["set"]
 for o in a_set.get_operators(){
   print("\nSet - \(o):")
@@ -33,29 +57,6 @@ print(" \(ADTs.pprint(s5)) => \(ADTs.pprint(res))")
 res = ADTs.eval(s6)
 print(" \(ADTs.pprint(s6)) => \(ADTs.pprint(res))")
 
-let bunch = ADTs["bunch"]
-
-for o in bunch.get_operators(){
-  print("\nBunch - \(o):")
-  print_ax(bunch.a(o))
-}
-
-
-var k = Bunch.n([Nat.n(2),Nat.n(5),Nat.n(3), Nat.n(1),Nat.n(4)])
-var exists = ADTs["bunch"]["contains"](k,Nat.n(1))
-res = ADTs.eval(exists)//resolve(exists, contains)
-print("\n \(ADTs.pprint(exists)) = \(ADTs.pprint(res))")
-
-var l0 = Bunch.n([Nat.n(1),Nat.n(3), Nat.n(8)])
-var l1 = Bunch.n([Nat.n(7),Nat.n(5)])
-var l2 = Bunch.concat(l1,l0)
-
-res = ADTs.eval(l2)
-print(" \(ADTs.pprint(l2)) => \(ADTs.pprint(res))")
-
-l0 = Bunch.size(Bunch.n([Nat.n(1),Nat.n(3),Nat.n(4)]))
-res = ADTs.eval(l0)
-print(" \(ADTs.pprint(l0)) => \(ADTs.pprint(res))")
 
 let o = ADTs["nat"]["+"](Nat.n(2), Nat.n(3))
 for i in ADTs["nat"].get_operators(){
