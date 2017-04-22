@@ -71,32 +71,32 @@ public class Bunch : ADT {
     }
 
     public static func concat(_ terms: Term...)->Term{
-      let o =  Operator.n(terms[0], terms[1], "concat")
+      let o =  Operator.n("concat", terms[0], terms[1])
       return o
     }
     public static func contains(_ terms: Term...)->Term{
-      return Operator.n(terms[0], terms[1], "contains")
+      return Operator.n("contains", terms[0], terms[1] )
     }
     public static func size(_ terms: Term...)->Term{
-      return Operator.n(vNil, terms[0], "size")
+      return Operator.n("size",terms[0])
     }
 
     public static func rest(_ terms: Term...)->Term{
-      return Operator.n(vNil, terms[0], "rest")
+      return Operator.n("rest", terms[0])
     }
 
     public static func first(_ terms: Term...)-> Term{
-      return Operator.n(vNil, terms[0], "first")
+      return Operator.n("first", terms[0])
     }
 
     public override func pprint(_ t: Term) -> String{
-      var s : String = "("
+      var s : String = "["
       var x = t
       while !x.equals(Bunch.empty()){
         if let m = (x as? Map){
           ////
           if m["rest"] != nil {
-            if s != "(" {
+            if s != "[" {
               s += ", "
             }
             s += ADTs.pprint(m["first"]!)
@@ -105,14 +105,14 @@ public class Bunch : ADT {
             x = Bunch.empty()
           }
         }else if let m = (x as? Variable){
-          if s != "(" {
+          if s != "[" {
             s += ", "
           }
           s+="rest : \(ADTs.pprint(m))"
           x = Bunch.empty()
         }
       }
-      return s + ")"
+      return s + "]"
     }
 
     public override func check(_ term: Term) -> Bool{
@@ -216,23 +216,23 @@ public class Set : Bunch {
   }
 
   public static func insert(_ terms: Term...)->Term{
-    return Operator.n(terms[0], terms[1], "insert")
+    return Operator.n("insert",terms[0], terms[1])
   }
 
   public static func union(_ terms: Term...)->Term{
-    return Operator.n(terms[0], terms[1], "union")
+    return Operator.n("union", terms[0], terms[1])
   }
 
   public static func intersection(_ terms: Term...)->Term{
-    return Operator.n(terms[0], terms[1], "intersection")
+    return Operator.n("intersection", terms[0], terms[1])
   }
 
   public static func diff(_ terms: Term...)->Term{
-    return Operator.n(terms[0], terms[1], "diff")
+    return Operator.n("diff", terms[0], terms[1])
   }
 
   public static func subSet(_ terms: Term...)->Term{
-    return Operator.n(terms[0], terms[1], "subSet")
+    return Operator.n("subSet",terms[0], terms[1])
   }
 
   public override func check(_ term: Term) -> Bool{
@@ -258,36 +258,8 @@ public class Set : Bunch {
   }
 
   public class override func belong(_ x: Term) -> Goal{
-    return (x === Set.empty() || delayed(fresh {y in fresh{w in x === Set.cons(y,w) && Set.belong(w)}}))
+    return (x === Set.empty() || delayed(fresh {y in fresh{w in x === Set.cons(y,w) && Set.belong(w) && ADTs.eval(Set.contains(w,y))===Boolean.False()}}))
   }
-
-  public override func pprint(_ t: Term) -> String{
-    var s : String = "("
-    var x = t
-    while !x.equals(Set.empty()){
-      if let m = (x as? Map){
-        ////
-        if m["s.rest"] != nil {
-          if s != "(" {
-            s += ", "
-          }
-          s += ADTs.pprint(m["s.first"]!)
-          x = m["s.rest"]!
-        }else{
-          x = Set.empty()
-        }
-      }else if let m = (x as? Variable){
-        if s != "(" {
-          s += ", "
-        }
-        s+="rest : \(ADTs.pprint(m))"
-        x = Set.empty()
-      }
-    }
-    return s + ")"
-  }
-
-
 
   public override class func n(_ terms: [Term]) -> Term{
     let n = terms.count
@@ -295,5 +267,85 @@ public class Set : Bunch {
       return Set.empty()
     }
     return Set.insert(terms[0],Set.n(Array<Term>(terms.suffix(n-1))))
+  }
+}
+
+
+public class Sequence : ADT {
+  public init(){
+    super.init("sequence")
+    self.add_generator("empty", Sequence.empty)
+    self.add_generator("cons", Sequence.cons, arity:3)
+  }
+
+  public static func empty(_:Term...)->Term{
+    return Value("seq.empty")
+  }
+
+  public static func cons( _ t:Term...)->Term{
+    return Map([
+      "value" : t[0],
+      "index" : t[1],
+      "rest" : t[2]
+    ])
+  }
+
+  // public static func insert(_ t: Term...)->Term{
+    // return Operator.n()
+  // }
+
+  public class override func belong(_ x: Term) -> Goal{
+    return (x === Sequence.empty() || delayed(fresh {y in fresh{w in fresh{z in x === Sequence.cons(y,w,z) && Sequence.belong(z)}}}))
+  }
+
+  public override func pprint(_ t: Term) -> String{
+    var s : String = "["
+    var x = t
+    while !x.equals(Sequence.empty()){
+      if let m = (x as? Map){
+        ////
+        if m["rest"] != nil {
+          if s != "[" {
+            s += ", "
+          }
+          s += "\(ADTs.pprint(m["index"]!)): \(ADTs.pprint(m["value"]!))"
+          x = m["rest"]!
+        }else{
+          x = Sequence.empty()
+        }
+      }else if let m = (x as? Variable){
+        if s != "[" {
+          s += ", "
+        }
+        s+="rest : \(ADTs.pprint(m))"
+        x = Sequence.empty()
+      }
+    }
+    return s + "]"
+  }
+
+  public override func check(_ term: Term) -> Bool{
+    if term.equals(Sequence.empty()){
+      return true
+    }
+    if let m = (term as? Map){
+      return m["rest"] != nil && m["value"] != nil && m["index"] != nil
+    }
+    return false
+  }
+
+  public override func eval(_ t: Term) -> Term{
+
+    if t.equals(Sequence.empty()){
+      return t
+    }
+
+    if let m = (t as? Map){
+      let val = m["value"]!
+      let ind = m["index"]!
+      let rest = m["rest"]!
+      return Sequence.cons(ADTs.eval(val), ADTs.eval(ind), ADTs.eval(rest))
+    }
+    return t
   }
 }

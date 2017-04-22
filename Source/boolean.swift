@@ -42,15 +42,15 @@ public class Boolean : ADT {
     }
 
     public static func not(_ operands: Term...)->Term{
-      return Operator.n(vNil, operands[0], "not")
+      return Operator.n("not", operands[0])
     }
 
     public static func or(_ operands: Term...)->Term{
-      return Operator.n(operands[0],operands[1],"or")
+      return Operator.n("or",operands[0],operands[1])
     }
 
     public static func and(_ operands: Term...)->Term{
-      return Operator.n(operands[0],operands[1],"and")
+      return Operator.n("and",operands[0],operands[1])
     }
 
     public class override func belong(_ term: Term ) -> Goal {

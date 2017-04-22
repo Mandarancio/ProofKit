@@ -111,11 +111,10 @@ public class Nat: ADT{
   }
 
   public static func add(_ operands: Term...) -> Term{
-      let o =  Operator.n(operands[0], operands[1], "+")
-      return o
+      return Operator.n("+",operands[0], operands[1])
   }
 
   public static func mul(_ operands: Term...)-> Term{
-    return Operator.n(operands[0], operands[1],"*")
+    return Operator.n("*",operands[0], operands[1])
   }
 }
