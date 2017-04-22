@@ -58,7 +58,7 @@ public class LList : ADT {
       ])
     }
 
-    public static func n(_ terms: [Term]) -> Term{
+    public class func n(_ terms: [Term]) -> Term{
       let n = terms.count
       if n == 0 {
         return LList.empty()
@@ -141,11 +141,11 @@ public class LList : ADT {
 
 //// SET
 //// https://en.wikipedia.org/wiki/Set_(abstract_data_type)
-public class Set : ADT {
-  public init(){
-    super.init("set")
-    self.add_generator("empty", Set.empty)
-    self.add_generator("cons", Set.cons, arity:2)
+public class Set : LList {
+  public override init(){
+    super.init()
+    self._name = "set"
+    self.remove_operator("concat")
     self.add_operator("insert", Set.insert, [
       Rule(
         Set.insert(Variable(named: "insert.0.$0"), Set.empty()),
@@ -161,24 +161,6 @@ public class Set : ADT {
       )
     ])
 
-    self.add_operator("s.contains", Set.contains, [
-      Rule(Set.contains(Set.empty(), Variable(named: "contains.0.$0")), Boolean.False()),
-      Rule(
-        Set.contains(Set.cons(Variable(named: "contains.1.$0"), Variable(named: "contains.1.$1")), Variable(named: "contains.1.$0")),
-        Boolean.True()
-      ),
-      Rule(
-        Set.contains(Set.cons(Variable(named: "contains.2.$0"), Variable(named: "contains.2.$1")), Variable(named: "contains.2.$2")),
-        Set.contains(Variable(named: "contains.2.$1"), Variable(named: "contains.2.$2"))
-      )
-    ])
-    self.add_operator("s.size", Set.size, [
-      Rule(Set.size(Set.empty()), Nat.zero()),
-      Rule(
-        Set.size(Set.cons(Variable(named: "size.1.$0"), Variable(named: "size.1.$1"))),
-        Nat.succ(x: Set.size(Variable(named:"size.1.$1")))
-      )
-    ], arity: 1)
     self.add_operator("union", Set.union, [
       Rule(
         Set.union(Set.empty(),Variable(named: "union.0.$0")),
@@ -234,27 +216,8 @@ public class Set : ADT {
   	])
   }
 
-  public static func empty(_ : Term ...) -> Term{
-    return Value("set.empty")
-  }
-
-  public static func cons(_ t: Term...) -> Term{
-    return Map([
-      "s.first": t[0],
-      "s.rest": t[1]
-    ])
-  }
-
   public static func insert(_ terms: Term...)->Term{
     return Operator.n(terms[0], terms[1], "insert")
-  }
-
-  public static func contains(_ terms: Term...)->Term{
-    return Operator.n(terms[0], terms[1], "s.contains")
-  }
-
-  public static func size(_ terms: Term...)->Term{
-    return Operator.n(vNil, terms[0], "s.size")
   }
 
   public static func union(_ terms: Term...)->Term{
@@ -327,7 +290,7 @@ public class Set : ADT {
 
 
 
-  public static func n(_ terms: [Term]) -> Term{
+  public override class func n(_ terms: [Term]) -> Term{
     let n = terms.count
     if n == 0 {
       return Set.empty()
