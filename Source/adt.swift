@@ -196,6 +196,7 @@ public struct ADTManager{
     self["boolean"] = Boolean()
     self["bunch"] = Bunch()
     self["set"] = Set()
+    self["sequence"] = Sequence()
   }
 
   subscript ( i : String) -> ADT{
@@ -341,7 +342,7 @@ public struct Operator{
       }else{
         var s :String = "\(name)(\(ADTs.pprint(m["0"]!))"
         if m.keys.count>3{
-          for i in 1...m.keys.count-2{
+          for i in 1...m.keys.count-3{
             s+=", \(ADTs.pprint(m[String(i)]!))"
           }
         }
