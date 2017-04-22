@@ -194,7 +194,7 @@ public struct ADTManager{
   fileprivate init(){
     self["nat"] = Nat()
     self["boolean"] = Boolean()
-    self["llist"] = LList()
+    self["bunch"] = Bunch()
     self["set"] = Set()
   }
 

@@ -33,27 +33,27 @@ print(" \(ADTs.pprint(s5)) => \(ADTs.pprint(res))")
 res = ADTs.eval(s6)
 print(" \(ADTs.pprint(s6)) => \(ADTs.pprint(res))")
 
-let llist = ADTs["llist"]
+let bunch = ADTs["bunch"]
 
-for o in llist.get_operators(){
-  print("\nLList - \(o):")
-  print_ax(llist.a(o))
+for o in bunch.get_operators(){
+  print("\nBunch - \(o):")
+  print_ax(bunch.a(o))
 }
 
 
-var k = LList.n([Nat.n(2),Nat.n(5),Nat.n(3), Nat.n(1),Nat.n(4)])
-var exists = ADTs["llist"]["contains"](k,Nat.n(1))
+var k = Bunch.n([Nat.n(2),Nat.n(5),Nat.n(3), Nat.n(1),Nat.n(4)])
+var exists = ADTs["bunch"]["contains"](k,Nat.n(1))
 res = ADTs.eval(exists)//resolve(exists, contains)
 print("\n \(ADTs.pprint(exists)) = \(ADTs.pprint(res))")
 
-var l0 = LList.n([Nat.n(1),Nat.n(3), Nat.n(8)])
-var l1 = LList.n([Nat.n(7),Nat.n(5)])
-var l2 = LList.concat(l1,l0)
+var l0 = Bunch.n([Nat.n(1),Nat.n(3), Nat.n(8)])
+var l1 = Bunch.n([Nat.n(7),Nat.n(5)])
+var l2 = Bunch.concat(l1,l0)
 
 res = ADTs.eval(l2)
 print(" \(ADTs.pprint(l2)) => \(ADTs.pprint(res))")
 
-l0 = LList.size(LList.n([Nat.n(1),Nat.n(3),Nat.n(4)]))
+l0 = Bunch.size(Bunch.n([Nat.n(1),Nat.n(3),Nat.n(4)]))
 res = ADTs.eval(l0)
 print(" \(ADTs.pprint(l0)) => \(ADTs.pprint(res))")
 
