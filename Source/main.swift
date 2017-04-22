@@ -58,6 +58,20 @@ res = ADTs.eval(s6)
 print(" \(ADTs.pprint(s6)) => \(ADTs.pprint(res))")
 
 
+let seq = ADTs["sequence"]
+for i in seq.get_operators(){
+  print("\nsequence - \(i):")
+  print_ax( seq.a(i))
+}
+s0 = ADTs.eval(Sequence.n([Nat.n(2), Nat.n(3), Nat.n(4)]))
+s1 = Sequence.getAt(s0, Nat.n(1))
+s3 = Sequence.setAt(s0, Nat.n(1), Nat.n(5))
+print("\n s0: \(ADTs.pprint(s0))")
+res = ADTs.eval(s1)
+print(" \(ADTs.pprint(s1)) => \(ADTs.pprint(res))")
+res = ADTs.eval(s3)
+print(" \(ADTs.pprint(s3)) => \(ADTs.pprint(res))")
+
 let o = ADTs["nat"]["+"](Nat.n(2), Nat.n(3))
 for i in ADTs["nat"].get_operators(){
   print("\nnat - \(i):")
