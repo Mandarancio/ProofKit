@@ -12,6 +12,9 @@ or
 ./buildandrun.sh
 ```
 
+## Current Status
+Currently implemented ADT and Operators
+
 ## Operator
 
 This *struct* is just an helper to uniform the way operators are implemented. The choosen structure is a **Map** with the operation name and the left and right operands.
@@ -103,7 +106,7 @@ print("\(ADTs.pprit(t))") //// 1 + 1
 A simple inner most universal evaluator is implemented. To use it:
 ```swift
 let operation : Term = ADTs["nat"]["*"](Nat.n(2),Nat.n(3))
-let result : Term = ADTs.eval(l0)
+let result : Term = ADTs.eval(operation)
 print(" \(ADTs.pprint(operation)) => \(ADTs.pprint(result))")
 //// 2 * 3 => 6
 ```
