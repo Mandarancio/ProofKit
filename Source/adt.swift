@@ -82,7 +82,7 @@ struct Proof {
 
 //// This base class contains all needed information to define a datatype
 public class ADT{
-  public let name : String
+  var _name : String
   private var _axioms : [String:[Rule]]
   private var _operators : [String: (Term ...) ->Term]
   private var _arity : [String: Int]
@@ -90,7 +90,7 @@ public class ADT{
   private var _gen_arity : [String : Int]
 
   public init(_ name: String){
-    self.name = name
+    self._name = name
     self._generators = [:]
     self._operators = [:]
     self._axioms = [:]
@@ -108,6 +108,11 @@ public class ADT{
       set{
       }
   }
+
+  public func name() -> String {
+    return self._name
+  }
+
   public func eval(_ t: Term)-> Term{
     return t
   }
@@ -156,6 +161,10 @@ public class ADT{
     self._operators[name] = oper
     self._arity[name] = arity
     self._axioms[name] = axioms
+  }
+
+  internal func remove_operator(_ name: String){
+    self._operators[name] = nil
   }
 
   //// Retrive operator generator
