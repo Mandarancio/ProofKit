@@ -19,8 +19,8 @@ Currently implemented ADT and Operators
 |---|--------|----------|-----------|---------|
 |Boolean|ADT|```True() False()```|```n(Bool)```|```not(x) and(x,y) or(x,y)```|
 |Nat|ADT|```zero() succ(x)```|```n(Int)```|```add(x,y) mul(x,y)```|
-|LinkedList|ADT|```empty() cons(first, rest)```|```n([Term])```|```first(x) rest(x) contains(x,y) size(x) concat(x,y)```|
-|Set|LinkedList|```insert(x,y)```|```n([Term])```|```union(x,y) subSet(x,y) intersection(x,y) difference```|
+|[Bunch](https://en.wikipedia.org/wiki/Linked_list)|ADT|```empty() cons(first, rest)```|```n([Term])```|```first(x) rest(x) contains(x,y) size(x) concat(x,y)```|
+|[Set](https://en.wikipedia.org/wiki/Set_%28abstract_data_type%29)|Bunch|```insert(x,y)```|```n([Term])```|```union(x,y) subSet(x,y) intersection(x,y) difference```|
 
 ## Operator
 
