@@ -21,6 +21,7 @@ Currently implemented ADT and Operators
 |Nat|ADT|```zero() succ(x)```|```n(Int)```|```add(x,y) mul(x,y)```|
 |[Bunch](https://en.wikipedia.org/wiki/Linked_list)|ADT|```empty() cons(first, rest)```|```n([Term])```|```first(x) rest(x) contains(x,y) size(x) concat(x,y)```|
 |[Set](https://en.wikipedia.org/wiki/Set_%28abstract_data_type%29)|Bunch|```insert(x,y)```|```n([Term])```|```union(x,y) subSet(x,y) intersection(x,y) difference```|
+|Sequence|ADT|```empty(), cons(value,index,rest)```|```n([Term])```|```push(value,rest), getAt(sequence, index), setAt(sequence, index, value)```|
 
 ## Operator
 
