@@ -15,6 +15,13 @@ or
 ## Current Status
 Currently implemented ADT and Operators
 
+|ADT|Base ADT|Generators|Constructor|Operators|
+|---|--------|----------|-----------|---------|
+|Boolean|ADT|```True() False()```|```n(Bool)```|```not(x) and(x,y) or(x,y)```|
+|Nat|ADT|```zero() succ(x)```|```n(Int)```|```add(x,y) mul(x,y)```|
+|LinkedList|ADT|```empty() cons(first, rest)```|```n([Terms])```|```first(x) rest(x) contains(x,y) size(x) concat(x,y)```|
+|Set|LinkedList|```insert(x,y)```||```union(x,y) subSet(x,y) intersection(x,y) difference```|
+
 ## Operator
 
 This *struct* is just an helper to uniform the way operators are implemented. The choosen structure is a **Map** with the operation name and the left and right operands.
