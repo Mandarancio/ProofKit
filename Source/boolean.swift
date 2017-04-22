@@ -29,7 +29,7 @@ public class Boolean : ADT {
     }
 
     ////Helper
-    public static func to(_ x: Bool) -> Term{
+    public static func n(_ x: Bool) -> Term{
       return Value<Bool>(x)
     }
 
