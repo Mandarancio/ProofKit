@@ -1,6 +1,6 @@
 import XCTest
-@testable import ADTTests
+@testable import ProofKitLibTests
 
 XCTMain([
-     testCase(ADTTests.allTests),
+     testCase(ProofKitLibTests.allTests)
 ])

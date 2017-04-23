@@ -1,10 +1,9 @@
 import LogicKit
 import Foundation
 
-//// SINGLETON ADT Manager
-public let ADTs = ADTManager()
 public let vNil = Value("nil")
 public let vFail = Value("fail")
+internal let ADTs : ADTManager = ADTManager()
 
 public func get_result(_ goal : Goal, _ x : Variable) -> Term{
   var res: Term = vNil
@@ -18,7 +17,7 @@ public func get_result(_ goal : Goal, _ x : Variable) -> Term{
   return res
 }
 
-func resolve(_ op: Term, _ rules: [Rule]) -> Term{
+public func resolve(_ op: Term, _ rules: [Rule]) -> Term{
   let x = Variable(named: "solver.x")
   var curr = op
   var res : Term = op
@@ -38,10 +37,7 @@ func resolve(_ op: Term, _ rules: [Rule]) -> Term{
 
 
 //// namespace containing all the operations to prove an axiom
-struct Proof {
-
-
-
+public struct Proof {
 
   public static func subst(_ t: Term, _ x: Term, _ st: Term, _ r: Term)-> Goal{
     return x === st && r === t
@@ -98,7 +94,7 @@ public class ADT{
     self._gen_arity = [:]
   }
 
-  subscript ( i : String) -> ((Term...)->Term){
+  public subscript ( i : String) -> ((Term...)->Term){
       get{
         if _generators[i] != nil{
           return _generators[i]!
@@ -191,6 +187,11 @@ public class ADT{
 
 //// To be used to store all the ADTs
 public struct ADTManager{
+
+  public static func instance()->ADTManager{
+    return ADTs
+  }
+
   fileprivate init(){
     self["nat"] = Nat()
     self["boolean"] = Boolean()
@@ -199,7 +200,7 @@ public struct ADTManager{
     self["sequence"] = Sequence()
   }
 
-  subscript ( i : String) -> ADT{
+  public subscript ( i : String) -> ADT{
       get{
         return adts[i]!
       }
@@ -355,7 +356,7 @@ public struct Operator{
 
 //// Proved tehorem and axioms data struct
 public struct Rule {
-  init(_ lT : Term,_ rT: Term, _ condition: Term = Boolean.True()){
+  public init(_ lT : Term,_ rT: Term, _ condition: Term = Boolean.True()){
     self.lTerm = lT
     self.rTerm = rT
     self.condition = condition

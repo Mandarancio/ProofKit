@@ -1,2 +1,2 @@
 #! /bin/sh
-.build/debug/ProofKit
+.build/debug/ProofKitDemo

@@ -1,4 +1,5 @@
 import LogicKit
+import ProofKitLib
 
 func print_ax(_ ax: [Rule]){
   var i = 0
@@ -9,8 +10,7 @@ func print_ax(_ ax: [Rule]){
 }
 
 var res : Term
-
-
+let ADTs = ADTManager.instance()
 let bunch = ADTs["bunch"]
 
 for o in bunch.get_operators(){
