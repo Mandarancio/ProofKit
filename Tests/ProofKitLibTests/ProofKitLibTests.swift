@@ -14,21 +14,23 @@ extension ProofKitLibTests {
 class ProofKitLibTests: XCTestCase {
   let adt : ADTManager = ADTManager.instance()
 
-  internal func TAssert(_ a: Term,_ b: Term){
-    XCTAssertTrue(adt.eval(a).equals(adt.eval(b)))
+  internal func TAssert(_ a: Term,_ b: Term, _ msg: String = "a == b is false"){
+    XCTAssertTrue(adt.eval(a).equals(adt.eval(b)), msg)
   }
 
-  internal func FAssert(_ a: Term,_ b: Term){
-    XCTAssertFalse(adt.eval(a).equals(adt.eval(b)))
+  internal func FAssert(_ a: Term,_ b: Term, _ msg: String = "a != b is false"){
+    XCTAssertFalse(adt.eval(a).equals(adt.eval(b)),msg)
   }
 
 
   override func setUp() {
     super.setUp()
    }
+
   func testBool(){
 
   }
+
   func testNat() {
     // 1+1 == 2
     self.TAssert(Nat.add(Nat.n(1),Nat.n(1)),Nat.n(2))
