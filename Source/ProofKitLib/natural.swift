@@ -7,10 +7,10 @@ public class Nat: ADT{
     self.add_generator("zero", Nat.zero)
     self.add_generator("succ", Nat.succ,arity: 1)
     self.add_operator("+", Nat.add, [
-      Rule(Nat.add(Variable(named: "+.0.$1"), Value(0)),
-                  Variable(named: "+.0.$1")),
-             Rule(Nat.add(Variable(named: "+.1.$1"), Nat.succ(x: Variable(named: "+.1.$2"))),
-                  Nat.succ(x: Nat.add(Variable(named: "+.1.$1"),Variable(named:"+.1.$2"))))
+      Rule(Nat.add(Variable(named: "+.0.$0"), Value(0)),
+                  Variable(named: "+.0.$0")),
+             Rule(Nat.add(Variable(named: "+.1.$0"), Nat.succ(x: Variable(named: "+.1.$1"))),
+                  Nat.succ(x: Nat.add(Variable(named: "+.1.$0"),Variable(named:"+.1.$1"))))
     ])
     self.add_operator("*", Nat.mul,[
       Rule(
@@ -18,12 +18,12 @@ public class Nat: ADT{
         Nat.zero()
       ),
       Rule(
-        Nat.mul(Variable(named: "*.1.$1"), Nat.succ(x: Nat.zero())),
-        Variable(named: "*.1.$1")
+        Nat.mul(Variable(named: "*.1.$0"), Nat.succ(x: Nat.zero())),
+        Variable(named: "*.1.$0")
       ),
       Rule(
-        Nat.mul(Variable(named: "*.2.$1"), Nat.succ(x: Variable(named: "*.2.$2"))),
-        Nat.add(Variable(named: "*.2.$1"), Nat.mul(Variable(named: "*.2.$1"), Variable(named: "*.2.$2")))
+        Nat.mul(Variable(named: "*.2.$0"), Nat.succ(x: Variable(named: "*.2.$1"))),
+        Nat.add(Variable(named: "*.2.$0"), Nat.mul(Variable(named: "*.2.$0"), Variable(named: "*.2.$1")))
       )
     ])
   }
