@@ -32,8 +32,6 @@ class ProofKitLibTests: XCTestCase {
    }
 
   func testBool(){
-    /*print(adt.eval(Boolean.not(Boolean.not(Boolean.not(Boolean.True())))))
-
     // true != false
     self.FAssert(Boolean.True(),Boolean.False())
     // not true == false
@@ -55,13 +53,10 @@ class ProofKitLibTests: XCTestCase {
     // false or true == true
     self.TAssert(Boolean.or(Boolean.False(), Boolean.True()),Boolean.True())
     // false or false == false
-    self.TAssert(Boolean.or(Boolean.False(), Boolean.False()),Boolean.False())*/
+    self.TAssert(Boolean.or(Boolean.False(), Boolean.False()),Boolean.False())
   }
 
   func testNat() {
-    let test = adt["nat"]["+"](Boolean.True(),Boolean.False())
-    print(test)
-    print(adt.eval(test))/*
     // x + 0 == x
     self.TAssert(Nat.add(Nat.n(5),Nat.zero()),Nat.n(5))
     // 3 + 2 = 5
@@ -71,7 +66,7 @@ class ProofKitLibTests: XCTestCase {
     // 3*1 = 1
     self.TAssert(Nat.mul(Nat.n(3),Nat.n(1)),Nat.n(3))
     // 3*2 = 6
-    self.TAssert(Nat.mul(Nat.n(3),Nat.n(2)),Nat.n(6))*/
+    self.TAssert(Nat.mul(Nat.n(3),Nat.n(2)),Nat.n(6))
   }
 
   func testBunch(){
