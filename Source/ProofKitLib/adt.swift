@@ -9,8 +9,11 @@ public func equivalence(_ a: Term, _ b: Term) ->Bool{
   if a.equals(b){
     return true
   }
-  let sol = solve(a===b)
-  return true
+  for _ in  solve(a===b){
+    ///TODO How to do it better
+    return true
+  }
+  return false
 }
 
 
@@ -68,8 +71,7 @@ public struct Proof {
     return Rule(vNil,vNil)
   }
   public static func substitutivity(operation: (Term...)->Term, operands: [Term]...)->Rule{
-    // let lhs : Term
-    // let rhs : Term
+    // TODO
     return  Rule(vNil,vNil)
   }
   /*
