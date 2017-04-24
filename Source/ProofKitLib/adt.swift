@@ -5,6 +5,15 @@ public let vNil = Value("nil")
 public let vFail = Value("fail")
 internal let ADTs : ADTManager = ADTManager()
 
+public func equivalence(_ a: Term, _ b: Term) ->Bool{
+  if a.equals(b){
+    return true
+  }
+  let sol = solve(a===b)
+  return true
+}
+
+
 public func get_result(_ goal : Goal, _ x : Variable) -> Term{
   var res: Term = vNil
   for s in solve(goal){
@@ -42,6 +51,28 @@ public struct Proof {
     return x === st && r === t
   }
 
+  public static func reflexivity(_ term: Term)->Rule{
+    return Rule(term,term)
+  }
+  public static func symmetry(_ rule: Rule) -> Rule{
+    return Rule(rule.rTerm, rule.lTerm, rule.condition)
+  }
+  public static func transitivity(_ lhs: Rule, _ rhs: Rule) -> Rule{
+    if equivalence(lhs.rTerm,rhs.lTerm){
+      let x = Variable(named:"x")
+      let rcondition = get_result(lhs.rTerm === rhs.lTerm && x === rhs.condition,x)
+      let rrhs = get_result(lhs.rTerm === rhs.lTerm && x === rhs.rTerm,x)
+      let condition = Boolean.and(lhs.condition, rcondition)
+      return Rule(lhs.lTerm, rrhs, condition)
+    }
+    return Rule(vNil,vNil)
+  }
+  public static func substitutivity(operation: (Term...)->Term, operands: [Term]...)->Rule{
+    // let lhs : Term
+    // let rhs : Term
+    return  Rule(vNil,vNil)
+  }
+  /*
   public  static func identity( _ t: Term, _ s: Rule...)-> Term
   {
     return t
@@ -71,7 +102,7 @@ public struct Proof {
     }
     g = s[1].applay(t,x)
     return get_result(g,x)
-  }
+  }*/
 
 }
 
@@ -308,10 +339,10 @@ public struct Operator{
     return o
   }
   public static func n(_ name: Value<String>, _ ops: [Term]) -> Map{
-    var o : Map = Map([
+    var o : Map = [
       "type" : Operator.vType,
       "name" : name
-    ])
+    ]
     var i = 0
     for op in ops{
       o = o.with(key: String(i), value: op)
