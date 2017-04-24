@@ -18,10 +18,9 @@ public func get_result(_ goal : Goal, _ x : Variable) -> Term{
 }
 
 public func resolve(_ op: Term, _ rules: [Rule]) -> Term{
-  let x = Variable(named: "solver.x")
+  let x = Variable(named: "resolver.x")
   var curr = op
   var res : Term = op
-
   while !vNil.equals(res){
     res = vNil
     for r in rules{
@@ -329,7 +328,9 @@ public struct Operator{
       let name: Value<String> = m["name"]! as! Value<String>
       var a : [Term] = []
       for i in 0...m.keys.count-3{
-        a.insert(ADTs.eval(m[String(i)]!),at: i)
+        let tmp : Term = ADTs.eval(m[String(i)]!)
+        a.insert(tmp,at: i)
+
       }
       return Operator.n(name,a)
     }

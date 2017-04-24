@@ -17,8 +17,6 @@ for o in bunch.get_operators(){
   print("\nBunch - \(o):")
   print_ax(bunch.a(o))
 }
-
-
 var k = Bunch.n([Nat.n(2),Nat.n(5),Nat.n(3), Nat.n(1),Nat.n(4)])
 var exists = ADTs["bunch"]["contains"](k,Nat.n(1))
 res = ADTs.eval(exists)//resolve(exists, contains)
