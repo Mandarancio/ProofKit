@@ -232,7 +232,11 @@ public struct ADTManager{
         for (_,adt) in self.adts{
           if adt.get_operators().contains(name) {
             let axioms = adt.a(name)
-            return self.eval(resolve(k, axioms))
+            let res = resolve(k, axioms)
+            if res.equals(op){
+              return op
+            }
+            return self.eval(res)
           }
         }
 
@@ -279,10 +283,10 @@ public struct ADTManager{
 public struct Operator{
   public static let vType : Value<String> = Value<String>("operator")
   public static func n( _ name: String,_ ops: Term...) -> Map{
-    var o : Map = Map([
+    var o : Map = [
       "type" : Operator.vType,
       "name" : Value<String>(name)
-    ])
+    ]
     var i = 0
     for op in ops{
       o = o.with(key: String(i), value: op)
@@ -292,10 +296,10 @@ public struct Operator{
   }
 
   public static func n(_ name: String, _ ops: [Term]) -> Map{
-    var o : Map = Map([
+    var o : Map = [
       "type" : Operator.vType,
       "name" : Value<String>(name)
-    ])
+    ]
     var i = 0
     for op in ops{
       o = o.with(key: String(i), value: op)
