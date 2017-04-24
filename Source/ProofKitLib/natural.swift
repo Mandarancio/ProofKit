@@ -18,12 +18,8 @@ public class Nat: ADT{
         Nat.zero()
       ),
       Rule(
-        Nat.mul(Variable(named: "*.1.$0"), Nat.succ(x: Nat.zero())),
-        Variable(named: "*.1.$0")
-      ),
-      Rule(
-        Nat.mul(Variable(named: "*.2.$0"), Nat.succ(x: Variable(named: "*.2.$1"))),
-        Nat.add(Variable(named: "*.2.$0"), Nat.mul(Variable(named: "*.2.$0"), Variable(named: "*.2.$1")))
+        Nat.mul(Variable(named: "*.1.$0"), Nat.succ(x: Variable(named: "*.1.$1"))),
+        Nat.add(Variable(named: "*.1.$0"), Nat.mul(Variable(named: "*.1.$0"), Variable(named: "*.1.$1")))
       )
     ])
   }
