@@ -168,9 +168,6 @@ public class Nat: ADT{
   }
 
   public override func check(_ term: Term) -> Bool{
-    if term is Variable{
-      return true
-    }
     if term.equals( Nat.zero()){
       return true
     }
@@ -264,7 +261,7 @@ public class Integer: ADT{
   }
 
   static public func int(_ x: Term...) -> Term {
-    if x.count != 2 || !(Nat.check(x[0]) && Nat.check(x[1])) {
+    if x.count != 2 || !((x[0] is Variable || ADTs["nat"].check(x[0])) && (x[1] is Variable || ADTs["nat"].check(x[1]))) {
       return vFail
     }
     return Map(["a": x[0], "b":x[1]])
