@@ -22,6 +22,40 @@ public class Nat: ADT{
         Nat.add(Variable(named: "*.1.$0"), Nat.mul(Variable(named: "*.1.$0"), Variable(named: "*.1.$1")))
       )
     ])
+    self.add_operator("pre", Nat.pre,[
+      Rule(
+        Nat.pre(Nat.zero()),
+        Nat.zero()
+      ),
+      Rule(
+        Nat.pre(Nat.succ(x: Variable(named: "*.1.$0"))),
+        Variable(named: "*.1.$0")
+      )
+    ])
+    self.add_operator("-", Nat.sub,[
+      Rule(
+        Nat.sub(Variable(named: "*.0.$0"), Nat.zero()),
+        Variable(named: "*.0.$0")
+      ),
+      Rule(
+        Nat.sub(Nat.zero(), Variable(named: "*.1.$0")),
+        Nat.zero()
+      ),
+      Rule(
+        Nat.sub(Variable(named: "*.2.$0"), Nat.succ(x: Variable(named: "*.2.$1"))),
+        Nat.pre(Nat.sub(Variable(named: "*.2.$0"), Variable(named: "*.2.$1")))
+      )
+    ])
+    self.add_operator("/", Nat.div,[
+      Rule(
+        Nat.div(Variable(named: "*.0.$0"), Nat.zero()),
+        vFail
+      ),
+      Rule(
+        Nat.div(Variable(named: "*.1.$0"), Nat.succ(x: Variable(named: "*.1.$1"))),
+        Nat.add(Variable(named: "*.1.$0"), Nat.mul(Variable(named: "*.1.$0"), Variable(named: "*.1.$1")))
+      )
+    ])
   }
 
   //Generator
@@ -109,8 +143,25 @@ public class Nat: ADT{
   public static func add(_ operands: Term...) -> Term{
       return Operator.n("+",operands[0], operands[1])
   }
-
   public static func mul(_ operands: Term...)-> Term{
     return Operator.n("*",operands[0], operands[1])
+  }
+  public static func pre(_ operands: Term...) -> Term{
+    return Operator.n("pre", operands[0])
+  }
+  public static func sub(_ operands: Term...) -> Term{
+    return Operator.n("-", operands[0], operands[1])
+  }
+  public static func div(_ operands: Term...) -> Term{
+    return Operator.n("/", operands[0], operands[1])
+  }
+  public static func mod(_ operands: Term...) -> Term{
+    return Operator.n("%", operands[0], operands[1])
+  }
+  public static func lt(_ operands: Term...) -> Term{
+    return Operator.n("<", operands[0], operands[1])
+  }
+  public static func gt(_ operands: Term...) -> Term{
+    return Operator.n(">", operands[0], operands[1])
   }
 }

@@ -101,6 +101,11 @@ class ProofKitLibTests: XCTestCase {
     self.TAssert(Nat.mul(Nat.n(3),Nat.n(1)),Nat.n(3))
     // 3*2 = 6
     self.TAssert(Nat.mul(Nat.n(3),Nat.n(2)),Nat.n(6))
+
+    self.TAssert(Nat.pre(Nat.n(5)),Nat.n(4))
+
+    self.TAssert(Nat.sub(Nat.n(5),Nat.n(2)),Nat.n(3))
+
   }
 
   func testBunch(){
