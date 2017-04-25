@@ -60,6 +60,20 @@ public class Nat: ADT{
         Nat.lt(Variable(named: "*.2.$0"), Variable(named: "*.2.$1"))
       )
     ])
+    self.add_operator(">", Nat.gt,[
+      Rule(
+        Nat.gt(Nat.zero(), Variable(named: "*.0.$0")),
+        Boolean.False()
+      ),
+      Rule(
+        Nat.gt(Variable(named: "*.1.$0"), Nat.zero()),
+        Boolean.True()
+      ),
+      Rule(
+        Nat.gt(Nat.succ(x: Variable(named: "*.2.$0")), Nat.succ(x: Variable(named: "*.2.$1"))),
+        Nat.gt(Variable(named: "*.2.$0"), Variable(named: "*.2.$1"))
+      )
+    ])
     self.add_operator("/", Nat.div,[
       Rule(
         Nat.div(Variable(named: "*.0.$0"), Nat.zero()),
