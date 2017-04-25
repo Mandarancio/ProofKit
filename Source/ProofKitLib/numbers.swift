@@ -252,3 +252,12 @@ public class Nat: ADT{
     return Operator.n("gcd", operands[0], operands[1])
   }
 }
+
+
+public class Integer: ADT{
+  public init(){
+    super.init("Integer")
+
+  }
+
+}
