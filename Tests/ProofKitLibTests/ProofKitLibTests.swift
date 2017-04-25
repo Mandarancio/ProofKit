@@ -117,6 +117,12 @@ class ProofKitLibTests: XCTestCase {
     self.TAssert(Nat.gt(Nat.n(2),Nat.n(7)), Boolean.False())
     // 7>7 = false
     self.TAssert(Nat.gt(Nat.n(7),Nat.n(7)), Boolean.False())
+    // 10==10 = true
+    self.TAssert(Nat.eq(Nat.n(10),Nat.n(10)), Boolean.True())
+    // 10==9 = false
+    self.TAssert(Nat.eq(Nat.n(10),Nat.n(9)), Boolean.False())
+    //9==10 = false
+    self.TAssert(Nat.eq(Nat.n(9),Nat.n(10)), Boolean.False())
     //mod(20,3) = 2
     self.TAssert(Nat.mod(Nat.n(20),Nat.n(3)), Nat.n(2))
     //mod(0,5) = 0

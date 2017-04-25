@@ -74,6 +74,24 @@ public class Nat: ADT{
         Nat.gt(Variable(named: "*.2.$0"), Variable(named: "*.2.$1"))
       )
     ])
+    self.add_operator("==", Nat.eq,[
+      Rule(
+        Nat.eq(Nat.zero(), Nat.zero()),
+        Boolean.True()
+      ),
+      Rule(
+        Nat.eq(Variable(named: "*.1.$0"), Nat.zero()),
+        Boolean.False()
+      ),
+      Rule(
+        Nat.eq(Nat.zero(), Variable(named: "*.2.$0")),
+        Boolean.False()
+      ),
+      Rule(
+        Nat.eq(Nat.succ(x: Variable(named: "*.3.$0")), Nat.succ(x:  Variable(named: "*.3.$1"))),
+        Nat.eq(Variable(named: "*.3.$0"), Variable(named: "*.3.$1"))
+      )
+    ])
     self.add_operator("%", Nat.mod,[
       Rule(
         Nat.mod(Variable(named: "*.0.$0"), Nat.zero()),
@@ -210,5 +228,8 @@ public class Nat: ADT{
   }
   public static func gt(_ operands: Term...) -> Term{
     return Operator.n(">", operands[0], operands[1])
+  }
+  public static func eq(_ operands: Term...) -> Term{
+    return Operator.n("==", operands[0], operands[1])
   }
 }
