@@ -58,7 +58,7 @@ print(" \(ADTs.pprint(s6)) => \(ADTs.pprint(res))")
 
 let seq = ADTs["sequence"]
 for i in seq.get_operators(){
-  print("\nsequence - \(i):")
+  print("\nSequence - \(i):")
   print_ax( seq.a(i))
 }
 s0 = ADTs.eval(Sequence.n([Nat.n(2), Nat.n(3), Nat.n(4)]))
@@ -72,7 +72,7 @@ print(" \(ADTs.pprint(s3)) => \(ADTs.pprint(res))")
 
 let o = ADTs["nat"]["+"](Nat.n(2), Nat.n(3))
 for i in ADTs["nat"].get_operators(){
-  print("\nnat - \(i):")
+  print("\nNat - \(i):")
   print_ax( ADTs["nat"].a(i))
 }
 res = ADTs.eval(o)
