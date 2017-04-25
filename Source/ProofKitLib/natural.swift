@@ -74,6 +74,25 @@ public class Nat: ADT{
         Nat.gt(Variable(named: "*.2.$0"), Variable(named: "*.2.$1"))
       )
     ])
+    self.add_operator("%", Nat.mod,[
+      Rule(
+        Nat.mod(Variable(named: "*.0.$0"), Nat.zero()),
+        vFail
+      ),
+      Rule(
+        Nat.mod(Nat.zero(),  Variable(named: "*.1.$0")),
+        Nat.zero()
+      ),
+      Rule(
+        Nat.mod(Variable(named: "*.2.$0"), Variable(named: "*.2.$1")),
+        Variable(named: "*.2.$0"),
+        Nat.lt(Variable(named: "*.2.$0"), Variable(named: "*.2.$1"))
+      ),
+      Rule(
+        Nat.mod(Variable(named: "*.3.$0"), Variable(named: "*.3.$1")),
+        Nat.mod(Nat.sub(Variable(named: "*.3.$0"), Variable(named: "*.3.$1")), Variable(named: "*.3.$1"))
+      )
+    ])
     self.add_operator("/", Nat.div,[
       Rule(
         Nat.div(Variable(named: "*.0.$0"), Nat.zero()),
