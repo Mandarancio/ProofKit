@@ -111,15 +111,31 @@ public class Nat: ADT{
         Nat.mod(Nat.sub(Variable(named: "*.3.$0"), Variable(named: "*.3.$1")), Variable(named: "*.3.$1"))
       )
     ])
+    self.add_operator("gcd", Nat.gcd,[
+      Rule(
+        Nat.gcd(Variable(named: "*.0.$0"), Variable(named: "*.0.$1")),
+        Variable(named: "*.0.$0"),
+        Nat.eq(Variable(named: "*.0.$1"), Nat.zero())
+      ),
+      Rule(
+        Nat.gcd(Variable(named: "*.1.$0"), Variable(named: "*.1.$1")),
+        Variable(named: "*.1.$1"),
+        Nat.eq(Nat.mod(Variable(named: "*.1.$0"), Variable(named: "*.1.$1")), Nat.zero())
+      ),
+      Rule(
+        Nat.gcd(Variable(named: "*.2.$0"), Variable(named: "*.2.$1")),
+        Nat.gcd(Variable(named: "*.2.$1"), Nat.mod(Variable(named: "*.2.$0"), Variable(named: "*.2.$1")))
+      )
+    ])
     self.add_operator("/", Nat.div,[
       Rule(
         Nat.div(Variable(named: "*.0.$0"), Nat.zero()),
         vFail
       ),
       Rule(
-        Nat.div(Variable(named: "*.1.$0"), Nat.succ(x: Variable(named: "*.1.$1"))),
-        Nat.add(Variable(named: "*.1.$0"), Nat.mul(Variable(named: "*.1.$0"), Variable(named: "*.1.$1")))
-      )
+        Nat.div(Variable(named: "*.1.$0"), Nat.n(1)),
+        Variable(named: "*.1.$0")
+      ),
     ])
   }
 
@@ -231,5 +247,8 @@ public class Nat: ADT{
   }
   public class func eq(_ operands: Term...) -> Term{
     return Operator.n("N==", operands[0], operands[1])
+  }
+  public class func gcd(_ operands: Term...) -> Term{
+    return Operator.n("gcd", operands[0], operands[1])
   }
 }

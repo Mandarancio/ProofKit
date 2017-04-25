@@ -130,6 +130,10 @@ class ProofKitLibTests: XCTestCase {
     self.TAssert(Nat.mod(Nat.n(20),Nat.n(3)), Nat.n(2))
     //mod(0,5) = 0
     self.TAssert(Nat.mod(Nat.n(0),Nat.n(5)), Nat.n(0))
+    //gcd(20,0) = 20
+    self.TAssert(Nat.gcd(Nat.n(20),Nat.n(0)), Nat.n(20))
+    //gcd(20,16) = 4
+    self.TAssert(Nat.gcd(Nat.n(20),Nat.n(16)), Nat.n(4))
 
   }
 
