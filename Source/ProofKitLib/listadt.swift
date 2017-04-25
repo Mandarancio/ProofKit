@@ -45,6 +45,36 @@ public class Bunch : ADT {
           Variable(named: "first.1.$0")
         )
       ], arity:1)
+      self.add_operator("removeOne", Bunch.removeOne,[
+        Rule(
+          Bunch.removeOne(Bunch.empty(),Variable(named:"remOne.0.$0")),
+          Bunch.empty()
+        ),
+        Rule(
+          Bunch.removeOne(Bunch.cons(Variable(named:"remOne.1.$0"),Variable(named:"remOne.1.$1")), Variable(named:"remOne.1.$0")),
+          Variable(named: "remOne.1.$1")
+        ),
+        Rule(
+          Bunch.removeOne(Bunch.cons(Variable(named:"remOne.2.$0"),Variable(named:"remOne.2.$1")), Variable(named:"remOne.2.$2")),
+          Bunch.cons(Variable(named:"remOne.2.$0"), Bunch.removeOne(Variable(named:"remOne.2.$1"),Variable(named:"remOne.2.$2")))
+        )
+      ])
+      self.add_operator("BU==",Bunch.eq,[
+        Rule(
+          Bunch.eq(Variable(named:"BU==.0.$0"),Variable(named:"BU==.0.$0")),
+          Boolean.True()
+        ),
+        Rule(
+          Bunch.eq(Bunch.cons(Variable(named:"BU==.1.$0"),Variable(named:"BU==.1.$1")),Variable(named:"BU==.1.$2")),
+          Boolean.False(),
+          Boolean.or(Boolean.not(Bunch.contains(Variable(named:"BU==.1.$2"), Variable(named:"BU==.1.$0"))), Boolean.not(Nat.eq(Nat.add(Bunch.size(Variable(named:"BU==.1.$1")),Nat.n(1)), Bunch.size(Variable(named:"BU==.1.$2")))))
+        ),
+        Rule(
+          Bunch.eq(Bunch.cons(Variable(named:"BU==.1.$0"),Variable(named:"BU==.1.$1")),Variable(named:"BU==.1.$2")),
+          Bunch.eq(Variable(named:"BU==.1.$1"), Bunch.removeOne(Variable(named:"BU==.1.$2"), Variable(named:"BU==.1.$0"))),
+          Boolean.and(Bunch.contains(Variable(named:"BU==.1.$2"), Variable(named:"BU==.1.$0")), Nat.eq(Nat.add(Bunch.size(Variable(named:"BU==.1.$1")),Nat.n(1)), Bunch.size(Variable(named:"BU==.1.$2"))))
+        )
+      ])
     }
 
     public static func empty(_ :Term...) -> Term{
@@ -87,6 +117,14 @@ public class Bunch : ADT {
 
     public static func first(_ terms: Term...)-> Term{
       return Operator.n("first", terms[0])
+    }
+
+    public static func removeOne(_ terms: Term...)->Term{
+      return Operator.n("removeOne",terms[0], terms[1])
+    }
+
+    public class func eq(_ terms: Term...)-> Term{
+      return Operator.n("BU==",terms[0],terms[1])
     }
 
     public override func pprint(_ t: Term) -> String{
@@ -145,6 +183,7 @@ public class Set : Bunch {
     super.init()
     self._name = "set"
     self.remove_operator("concat")
+    self.remove_operator("removeOne")
     self.add_operator("insert", Set.insert, [
       Rule(
         Set.insert(Variable(named: "insert.0.$0"), Set.empty()),
