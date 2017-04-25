@@ -74,7 +74,7 @@ public class Nat: ADT{
         Nat.gt(Variable(named: "*.2.$0"), Variable(named: "*.2.$1"))
       )
     ])
-    self.add_operator("==", Nat.eq,[
+    self.add_operator("N==", Nat.eq,[
       Rule(
         Nat.eq(Nat.zero(), Nat.zero()),
         Boolean.True()
@@ -229,7 +229,7 @@ public class Nat: ADT{
   public static func gt(_ operands: Term...) -> Term{
     return Operator.n(">", operands[0], operands[1])
   }
-  public static func eq(_ operands: Term...) -> Term{
-    return Operator.n("==", operands[0], operands[1])
+  public class func eq(_ operands: Term...) -> Term{
+    return Operator.n("N==", operands[0], operands[1])
   }
 }
