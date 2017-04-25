@@ -18,6 +18,10 @@ public class Boolean : ADT {
         Rule(Boolean.or(Variable(named:"or.1.$1"),Boolean.True()),Boolean.True()),
         Rule(Boolean.or(Boolean.False(),Boolean.False()),Boolean.False())
       ])
+      self.add_operator("B==",Boolean.eq, [
+        Rule(Boolean.eq(Variable(named:"b.==.0.$0"),Variable(named:"b.==.0.$0")), Boolean.True()),
+        Rule(Boolean.eq(Variable(named:"b.==.1.$0"),Variable(named:"b.==.1.$1")), Boolean.False()),
+      ])
     }
 
     public static func True(_:Term...) -> Term{
@@ -26,6 +30,10 @@ public class Boolean : ADT {
 
     public static func False(_:Term...) -> Term{
       return Value<Bool>(false)
+    }
+
+    public static func eq(_ ops: Term...)->Term{
+      return Operator.n("B==",ops[0],ops[1])
     }
 
     ////Helper
