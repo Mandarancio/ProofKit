@@ -50,9 +50,9 @@ public func resolve(_ op: Term, _ rules: [Rule]) -> Term{
 //// namespace containing all the operations to prove an axiom
 public struct Proof {
 
-  public static func subst(_ t: Term, _ x: Term, _ st: Term, _ r: Term)-> Goal{
-    return x === st && r === t
-  }
+  // public static func subst(_ t: Term, _ x: Term, _ st: Term, _ r: Term)-> Goal{
+  //   return x === st && r === t
+  // }
 
   public static func reflexivity(_ term: Term)->Rule{
     return Rule(term,term)
@@ -62,17 +62,47 @@ public struct Proof {
   }
   public static func transitivity(_ lhs: Rule, _ rhs: Rule) -> Rule{
     if equivalence(lhs.rTerm,rhs.lTerm){
-      let x = Variable(named:"x")
+      let x = Variable(named:"t.x")
       let rcondition = get_result(lhs.rTerm === rhs.lTerm && x === rhs.condition,x)
       let rrhs = get_result(lhs.rTerm === rhs.lTerm && x === rhs.rTerm,x)
-      let condition = Boolean.and(lhs.condition, rcondition)
+      let condition : Term
+      if equivalence(lhs.condition, rcondition){
+        condition = lhs.condition
+      }else{
+        condition = Boolean.and(lhs.condition, rcondition)
+      }
       return Rule(lhs.lTerm, rrhs, condition)
     }
     return Rule(vNil,vNil)
   }
-  public static func substitutivity(operation: (Term...)->Term, operands: [Term]...)->Rule{
+
+
+  public static func substitutivity(operation: String, operands: [Term]...)->Rule{
     // TODO
-    return  Rule(vNil,vNil)
+    var lhs : Map = Operator.n(operation, operands[0][0])
+    var rhs : Map = Operator.n(operation, operands[0][1])
+    for i in 1...operands.count-1{
+      lhs = lhs.with(key: String(i), value: operands[i][0])
+      rhs = rhs.with(key: String(i), value: operands[i][1])
+    }
+    return Rule(lhs,rhs)
+  }
+
+  public static func substitution(_ rule: Rule, _ variable: Variable, _ replacement: Term)-> Rule{
+    let x = Variable(named: "s.x")
+    // let y = Variable(named: "s.y")
+    let lhs = get_result(rule.lTerm === x && variable === replacement, x)
+    let rhs = get_result(rule.rTerm === x && variable === replacement, x)
+    let condition = get_result(rule.condition === x && variable === replacement, x)
+    return Rule(lhs,rhs,condition)
+  }
+
+  public static func cut(_ rule: Rule, _ replacement: Rule) -> Rule{
+    let x = Variable(named: "cut.x")
+    let lhs = get_result(rule.lTerm === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
+    let rhs = get_result(rule.rTerm === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
+    let condition = get_result(rule.condition === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
+    return Rule(lhs,rhs,condition)
   }
   /*
   public  static func identity( _ t: Term, _ s: Rule...)-> Term
@@ -413,6 +443,10 @@ public struct Rule {
     }else{
       return "if \(ADTs.pprint(self.condition)) then \n\t\(ADTs.pprint(self.lTerm)) = \(ADTs.pprint(self.rTerm))"
     }
+  }
+
+  public func equals(_ r: Rule) -> Bool{
+    return equivalence(self.lTerm, r.lTerm) && equivalence(self.rTerm, r.rTerm) && equivalence(self.condition, r.condition)
   }
 
   public let lTerm : Term
