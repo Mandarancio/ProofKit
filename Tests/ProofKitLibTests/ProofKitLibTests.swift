@@ -7,7 +7,8 @@ extension ProofKitLibTests {
         return [
             ("testBool", testBool),
             ("testNat", testNat),
-            ("testEquationalProof", testEquationalProof)
+            ("testEquationalProof", testEquationalProof),
+            ("testBunch", testBunch)
         ]
     }
 }
@@ -70,6 +71,8 @@ class ProofKitLibTests: XCTestCase {
     self.FAssert(Boolean.True(),Boolean.False())
     // not true == false
     self.TAssert(Boolean.not(Boolean.True()), Boolean.False())
+    // not Fase = True == True
+    self.TAssert(Boolean.eq(Boolean.True(), Boolean.not(Boolean.False())),Boolean.True())
     // not false == true
     self.TAssert(Boolean.not(Boolean.False()), Boolean.True())
     // true and true == true
@@ -132,5 +135,10 @@ class ProofKitLibTests: XCTestCase {
 
   func testBunch(){
     //////////////
+    let b1 = Bunch.n([Nat.n(1), Nat.n(2),Nat.n(4)])
+    let b2 = Bunch.n([Nat.n(4), Nat.n(2),Nat.n(1)])
+
+    self.TAssert(Bunch.eq(b1,b2), Boolean.True())
+    self.FAssert(Bunch.eq(Bunch.removeOne(b1,Nat.n(1)),b2),Boolean.True())
   }
 }
