@@ -23,6 +23,19 @@ Currently implemented ADT and Operators
 |[Set](https://en.wikipedia.org/wiki/Set_%28abstract_data_type%29)|Bunch|```insert(x,y)```|```n([Term])```|```union(x,y) subSet(x,y) intersection(x,y) difference```|
 |Sequence|ADT|```empty(), cons(value,index,rest)```|```n([Term])```|```push(value,rest), getAt(sequence, index), setAt(sequence, index, value)```|
 
+Equational Proofs:
+
+|Name| Status|
+|----|------:|
+|reflexivity| **tested**|
+|simmetry|**tested**|
+|transitivity* | **tested**|
+|substitution| implemented|
+|substitutivity| implemented|
+|cut|implemented|
+|inductive| - |
+* variable name problem to b
+
 ## Operator
 
 This *struct* is just an helper to uniform the way operators are implemented. The choosen structure is a **Map** with the operation name and the left and right operands.
