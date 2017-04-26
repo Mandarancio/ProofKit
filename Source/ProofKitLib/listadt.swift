@@ -47,6 +47,10 @@ public class Bunch : ADT {
       ], arity:1)
       self.add_operator("removeOne", Bunch.removeOne,[
         Rule(
+          Bunch.removeOne(Variable(named:"remOne.-1.$0"),Bunch.empty()),
+          Variable(named:"remOne.-1.$0")
+        ),
+        Rule(
           Bunch.removeOne(Bunch.empty(),Variable(named:"remOne.0.$0")),
           Bunch.empty()
         ),
@@ -57,6 +61,22 @@ public class Bunch : ADT {
         Rule(
           Bunch.removeOne(Bunch.cons(Variable(named:"remOne.2.$0"),Variable(named:"remOne.2.$1")), Variable(named:"remOne.2.$2")),
           Bunch.cons(Variable(named:"remOne.2.$0"), Bunch.removeOne(Variable(named:"remOne.2.$1"),Variable(named:"remOne.2.$2")))
+        )
+      ])
+      self.add_operator("removeAll",Bunch.removeAll, [
+        Rule(
+          Bunch.removeAll(Variable(named:"remAll.0.$0"), Bunch.empty()),
+          Variable(named:"remAll.0.$0")
+        ),
+        Rule(
+          Bunch.removeAll(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1")),
+          Variable(named:"remAll.0.$0"),
+          Boolean.not(Bunch.contains(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1")))
+        ),
+        Rule(
+          Bunch.removeAll(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1")),
+          Bunch.removeAll(Bunch.removeOne(Variable(named:"remAll.0.$0"),Variable(named:"remAll.0.$1")),Variable(named:"remAll.0.$1")),
+          Bunch.contains(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1"))
         )
       ])
       self.add_operator("BU==",Bunch.eq,[
@@ -122,6 +142,9 @@ public class Bunch : ADT {
     public static func removeOne(_ terms: Term...)->Term{
       return Operator.n("removeOne",terms[0], terms[1])
     }
+    public static func removeAll(_ terms: Term...)->Term{
+      return Operator.n("removeAll",terms[0],terms[1])
+    }
 
     public class func eq(_ terms: Term...)-> Term{
       return Operator.n("BU==",terms[0],terms[1])
@@ -184,6 +207,7 @@ public class Set : Bunch {
     self._name = "set"
     self.remove_operator("concat")
     self.remove_operator("removeOne")
+    self.remove_operator("BU==")
     self.add_operator("insert", Set.insert, [
       Rule(
         Set.insert(Variable(named: "insert.0.$0"), Set.empty()),
@@ -252,8 +276,32 @@ public class Set : Bunch {
   			Boolean.and(Set.contains(Variable(named: "subset.1.$2"),  Variable(named: "subset.1.$0")),Set.subSet( Variable(named: "subset.1.$1"), Variable(named: "subset.1.$2")))
   		)
   	])
+    self.add_operator("S_norm", Set.norm,[
+      Rule(
+        Set.norm(Set.empty()),
+        Set.empty()
+      ),
+      Rule(
+        Set.norm(Set.cons(Variable(named:"sn.1.$0"),Variable(named:"sn.1.$1"))),
+        Set.cons(Variable(named:"sn.1.$0"),Set.removeAll(Variable(named:"sn.1.$1"),Variable(named:"sn.1.$0")))
+      )
+    ])
+    self.add_operator("S==", Set.eq,[
+      Rule(
+        Set.eq(Variable(named: "S==.0.$0"),Variable(named: "S==.0.$1")),
+        Bunch.eq(Set.norm(Variable(named:"S==.0.$0")),Set.norm(Variable(named:"S==.0.$1")))
+      )
+    ])
   }
 
+  public override class func eq(_ terms: Term...)-> Term
+  {
+    return Operator.n("S==",terms[0],terms[1])
+  }
+
+  public static func norm(_ terms: Term...)-> Term{
+    return Operator.n("S_norm",terms[0])
+  }
   public static func insert(_ terms: Term...)->Term{
     return Operator.n("insert",terms[0], terms[1])
   }
