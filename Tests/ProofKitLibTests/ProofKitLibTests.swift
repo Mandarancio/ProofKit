@@ -134,7 +134,10 @@ class ProofKitLibTests: XCTestCase {
     self.TAssert(Nat.gcd(Nat.n(20),Nat.n(0)), Nat.n(20))
     //gcd(20,16) = 4
     self.TAssert(Nat.gcd(Nat.n(20),Nat.n(16)), Nat.n(4))
-
+    //div(10/0) = vFail
+    self.TAssert(Nat.div(Nat.n(10),Nat.n(0)), vFail)
+    //div(22/5) = 4
+    self.TAssert(Nat.div(Nat.n(22),Nat.n(5)), Nat.n(4))
   }
 
   func testBunch(){
