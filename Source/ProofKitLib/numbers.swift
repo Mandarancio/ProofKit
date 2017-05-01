@@ -133,9 +133,27 @@ public class Nat: ADT{
         vFail
       ),
       Rule(
-        Nat.div(Variable(named: "*.1.$0"), Nat.n(1)),
-        Variable(named: "*.1.$0")
+        Nat.div(Variable(named: "*.1.$0"), Variable(named: "*.1.$1")),
+        Nat.zero(),
+        Nat.lt(Variable(named: "*.1.$0"), Variable(named: "*.1.$1"))
       ),
+      Rule(
+        Nat.div(Variable(named: "*.2.$0"), Variable(named: "*.2.$1")),
+        Nat.succ(
+          x: Nat.div(
+            Nat.sub(
+              Variable(named: "*.2.$0"),
+              Variable(named: "*.2.$1")
+            ),
+              Variable(named: "*.2.$1")
+          )
+        ),
+        Boolean.or(
+          Nat.gt(Variable(named: "*.2.$0"), Variable(named: "*.2.$1")),
+          Nat.eq(Variable(named: "*.2.$0"), Variable(named: "*.2.$1"))
+        )
+
+      )
     ])
   }
 
