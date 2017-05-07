@@ -4,8 +4,10 @@ import Foundation
 public class Nat: ADT{
   public init(){
     super.init("Nat")
+
     self.add_generator("zero", Nat.zero)
     self.add_generator("succ", Nat.succ,arity: 1)
+
     self.add_operator("+", Nat.add, [
       Rule(Nat.add(Variable(named: "+.0.$0"), Value(0)),
                   Variable(named: "+.0.$0")),
@@ -108,7 +110,7 @@ public class Nat: ADT{
       ),
       Rule(
         Nat.mod(Variable(named: "%.3.$0"), Variable(named: "%.3.$1")),
-        Nat.mod(Nat.sub(Variable(named: "%.3.$0"), Variable(named: "%.3.$1")), Variable(named: "*.3.$1"))
+        Nat.mod(Nat.sub(Variable(named: "%.3.$0"), Variable(named: "%.3.$1")), Variable(named: "%.3.$1"))
       )
     ])
     self.add_operator("gcd", Nat.gcd,[
@@ -124,7 +126,7 @@ public class Nat: ADT{
       ),
       Rule(
         Nat.gcd(Variable(named: "gcd.2.$0"), Variable(named: "gcd.2.$1")),
-        Nat.gcd(Variable(named: "gcd.2.$1"), Nat.mod(Variable(named: "gcd.2.$0"), Variable(named: "*.2.$1")))
+        Nat.gcd(Variable(named: "gcd.2.$1"), Nat.mod(Variable(named: "gcd.2.$0"), Variable(named: "gcd.2.$1")))
       )
     ])
     self.add_operator("/", Nat.div,[
@@ -284,5 +286,15 @@ public class Integer: ADT{
     }
     return Map(["a": x[0], "b":x[1]])
   }
+
+  /*static public func n(_ x: Int, _y: Int) -> Term {
+  	if x==0{
+  		return Nat.zero()
+  	}
+    return Nat.zero()
+    /*else{
+      return Nat.sub(Nat.n(x),Nat.n(y))
+    }*/
+  }*/
 
 }
