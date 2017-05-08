@@ -7,6 +7,7 @@ extension ProofKitLibTests {
         return [
             ("testBool", testBool),
             ("testNat", testNat),
+            ("testInt", testInt),
             ("testEquationalProof", testEquationalProof),
             ("testBunch", testBunch)
         ]
@@ -138,6 +139,10 @@ class ProofKitLibTests: XCTestCase {
     self.TAssert(Nat.div(Nat.n(10),Nat.n(0)), vFail)
     //div(22/5) = 4
     self.TAssert(Nat.div(Nat.n(22),Nat.n(5)), Nat.n(4))
+  }
+
+  func testInt(){
+
   }
 
   func testBunch(){
