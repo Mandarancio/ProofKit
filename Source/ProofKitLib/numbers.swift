@@ -294,9 +294,17 @@ public class Integer: ADT{
     }
     return Integer.int(Nat.zero(),Nat.n(abs_x))
   }
-  /*public class override func belong(_ x: Term...) -> Goal{
-    return Nat.belong(Integer.n(x))
-  }*/
+
+  public override func check(_ term: Term) -> Bool{
+    if let map = (term as? Map) {
+      return map["a"] != nil && map["b"] != nil
+    }
+    return false
+  }
+
+  public class override func belong(_ x: Term) -> Goal{
+    return (delayed(fresh {y in fresh {z in x === Integer.int(y,z) && Nat.belong(y) && Nat.belong(z)}}))
+  }
 
   public override func pprint(_ term: Term) -> String{
     if let map = (term as? Map) {
