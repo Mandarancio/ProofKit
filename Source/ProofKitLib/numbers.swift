@@ -287,14 +287,35 @@ public class Integer: ADT{
     return Map(["a": x[0], "b":x[1]])
   }
 
-  /*static public func n(_ x: Int, _y: Int) -> Term {
-  	if x==0{
-  		return Nat.zero()
-  	}
-    return Nat.zero()
-    /*else{
-      return Nat.sub(Nat.n(x),Nat.n(y))
-    }*/
+  static public func n(_ x: Int) -> Term {
+    let abs_x = Swift.abs(x)
+    if x>0{
+      return Integer.int(Nat.n(abs_x),Nat.zero())
+    }
+    return Integer.int(Nat.zero(),Nat.n(abs_x))
+  }
+  /*public class override func belong(_ x: Term...) -> Goal{
+    return Nat.belong(Integer.n(x))
   }*/
+
+  public override func pprint(_ term: Term) -> String{
+    if let map = (term as? Map) {
+      let a : Term = map["a"]!
+      let b : Term = map["b"]!
+      if  ADTs["nat"].check(a) && ADTs["nat"].check(b){
+        if ADTs.eval(Nat.eq(a,b)).equals(Boolean.True()){
+          return "0"
+        }
+        if ADTs.eval(Nat.gt(a,b)).equals(Boolean.True()){
+          return "+\(ADTs.pprint(ADTs.eval(Nat.sub(a,b))))"
+        }
+        return "-\(ADTs.pprint(ADTs.eval(Nat.sub(b,a))))"
+      }
+    }
+    if let variable = (term as? Variable){
+      return variable.description
+    }
+    return Nat.to_string(term)
+  }
 
 }
