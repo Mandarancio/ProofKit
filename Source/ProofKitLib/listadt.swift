@@ -1,104 +1,104 @@
 import LogicKit
 //// https://en.wikipedia.org/wiki/Linked_list
 //// Linked List
-public class Bunch : ADT {
+public class Multiset : ADT {
     public init(){
-      super.init("bunch")
+      super.init("multiset")
 
-      self.add_generator("empty", Bunch.empty)
-      self.add_generator("cons", Bunch.cons, arity:2)
-      self.add_operator("concat", Bunch.concat, [
-        Rule(Bunch.concat(Bunch.empty(),Variable(named: "concat.0.$0")),Variable(named: "concat.0.$0")),
+      self.add_generator("empty", Multiset.empty)
+      self.add_generator("cons", Multiset.cons, arity:2)
+      self.add_operator("concat", Multiset.concat, [
+        Rule(Multiset.concat(Multiset.empty(),Variable(named: "concat.0.$0")),Variable(named: "concat.0.$0")),
         Rule(
-          Bunch.concat(Bunch.cons(Variable(named: "concat.1.$0"), Variable(named: "concat.1.$1")),Variable(named: "concat.1.$2")),
-          Bunch.concat(Variable(named: "concat.1.$1"), Bunch.cons(Variable(named: "concat.1.$0"), Variable(named: "concat.1.$2"))))
+          Multiset.concat(Multiset.cons(Variable(named: "concat.1.$0"), Variable(named: "concat.1.$1")),Variable(named: "concat.1.$2")),
+          Multiset.concat(Variable(named: "concat.1.$1"), Multiset.cons(Variable(named: "concat.1.$0"), Variable(named: "concat.1.$2"))))
       ])
-      self.add_operator("contains", Bunch.contains, [
-        Rule(Bunch.contains(Bunch.empty(), Variable(named: "contains.0.$0")), Boolean.False()),
+      self.add_operator("contains", Multiset.contains, [
+        Rule(Multiset.contains(Multiset.empty(), Variable(named: "contains.0.$0")), Boolean.False()),
         Rule(
-          Bunch.contains(Bunch.cons(Variable(named: "contains.1.$0"), Variable(named: "contains.1.$1")), Variable(named: "contains.1.$0")),
+          Multiset.contains(Multiset.cons(Variable(named: "contains.1.$0"), Variable(named: "contains.1.$1")), Variable(named: "contains.1.$0")),
           Boolean.True()
         ),
         Rule(
-          Bunch.contains(Bunch.cons(Variable(named: "contains.2.$0"), Variable(named: "contains.2.$1")), Variable(named: "contains.2.$2")),
-          Bunch.contains(Variable(named: "contains.2.$1"), Variable(named: "contains.2.$2"))
+          Multiset.contains(Multiset.cons(Variable(named: "contains.2.$0"), Variable(named: "contains.2.$1")), Variable(named: "contains.2.$2")),
+          Multiset.contains(Variable(named: "contains.2.$1"), Variable(named: "contains.2.$2"))
         )
       ])
-      self.add_operator("size", Bunch.size, [
-        Rule(Bunch.size(Bunch.empty()), Nat.zero()),
+      self.add_operator("size", Multiset.size, [
+        Rule(Multiset.size(Multiset.empty()), Nat.zero()),
         Rule(
-          Bunch.size(Bunch.cons(Variable(named: "size.1.$0"), Variable(named: "size.1.$1"))),
-          Nat.succ(x: Bunch.size(Variable(named:"size.1.$1")))
+          Multiset.size(Multiset.cons(Variable(named: "size.1.$0"), Variable(named: "size.1.$1"))),
+          Nat.succ(x: Multiset.size(Variable(named:"size.1.$1")))
         )
       ], arity: 1)
-      self.add_operator("rest", Bunch.rest, [
-        Rule(Bunch.rest(Bunch.empty()), Bunch.empty()),
+      self.add_operator("rest", Multiset.rest, [
+        Rule(Multiset.rest(Multiset.empty()), Multiset.empty()),
         Rule(
-          Bunch.rest(Bunch.cons(Variable(named: "rest.1.$0"), Variable(named: "rest.1.$1"))),
+          Multiset.rest(Multiset.cons(Variable(named: "rest.1.$0"), Variable(named: "rest.1.$1"))),
           Variable(named: "rest.1.$1")
         )
       ], arity:1)
-      self.add_operator("first", Bunch.first, [
-        Rule(Bunch.first(Bunch.empty()), vNil),
+      self.add_operator("first", Multiset.first, [
+        Rule(Multiset.first(Multiset.empty()), vNil),
         Rule(
-          Bunch.first(Bunch.cons(Variable(named: "first.1.$0"), Variable(named: "first.1.$1"))),
+          Multiset.first(Multiset.cons(Variable(named: "first.1.$0"), Variable(named: "first.1.$1"))),
           Variable(named: "first.1.$0")
         )
       ], arity:1)
-      self.add_operator("removeOne", Bunch.removeOne,[
+      self.add_operator("removeOne", Multiset.removeOne,[
         Rule(
-          Bunch.removeOne(Variable(named:"remOne.-1.$0"),Bunch.empty()),
+          Multiset.removeOne(Variable(named:"remOne.-1.$0"),Multiset.empty()),
           Variable(named:"remOne.-1.$0")
         ),
         Rule(
-          Bunch.removeOne(Bunch.empty(),Variable(named:"remOne.0.$0")),
-          Bunch.empty()
+          Multiset.removeOne(Multiset.empty(),Variable(named:"remOne.0.$0")),
+          Multiset.empty()
         ),
         Rule(
-          Bunch.removeOne(Bunch.cons(Variable(named:"remOne.1.$0"),Variable(named:"remOne.1.$1")), Variable(named:"remOne.1.$0")),
+          Multiset.removeOne(Multiset.cons(Variable(named:"remOne.1.$0"),Variable(named:"remOne.1.$1")), Variable(named:"remOne.1.$0")),
           Variable(named: "remOne.1.$1")
         ),
         Rule(
-          Bunch.removeOne(Bunch.cons(Variable(named:"remOne.2.$0"),Variable(named:"remOne.2.$1")), Variable(named:"remOne.2.$2")),
-          Bunch.cons(Variable(named:"remOne.2.$0"), Bunch.removeOne(Variable(named:"remOne.2.$1"),Variable(named:"remOne.2.$2")))
+          Multiset.removeOne(Multiset.cons(Variable(named:"remOne.2.$0"),Variable(named:"remOne.2.$1")), Variable(named:"remOne.2.$2")),
+          Multiset.cons(Variable(named:"remOne.2.$0"), Multiset.removeOne(Variable(named:"remOne.2.$1"),Variable(named:"remOne.2.$2")))
         )
       ])
-      self.add_operator("removeAll",Bunch.removeAll, [
+      self.add_operator("removeAll",Multiset.removeAll, [
         Rule(
-          Bunch.removeAll(Variable(named:"remAll.0.$0"), Bunch.empty()),
+          Multiset.removeAll(Variable(named:"remAll.0.$0"), Multiset.empty()),
           Variable(named:"remAll.0.$0")
         ),
         Rule(
-          Bunch.removeAll(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1")),
+          Multiset.removeAll(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1")),
           Variable(named:"remAll.0.$0"),
-          Boolean.not(Bunch.contains(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1")))
+          Boolean.not(Multiset.contains(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1")))
         ),
         Rule(
-          Bunch.removeAll(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1")),
-          Bunch.removeAll(Bunch.removeOne(Variable(named:"remAll.0.$0"),Variable(named:"remAll.0.$1")),Variable(named:"remAll.0.$1")),
-          Bunch.contains(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1"))
+          Multiset.removeAll(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1")),
+          Multiset.removeAll(Multiset.removeOne(Variable(named:"remAll.0.$0"),Variable(named:"remAll.0.$1")),Variable(named:"remAll.0.$1")),
+          Multiset.contains(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1"))
         )
       ])
-      self.add_operator("BU==",Bunch.eq,[
+      self.add_operator("BU==",Multiset.eq,[
         Rule(
-          Bunch.eq(Variable(named:"BU==.0.$0"),Variable(named:"BU==.0.$0")),
+          Multiset.eq(Variable(named:"BU==.0.$0"),Variable(named:"BU==.0.$0")),
           Boolean.True()
         ),
         Rule(
-          Bunch.eq(Bunch.cons(Variable(named:"BU==.1.$0"),Variable(named:"BU==.1.$1")),Variable(named:"BU==.1.$2")),
+          Multiset.eq(Multiset.cons(Variable(named:"BU==.1.$0"),Variable(named:"BU==.1.$1")),Variable(named:"BU==.1.$2")),
           Boolean.False(),
-          Boolean.or(Boolean.not(Bunch.contains(Variable(named:"BU==.1.$2"), Variable(named:"BU==.1.$0"))), Boolean.not(Nat.eq(Nat.add(Bunch.size(Variable(named:"BU==.1.$1")),Nat.n(1)), Bunch.size(Variable(named:"BU==.1.$2")))))
+          Boolean.or(Boolean.not(Multiset.contains(Variable(named:"BU==.1.$2"), Variable(named:"BU==.1.$0"))), Boolean.not(Nat.eq(Nat.add(Multiset.size(Variable(named:"BU==.1.$1")),Nat.n(1)), Multiset.size(Variable(named:"BU==.1.$2")))))
         ),
         Rule(
-          Bunch.eq(Bunch.cons(Variable(named:"BU==.1.$0"),Variable(named:"BU==.1.$1")),Variable(named:"BU==.1.$2")),
-          Bunch.eq(Variable(named:"BU==.1.$1"), Bunch.removeOne(Variable(named:"BU==.1.$2"), Variable(named:"BU==.1.$0"))),
-          Boolean.and(Bunch.contains(Variable(named:"BU==.1.$2"), Variable(named:"BU==.1.$0")), Nat.eq(Nat.add(Bunch.size(Variable(named:"BU==.1.$1")),Nat.n(1)), Bunch.size(Variable(named:"BU==.1.$2"))))
+          Multiset.eq(Multiset.cons(Variable(named:"BU==.1.$0"),Variable(named:"BU==.1.$1")),Variable(named:"BU==.1.$2")),
+          Multiset.eq(Variable(named:"BU==.1.$1"), Multiset.removeOne(Variable(named:"BU==.1.$2"), Variable(named:"BU==.1.$0"))),
+          Boolean.and(Multiset.contains(Variable(named:"BU==.1.$2"), Variable(named:"BU==.1.$0")), Nat.eq(Nat.add(Multiset.size(Variable(named:"BU==.1.$1")),Nat.n(1)), Multiset.size(Variable(named:"BU==.1.$2"))))
         )
       ])
     }
 
     public static func empty(_ :Term...) -> Term{
-      return Value<String>("Bunch.tail")
+      return Value<String>("Multiset.tail")
     }
 
     public static func cons(_ terms: Term...) -> Term{
@@ -111,13 +111,13 @@ public class Bunch : ADT {
     public class func n(_ terms: [Term]) -> Term{
       let n = terms.count
       if n == 0 {
-        return Bunch.empty()
+        return Multiset.empty()
       }
-      return Bunch.cons(terms[0],Bunch.n(Array<Term>(terms.suffix(n-1))))
+      return Multiset.cons(terms[0],Multiset.n(Array<Term>(terms.suffix(n-1))))
     }
 
     public class override func belong(_ x: Term) -> Goal{
-      return (x === Bunch.empty() || delayed(fresh {y in fresh{w in x === Bunch.cons(y,w) && Bunch.belong(w)}}))
+      return (x === Multiset.empty() || delayed(fresh {y in fresh{w in x === Multiset.cons(y,w) && Multiset.belong(w)}}))
     }
 
     public static func concat(_ terms: Term...)->Term{
@@ -153,7 +153,7 @@ public class Bunch : ADT {
     public override func pprint(_ t: Term) -> String{
       var s : String = "["
       var x = t
-      while !x.equals(Bunch.empty()){
+      while !x.equals(Multiset.empty()){
         if let m = (x as? Map){
           ////
           if m["rest"] != nil {
@@ -163,21 +163,21 @@ public class Bunch : ADT {
             s += ADTs.pprint(m["first"]!)
             x = m["rest"]!
           }else{
-            x = Bunch.empty()
+            x = Multiset.empty()
           }
         }else if let m = (x as? Variable){
           if s != "[" {
             s += ", "
           }
           s+="rest : \(ADTs.pprint(m))"
-          x = Bunch.empty()
+          x = Multiset.empty()
         }
       }
       return s + "]"
     }
 
     public override func check(_ term: Term) -> Bool{
-      if term.equals(Bunch.empty()){
+      if term.equals(Multiset.empty()){
         return true
       }
       if let m = (term as? Map){
@@ -187,13 +187,13 @@ public class Bunch : ADT {
     }
 
     public override func eval(_ t: Term) -> Term{
-      if t.equals(Bunch.empty()){
+      if t.equals(Multiset.empty()){
         return t
       }
       if let m = (t as? Map){
         let first = m["first"]!
         let rest = m["rest"]!
-        return Bunch.cons(ADTs.eval(first), ADTs.eval(rest))
+        return Multiset.cons(ADTs.eval(first), ADTs.eval(rest))
       }
       return t
     }
@@ -201,7 +201,7 @@ public class Bunch : ADT {
 
 //// SET
 //// https://en.wikipedia.org/wiki/Set_(abstract_data_type)
-public class Set : Bunch {
+public class Set : Multiset {
   public override init(){
     super.init()
     self._name = "set"
@@ -289,7 +289,7 @@ public class Set : Bunch {
     self.add_operator("S==", Set.eq,[
       Rule(
         Set.eq(Variable(named: "S==.0.$0"),Variable(named: "S==.0.$1")),
-        Bunch.eq(Set.norm(Variable(named:"S==.0.$0")),Set.norm(Variable(named:"S==.0.$1")))
+        Multiset.eq(Set.norm(Variable(named:"S==.0.$0")),Set.norm(Variable(named:"S==.0.$1")))
       )
     ])
   }
@@ -321,6 +321,7 @@ public class Set : Bunch {
   public static func subSet(_ terms: Term...)->Term{
     return Operator.n("subSet",terms[0], terms[1])
   }
+
 
   public override func check(_ term: Term) -> Bool{
     if term.equals(Set.empty()){
@@ -432,6 +433,10 @@ public class Sequence : ADT {
   }
   public static func setAt(_ t:Term...)->Term{
     return Operator.n("set",t[0],t[1],t[2])
+  }
+
+  public static func size(_ t: Term...)->Term{
+    return Multiset.size(Set.norm(t[0]))
   }
 
   public class override func belong(_ x: Term) -> Goal{

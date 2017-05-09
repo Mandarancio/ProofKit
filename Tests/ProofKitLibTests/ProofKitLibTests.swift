@@ -9,7 +9,7 @@ extension ProofKitLibTests {
             ("testNat", testNat),
             ("testInt", testInt),
             ("testEquationalProof", testEquationalProof),
-            ("testBunch", testBunch)
+            ("testMultiset", testMultiset)
         ]
     }
 }
@@ -145,20 +145,20 @@ class ProofKitLibTests: XCTestCase {
 
   }
 
-  func testBunch(){
+  func testMultiset(){
     //////////////
-    var b1 = Bunch.n([Nat.n(1), Nat.n(2),Nat.n(4)])
-    var b2 = Bunch.n([Nat.n(4), Nat.n(2),Nat.n(1)])
+    var b1 = Multiset.n([Nat.n(1), Nat.n(2),Nat.n(4)])
+    var b2 = Multiset.n([Nat.n(4), Nat.n(2),Nat.n(1)])
     // [1,2,4] === [4,2,1]
-    self.TAssert(Bunch.eq(b1,b2), Boolean.True())
+    self.TAssert(Multiset.eq(b1,b2), Boolean.True())
     // [1,2,4] removeOne 1 !== [4,2,1]
-    self.FAssert(Bunch.eq(Bunch.removeOne(b1,Nat.n(1)),b2),Boolean.True())
+    self.FAssert(Multiset.eq(Multiset.removeOne(b1,Nat.n(1)),b2),Boolean.True())
     // [1,2,4] contains 1
-    self.TAssert(Bunch.contains(b1, Nat.n(1)),Boolean.True())
-    b1 = Bunch.n([Nat.n(1),Nat.n(1),Nat.n(2),Nat.n(4)])
-    b2 = Bunch.n([Nat.n(2),Nat.n(4)])
+    self.TAssert(Multiset.contains(b1, Nat.n(1)),Boolean.True())
+    b1 = Multiset.n([Nat.n(1),Nat.n(1),Nat.n(2),Nat.n(4)])
+    b2 = Multiset.n([Nat.n(2),Nat.n(4)])
     // [1,1,2,4] removeAll 1 === [2,4]
-    self.TAssert(Bunch.removeAll(b1,Nat.n(1)),b2)
+    self.TAssert(Multiset.removeAll(b1,Nat.n(1)),b2)
   }
 
 }

@@ -11,25 +11,25 @@ func print_ax(_ ax: [Rule]){
 
 var res : Term
 let ADTs = ADTManager.instance()
-let bunch = ADTs["bunch"]
+let multiset = ADTs["multiset"]
 
-for o in bunch.get_operators(){
-  print("\nBunch - \(o):")
-  print_ax(bunch.a(o))
+for o in multiset.get_operators(){
+  print("\nMultiset - \(o):")
+  print_ax(multiset.a(o))
 }
-var k = Bunch.n([Nat.n(2),Nat.n(5),Nat.n(3), Nat.n(1),Nat.n(4)])
-var exists = ADTs["bunch"]["contains"](k,Nat.n(1))
+var k = Multiset.n([Nat.n(2),Nat.n(5),Nat.n(3), Nat.n(1),Nat.n(4)])
+var exists = ADTs["multiset"]["contains"](k,Nat.n(1))
 res = ADTs.eval(exists)//resolve(exists, contains)
 print("\n \(ADTs.pprint(exists)) = \(ADTs.pprint(res))")
 
-var l0 = Bunch.n([Nat.n(1),Nat.n(3), Nat.n(5), Nat.n(8)])
-var l1 = Bunch.n([Nat.n(7),Nat.n(5)])
-var l2 = Bunch.concat(l1,l0)
+var l0 = Multiset.n([Nat.n(1),Nat.n(3), Nat.n(5), Nat.n(8)])
+var l1 = Multiset.n([Nat.n(7),Nat.n(5)])
+var l2 = Multiset.concat(l1,l0)
 
 res = ADTs.eval(l2)
 print(" \(ADTs.pprint(l2)) => \(ADTs.pprint(res))")
 
-l0 = Bunch.size(Bunch.n([Nat.n(1),Nat.n(3),Nat.n(4)]))
+l0 = Multiset.size(Multiset.n([Nat.n(1),Nat.n(3),Nat.n(4)]))
 res = ADTs.eval(l0)
 print(" \(ADTs.pprint(l0)) => \(ADTs.pprint(res))")
 
@@ -81,5 +81,9 @@ l0 = ADTs["nat"]["+"](ADTs["nat"]["*"](Nat.n(2),Nat.n(3)), o)
 res = ADTs.eval(l0)
 print(" \(ADTs.pprint(l0)) => \(ADTs.pprint(res))")
 print()
-let int  = Integer()
-print(int.pprint(Integer.n(-3)))
+
+let a = Integer.n(-2)
+let b = Integer.n(2)
+let c = Integer.add(a,b)
+res = ADTs.eval(c)
+print("\(ADTs.pprint(c)) => \(ADTs.pprint(res))")

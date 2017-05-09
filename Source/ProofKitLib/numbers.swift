@@ -278,12 +278,21 @@ public class Integer: ADT{
   public init(){
     super.init("Integer")
     self.add_generator("int", Integer.int)
+    self.add_operator("I+", Integer.add, [
+      Rule(
+        Integer.add(
+          Integer.int(Variable(named: "I+.0.$0"),Variable(named: "I+.0.$1")),
+          Integer.int(Variable(named: "I+.0.$2"),Variable(named: "I+.0.$3"))
+        ),
+        Integer.int(
+          Nat.add(Variable(named: "I+.0.$0"),Variable(named: "I+.0.$2")),
+          Nat.add(Variable(named: "I+.0.$1"),Variable(named: "I+.0.$3"))
+        )
+      )
+    ])
   }
 
   static public func int(_ x: Term...) -> Term {
-    if x.count != 2 || !((x[0] is Variable || ADTs["nat"].check(x[0])) && (x[1] is Variable || ADTs["nat"].check(x[1]))) {
-      return vFail
-    }
     return Map(["a": x[0], "b":x[1]])
   }
 
@@ -293,6 +302,10 @@ public class Integer: ADT{
       return Integer.int(Nat.n(abs_x),Nat.zero())
     }
     return Integer.int(Nat.zero(),Nat.n(abs_x))
+  }
+
+  static public func add(_ terms: Term...)->Term{
+    return Operator.n("I+",terms[0], terms[1])
   }
 
   public override func check(_ term: Term) -> Bool{
@@ -308,8 +321,8 @@ public class Integer: ADT{
 
   public override func pprint(_ term: Term) -> String{
     if let map = (term as? Map) {
-      let a : Term = map["a"]!
-      let b : Term = map["b"]!
+      let a : Term = ADTs.eval(map["a"]!)
+      let b : Term = ADTs.eval(map["b"]!)
       if  ADTs["nat"].check(a) && ADTs["nat"].check(b){
         if ADTs.eval(Nat.eq(a,b)).equals(Boolean.True()){
           return "0"
@@ -319,6 +332,7 @@ public class Integer: ADT{
         }
         return "-\(ADTs.pprint(ADTs.eval(Nat.sub(b,a))))"
       }
+      return "FAIL"
     }
     if let variable = (term as? Variable){
       return variable.description

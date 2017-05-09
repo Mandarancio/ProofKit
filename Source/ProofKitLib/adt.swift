@@ -1,9 +1,39 @@
 import LogicKit
-import Foundation
 
 public let vNil = Value("nil")
 public let vFail = Value("fail")
 internal let ADTs : ADTManager = ADTManager()
+
+public func variables(_ a: Term)-> [Variable]{
+  var l : [Variable] = []
+  if a is Variable{
+    return [a as! Variable]
+  }
+  if let m = (a as? Map){
+    for (_,x) in m{
+      l +=  variables(x)
+    }
+  }
+  return l
+}
+
+public func replace_variable(_ a: Term, _ vx: [Variable]) -> Term{
+  let vs = variables(a)
+  if vs.count != vx.count || a is Term{
+    return a
+  }
+  if a is Variable{
+    return vx[0]
+  }
+  if let m = (a as? Map){
+    let nm = m
+    for (_,_) in m{
+      // if v is Variable
+      // nm = nm.with(k)
+    }
+  }
+  return a
+}
 
 public func equivalence(_ a: Term, _ b: Term) ->Bool{
   if a.equals(b){
@@ -13,6 +43,7 @@ public func equivalence(_ a: Term, _ b: Term) ->Bool{
     ///TODO How to do it better
     return true
   }
+  print(variables(a))
   return false
 }
 
@@ -77,14 +108,10 @@ public struct Proof {
   }
 
 
-  public static func substitutivity(operation: String, operands: [Term]...)->Rule{
+  public static func substitutivity(_ operation: ([Term])->Term, _ operands: [Term]...)->Rule{
     // TODO
-    var lhs : Map = Operator.n(operation, operands[0][0])
-    var rhs : Map = Operator.n(operation, operands[0][1])
-    for i in 1...operands.count-1{
-      lhs = lhs.with(key: String(i), value: operands[i][0])
-      rhs = rhs.with(key: String(i), value: operands[i][1])
-    }
+    let lhs  = operation(operands[0])
+    let rhs = operation(operands[1])
     return Rule(lhs,rhs)
   }
 
@@ -184,16 +211,19 @@ public class ADT{
   }
 
   //// GOAL To detect if a term belongs to an ADT
+  //// TODO Implement in each ADT sub-class
   public class func belong(_ term: Term ) -> Goal {
         return Boolean.isTrue(Boolean.True())
   }
 
   //// Boolean check if a term belongs to an ADT (used by ADTManager)
+  //// TODO Implement in each ADT sub-class
   public func check(_ term: Term) -> Bool{
     return false
   }
 
   //// Function to nicely print a TERM belonging to an ADT
+  //// TODO Implement in each ADT sub-class
   public func pprint(_ term: Term) -> String{
     return ""
   }
@@ -257,9 +287,12 @@ public struct ADTManager{
   fileprivate init(){
     self["nat"] = Nat()
     self["boolean"] = Boolean()
-    self["bunch"] = Bunch()
+    self["multiset"] = Multiset()
     self["set"] = Set()
     self["sequence"] = Sequence()
+    print("here")
+    self["int"] = Integer()
+    print("done")
   }
 
   public subscript ( i : String) -> ADT{

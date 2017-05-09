@@ -4,6 +4,7 @@ let package = Package(
     name: "ProofKit",
     targets: [
    	  Target(name: "ProofKitLib"),
+      Target(name: "ProofKitDemo2", dependencies:["ProofKitLib"]),
  		  Target(name: "ProofKitDemo", dependencies: ["ProofKitLib"])
     ],
     dependencies: [
