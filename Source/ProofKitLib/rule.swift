@@ -1,11 +1,14 @@
 import LogicKit
-import Foundation
+
+// RULE IDENTIFIER COUNTER
+internal var rule_counter = 0;
 
 //// Proved tehorem and axioms data struct
 public struct Rule {
 
   public init(_ lT : Term,_ rT: Term, _ condition: Term = Boolean.True()){
-    self.id = UUID().uuidString
+    self.id = "r\(rule_counter)"
+    rule_counter += 1
 
     self._variables = [:]
     var counter = 0
