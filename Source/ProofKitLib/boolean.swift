@@ -9,18 +9,18 @@ public class Boolean : ADT {
         Rule(Boolean.not(Boolean.True()),Boolean.False())
       ], arity: 1)
       self.add_operator("and", Boolean.and, [
-        Rule(Boolean.and(Boolean.False(),Variable(named:"and.0.$1")),Boolean.False()),
-        Rule(Boolean.and(Variable(named:"and.1.$1"),Boolean.False()),Boolean.False()),
+        Rule(Boolean.and(Boolean.False(),Variable(named:"x")),Boolean.False()),
+        Rule(Boolean.and(Variable(named:"x"),Boolean.False()),Boolean.False()),
         Rule(Boolean.and(Boolean.True(),Boolean.True()),Boolean.True())
       ])
       self.add_operator("or", Boolean.or, [
-        Rule(Boolean.or(Boolean.True(),Variable(named:"or.0.$1")),Boolean.True()),
-        Rule(Boolean.or(Variable(named:"or.1.$1"),Boolean.True()),Boolean.True()),
+        Rule(Boolean.or(Boolean.True(),Variable(named:"x")),Boolean.True()),
+        Rule(Boolean.or(Variable(named:"x"),Boolean.True()),Boolean.True()),
         Rule(Boolean.or(Boolean.False(),Boolean.False()),Boolean.False())
       ])
       self.add_operator("B==",Boolean.eq, [
-        Rule(Boolean.eq(Variable(named:"b.==.0.$0"),Variable(named:"b.==.0.$0")), Boolean.True()),
-        Rule(Boolean.eq(Variable(named:"b.==.1.$0"),Variable(named:"b.==.1.$1")), Boolean.False()),
+        Rule(Boolean.eq(Variable(named:"x"),Variable(named:"x")), Boolean.True()),
+        Rule(Boolean.eq(Variable(named:"x"),Variable(named:"y")), Boolean.False()),
       ])
     }
 

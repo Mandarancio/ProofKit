@@ -29,7 +29,7 @@ var l2 = Multiset.concat(l1,l0)
 res = ADTs.eval(l2)
 print(" \(ADTs.pprint(l2)) => \(ADTs.pprint(res))")
 
-l0 = Multiset.size(Multiset.n([Nat.n(1),Nat.n(3),Nat.n(4)]))
+l0 = Multiset.size(l2)
 res = ADTs.eval(l0)
 print(" \(ADTs.pprint(l0)) => \(ADTs.pprint(res))")
 

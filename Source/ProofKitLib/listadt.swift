@@ -8,91 +8,91 @@ public class Multiset : ADT {
       self.add_generator("empty", Multiset.empty)
       self.add_generator("cons", Multiset.cons, arity:2)
       self.add_operator("concat", Multiset.concat, [
-        Rule(Multiset.concat(Multiset.empty(),Variable(named: "concat.0.$0")),Variable(named: "concat.0.$0")),
+        Rule(Multiset.concat(Multiset.empty(),Variable(named: "x")),Variable(named: "x")),
         Rule(
-          Multiset.concat(Multiset.cons(Variable(named: "concat.1.$0"), Variable(named: "concat.1.$1")),Variable(named: "concat.1.$2")),
-          Multiset.concat(Variable(named: "concat.1.$1"), Multiset.cons(Variable(named: "concat.1.$0"), Variable(named: "concat.1.$2"))))
+          Multiset.concat(Multiset.cons(Variable(named: "x"), Variable(named: "rest")),Variable(named: "z")),
+          Multiset.concat(Variable(named: "rest"), Multiset.cons(Variable(named: "x"), Variable(named: "z"))))
       ])
       self.add_operator("contains", Multiset.contains, [
-        Rule(Multiset.contains(Multiset.empty(), Variable(named: "contains.0.$0")), Boolean.False()),
+        Rule(Multiset.contains(Multiset.empty(), Variable(named: "x")), Boolean.False()),
         Rule(
-          Multiset.contains(Multiset.cons(Variable(named: "contains.1.$0"), Variable(named: "contains.1.$1")), Variable(named: "contains.1.$0")),
+          Multiset.contains(Multiset.cons(Variable(named: "x"), Variable(named: "rest")), Variable(named: "x")),
           Boolean.True()
         ),
         Rule(
-          Multiset.contains(Multiset.cons(Variable(named: "contains.2.$0"), Variable(named: "contains.2.$1")), Variable(named: "contains.2.$2")),
-          Multiset.contains(Variable(named: "contains.2.$1"), Variable(named: "contains.2.$2"))
+          Multiset.contains(Multiset.cons(Variable(named: "x"), Variable(named: "rest")), Variable(named: "y")),
+          Multiset.contains(Variable(named: "rest"), Variable(named: "y"))
         )
       ])
       self.add_operator("size", Multiset.size, [
         Rule(Multiset.size(Multiset.empty()), Nat.zero()),
         Rule(
-          Multiset.size(Multiset.cons(Variable(named: "size.1.$0"), Variable(named: "size.1.$1"))),
-          Nat.succ(x: Multiset.size(Variable(named:"size.1.$1")))
+          Multiset.size(Multiset.cons(Variable(named: "x"), Variable(named: "rest"))),
+          Nat.succ(x: Multiset.size(Variable(named:"rest")))
         )
       ], arity: 1)
       self.add_operator("rest", Multiset.rest, [
         Rule(Multiset.rest(Multiset.empty()), Multiset.empty()),
         Rule(
-          Multiset.rest(Multiset.cons(Variable(named: "rest.1.$0"), Variable(named: "rest.1.$1"))),
-          Variable(named: "rest.1.$1")
+          Multiset.rest(Multiset.cons(Variable(named: "x"), Variable(named: "rest"))),
+          Variable(named: "rest")
         )
       ], arity:1)
       self.add_operator("first", Multiset.first, [
         Rule(Multiset.first(Multiset.empty()), vNil),
         Rule(
-          Multiset.first(Multiset.cons(Variable(named: "first.1.$0"), Variable(named: "first.1.$1"))),
-          Variable(named: "first.1.$0")
+          Multiset.first(Multiset.cons(Variable(named: "x"), Variable(named: "rest"))),
+          Variable(named: "x")
         )
       ], arity:1)
       self.add_operator("removeOne", Multiset.removeOne,[
         Rule(
-          Multiset.removeOne(Variable(named:"remOne.-1.$0"),Multiset.empty()),
-          Variable(named:"remOne.-1.$0")
+          Multiset.removeOne(Variable(named:"x"),Multiset.empty()),
+          Variable(named:"x")
         ),
         Rule(
-          Multiset.removeOne(Multiset.empty(),Variable(named:"remOne.0.$0")),
+          Multiset.removeOne(Multiset.empty(),Variable(named:"element")),
           Multiset.empty()
         ),
         Rule(
-          Multiset.removeOne(Multiset.cons(Variable(named:"remOne.1.$0"),Variable(named:"remOne.1.$1")), Variable(named:"remOne.1.$0")),
-          Variable(named: "remOne.1.$1")
+          Multiset.removeOne(Multiset.cons(Variable(named:"element"),Variable(named:"rest")), Variable(named:"element")),
+          Variable(named: "rest")
         ),
         Rule(
-          Multiset.removeOne(Multiset.cons(Variable(named:"remOne.2.$0"),Variable(named:"remOne.2.$1")), Variable(named:"remOne.2.$2")),
-          Multiset.cons(Variable(named:"remOne.2.$0"), Multiset.removeOne(Variable(named:"remOne.2.$1"),Variable(named:"remOne.2.$2")))
+          Multiset.removeOne(Multiset.cons(Variable(named:"first"),Variable(named:"rest")), Variable(named:"element")),
+          Multiset.cons(Variable(named:"first"), Multiset.removeOne(Variable(named:"rest"),Variable(named:"element")))
         )
       ])
       self.add_operator("removeAll",Multiset.removeAll, [
         Rule(
-          Multiset.removeAll(Variable(named:"remAll.0.$0"), Multiset.empty()),
-          Variable(named:"remAll.0.$0")
+          Multiset.removeAll(Variable(named:"x"), Multiset.empty()),
+          Variable(named:"x")
         ),
         Rule(
-          Multiset.removeAll(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1")),
-          Variable(named:"remAll.0.$0"),
-          Boolean.not(Multiset.contains(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1")))
+          Multiset.removeAll(Variable(named:"set"), Variable(named:"element")),
+          Variable(named:"set"),
+          Boolean.not(Multiset.contains(Variable(named:"set"), Variable(named:"element")))
         ),
         Rule(
-          Multiset.removeAll(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1")),
-          Multiset.removeAll(Multiset.removeOne(Variable(named:"remAll.0.$0"),Variable(named:"remAll.0.$1")),Variable(named:"remAll.0.$1")),
-          Multiset.contains(Variable(named:"remAll.0.$0"), Variable(named:"remAll.0.$1"))
+          Multiset.removeAll(Variable(named:"set"), Variable(named:"element")),
+          Multiset.removeAll(Multiset.removeOne(Variable(named:"set"),Variable(named:"element")),Variable(named:"element")),
+          Multiset.contains(Variable(named:"set"), Variable(named:"element"))
         )
       ])
       self.add_operator("BU==",Multiset.eq,[
         Rule(
-          Multiset.eq(Variable(named:"BU==.0.$0"),Variable(named:"BU==.0.$0")),
+          Multiset.eq(Variable(named:"x"),Variable(named:"x")),
           Boolean.True()
         ),
         Rule(
-          Multiset.eq(Multiset.cons(Variable(named:"BU==.1.$0"),Variable(named:"BU==.1.$1")),Variable(named:"BU==.1.$2")),
+          Multiset.eq(Multiset.cons(Variable(named:"first"),Variable(named:"rest")),Variable(named:"rhs")),
           Boolean.False(),
-          Boolean.or(Boolean.not(Multiset.contains(Variable(named:"BU==.1.$2"), Variable(named:"BU==.1.$0"))), Boolean.not(Nat.eq(Nat.add(Multiset.size(Variable(named:"BU==.1.$1")),Nat.n(1)), Multiset.size(Variable(named:"BU==.1.$2")))))
+          Boolean.or(Boolean.not(Multiset.contains(Variable(named:"rhs"), Variable(named:"first"))), Boolean.not(Nat.eq(Nat.add(Multiset.size(Variable(named:"rest")),Nat.n(1)), Multiset.size(Variable(named:"rhs")))))
         ),
         Rule(
-          Multiset.eq(Multiset.cons(Variable(named:"BU==.1.$0"),Variable(named:"BU==.1.$1")),Variable(named:"BU==.1.$2")),
-          Multiset.eq(Variable(named:"BU==.1.$1"), Multiset.removeOne(Variable(named:"BU==.1.$2"), Variable(named:"BU==.1.$0"))),
-          Boolean.and(Multiset.contains(Variable(named:"BU==.1.$2"), Variable(named:"BU==.1.$0")), Nat.eq(Nat.add(Multiset.size(Variable(named:"BU==.1.$1")),Nat.n(1)), Multiset.size(Variable(named:"BU==.1.$2"))))
+          Multiset.eq(Multiset.cons(Variable(named:"first"),Variable(named:"rest")),Variable(named:"rhs")),
+          Multiset.eq(Variable(named:"rest"), Multiset.removeOne(Variable(named:"rhs"), Variable(named:"first"))),
+          Boolean.and(Multiset.contains(Variable(named:"rhs"), Variable(named:"first")), Nat.eq(Nat.add(Multiset.size(Variable(named:"rest")),Nat.n(1)), Multiset.size(Variable(named:"rhs"))))
         )
       ])
     }
@@ -210,23 +210,23 @@ public class Set : Multiset {
     self.remove_operator("BU==")
     self.add_operator("insert", Set.insert, [
       Rule(
-        Set.insert(Variable(named: "insert.0.$0"), Set.empty()),
-        Set.cons(Variable(named: "insert.0.$0"), Set.empty())
+        Set.insert(Variable(named: "element"), Set.empty()),
+        Set.cons(Variable(named: "element"), Set.empty())
       ),
       Rule(
-        Set.insert(Variable(named: "insert.1.$0"), Set.cons(Variable(named: "insert.1.$0"), Variable(named: "insert.1.$1"))),
-        Set.cons(Variable(named: "insert.1.$0"), Variable(named: "insert.1.$1"))
+        Set.insert(Variable(named: "element"), Set.cons(Variable(named: "element"), Variable(named: "rest"))),
+        Set.cons(Variable(named: "element"), Variable(named: "rest"))
       ),
       Rule(
-        Set.insert(Variable(named: "insert.2.$0"), Set.cons(Variable(named: "insert.2.$1"), Variable(named: "insert.2.$2"))),
-        Set.cons(Variable(named: "insert.2.$1"), Set.insert(Variable(named: "insert.2.$0"), Variable(named: "insert.2.$2")))
+        Set.insert(Variable(named: "element"), Set.cons(Variable(named: "first"), Variable(named: "rest"))),
+        Set.cons(Variable(named: "first"), Set.insert(Variable(named: "element"), Variable(named: "rest")))
       )
     ])
 
     self.add_operator("union", Set.union, [
       Rule(
-        Set.union(Set.empty(),Variable(named: "union.0.$0")),
-        Variable(named: "union.0.$0")
+        Set.union(Set.empty(),Variable(named: "rhs")),
+        Variable(named: "rhs")
       ),
       Rule(
         Set.union(Set.cons(Variable(named: "union.1.$0"), Variable(named: "union.1.$1")),Variable(named: "union.1.$2")),
