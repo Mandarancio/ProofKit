@@ -33,19 +33,35 @@ public struct Proof {
   }
 
 
-  public static func substitutivity(_ operation: ([Term])->Term, _ operands: [Term]...)->Rule{
+  public static func substitutivity(_ operation: (Term...)->Term, _ tlhs: [Term], _ trhs: [Term])->Rule{
     // TODO Implement substitutivity
-    let lhs  = operation(operands[0])
-    let rhs = operation(operands[1])
+    let lhs : Term
+    let rhs : Term
+    if tlhs.count == 1{
+      lhs  = operation(tlhs[0])
+      rhs = operation(trhs[0])
+    }else if tlhs.count == 2{
+      lhs  = operation(tlhs[0], tlhs[1])
+      rhs = operation(trhs[0], trhs[1])
+    }else if tlhs.count == 3{
+      lhs  = operation(tlhs[0], tlhs[1], tlhs[2])
+      rhs = operation(trhs[0], trhs[1], tlhs[2])
+    }else{
+      lhs = vFail
+      rhs = vFail
+    }
     return Rule(lhs,rhs)
   }
 
   public static func substitution(_ rule: Rule, _ variable: Variable, _ replacement: Term)-> Rule{
-    let x = Variable(named: "s.x")
-    // let y = Variable(named: "s.y")
-    let lhs = get_result(rule.ulTerm() === x && variable === replacement, x)
-    let rhs = get_result(rule.urTerm() === x && variable === replacement, x)
-    let condition = get_result(rule.ucondition() === x && variable === replacement, x)
+    let v = rule.variables()[variable]
+    if v == nil{
+      return rule
+    }
+
+    let lhs = subst_variable(rule.lTerm, v!, replacement)
+    let rhs = subst_variable(rule.rTerm, v!, replacement)
+    let condition = subst_variable(rule.condition, v!, replacement)
     var r =  Rule(lhs,rhs,condition)
     r.set_variables(rule.variables())
     return r

@@ -63,6 +63,22 @@ internal func apply_subst_table(_ a: Term, _ st: [Variable:Variable]) -> Term{
   return a
 }
 
+public func subst_variable(_ a:Term, _ v: Variable, _ b:Term)->Term{
+  if let av = (a as? Variable){
+    if av.equals(v){
+      return b
+    }
+    return a
+  }
+  if let am = (a as? Map){
+    var nm = am
+    for (k,val) in am{
+      nm = nm.with(key: k, value: subst_variable(val, v, b))
+    }
+    return nm
+  }
+  return a
+}
 
 public func replace_variable(_ a: Term, _ vx: [Variable]) -> Term{
   let vs = variables(a)
@@ -146,4 +162,8 @@ public func resolve(_ op: Term, _ rules: [Rule]) -> Term{
     }
   }
   return curr
+}
+
+public func /(left: Term, right: [Variable:Variable])->Term{
+  return apply_subst_table(left,right)
 }

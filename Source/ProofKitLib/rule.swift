@@ -17,16 +17,20 @@ public struct Rule {
     create_subst_table(rT, self.id,&counter, &self._variables)
     self._r_variables = reverse_subs_table(self._variables)
 
-    self.lTerm = apply_subst_table(lT, self._variables)
-    self.rTerm = apply_subst_table(rT, self._variables)
+    self.lTerm = lT/self._variables
+    self.rTerm = rT/self._variables
 
-    self.condition = apply_subst_table(condition, self._variables)
+    self.condition = condition/self._variables
   }
 
 
   //Get substitution table of the variables
   public func variables() -> [Variable:Variable]{
     return self._variables
+  }
+
+  public func rvariables()  -> [Variable:Variable]{
+    return self._r_variables
   }
 
   //Set new names for variables
@@ -53,13 +57,13 @@ public struct Rule {
 
   //// Pretty print of the axiom
   public func pprint() -> String{
-    let lt = apply_subst_table(self.lTerm, self._r_variables)
-    let rt = apply_subst_table(self.rTerm, self._r_variables)
+    let lt =  self.lTerm/self._r_variables
+    let rt = self.rTerm/self._r_variables
 
     if condition.equals(Boolean.True()){
       return "\(ADTs.pprint(lt)) = \(ADTs.pprint(rt))"
     }else{
-      let c = apply_subst_table(self.condition, self._r_variables)
+      let c = self.condition/self._r_variables
       return "if \(ADTs.pprint(c)) then \n\t\(ADTs.pprint(lt)) = \(ADTs.pprint(rt))"
     }
   }
@@ -74,7 +78,7 @@ public struct Rule {
     var counter : Int = 0
     var vx : [Variable:Variable] = [:]
     create_subst_table(lTerm, "", &counter, &vx)
-    return apply_subst_table(lTerm, vx)
+    return lTerm/vx
   }
 
   // universaly formatted right term
@@ -84,7 +88,7 @@ public struct Rule {
     create_subst_table(lTerm, "", &counter, &vx)
     counter = 0
     create_subst_table(rTerm, "", &counter, &vx)
-    return apply_subst_table(rTerm, vx)
+    return rTerm/vx
   }
 
   // universaly formatted condition
@@ -94,7 +98,7 @@ public struct Rule {
     create_subst_table(lTerm, "", &counter, &vx)
     counter = 0
     create_subst_table(rTerm, "", &counter, &vx)
-    return apply_subst_table(condition, vx)
+    return condition/vx
   }
 
   public let lTerm : Term

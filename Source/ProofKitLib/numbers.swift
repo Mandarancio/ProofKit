@@ -9,10 +9,10 @@ public class Nat: ADT{
     self.add_generator("succ", Nat.succ,arity: 1)
 
     self.add_operator("+", Nat.add, [
-      Rule(Nat.add(Variable(named: "+.0.$0"), Value(0)),
-                  Variable(named: "+.0.$0")),
-             Rule(Nat.add(Variable(named: "+.1.$0"), Nat.succ(x: Variable(named: "+.1.$1"))),
-                  Nat.succ(x: Nat.add(Variable(named: "+.1.$0"),Variable(named:"+.1.$1"))))
+      Rule(Nat.add(Variable(named: "x"), Value(0)),
+                  Variable(named: "x")),
+             Rule(Nat.add(Variable(named: "x"), Nat.succ(x: Variable(named: "y"))),
+                  Nat.succ(x: Nat.add(Variable(named: "x"),Variable(named:"y"))))
     ])
     self.add_operator("*", Nat.mul,[
       Rule(
