@@ -23,6 +23,47 @@ public func is_solvable(_ g :Goal)->Bool{
   return false
 }
 
+internal func create_subst_table(_ l: Term, _ id: String, _ counter: inout Int, _ variables: inout [Variable:Variable]){
+  if let lv = (l as? Variable){
+    // let name = lv.name
+    if variables[lv] == nil{
+      variables[lv] = Variable(named: "\(id)#\(counter)")
+      counter += 1
+    }
+  }
+  if let lm = (l as? Map){
+    for (_, v) in lm {
+      create_subst_table(v, id, &counter, &variables)
+    }
+  }
+}
+
+internal func reverse_subs_table(_ st: [Variable:Variable]) -> [Variable:Variable] {
+  var res : [Variable:Variable] = [:]
+  for (k,v) in st{
+    res[v] = k
+  }
+  return res
+}
+
+internal func apply_subst_table(_ a: Term, _ st: [Variable:Variable]) -> Term{
+  if let av = (a as? Variable){
+    if st[av] != nil {
+      return st[av]!
+    }
+    return av
+  }
+  if let am = (a as? Map){
+    var nm = am
+    for (k,v) in am{
+      nm = nm.with(key: k, value: apply_subst_table(v, st))
+    }
+    return nm
+  }
+  return a
+}
+
+
 public func replace_variable(_ a: Term, _ vx: [Variable]) -> Term{
   let vs = variables(a)
   if vs.count != vx.count {
@@ -97,7 +138,7 @@ public func resolve(_ op: Term, _ rules: [Rule]) -> Term{
   while !vNil.equals(res){
     res = vNil
     for r in rules{
-      res = get_result(r.applay(curr, x),x)
+      res = get_result(r.apply(curr, x),x)
       if !vNil.equals(res){
         curr = res
         break
