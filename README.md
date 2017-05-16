@@ -48,13 +48,17 @@ However each adts will implement its operator generator (based on this one) for 
 ## Rule
 The *struct* **Rule** is the container of **axioms** and future **theorems**. Is composed in left and right components (both Term) and implement both a function to applay the rule and one to *pretty print* it.
 To create a rule simply:
+
 ```swift
 let r = Rule(
   Nat.add(Variable(named: "x"), Nat.zero()), // left component
-  Variable(named: "x") // right component
+  Variable(named: "x"), // right component
+  Boolean.True() // optional Boolean condition
 )
 ```
-The to use it:
+
+Use a rule it:
+
 ```swift
 // pretty print it
 print(r.pprint()) // print => x + 0 = x
@@ -66,6 +70,7 @@ let res : Term = get_result(g,x) //function solve goal and return the substituti
 ```
 
 ## ADT
+
 All ADTs extend the base *class* **ADT**, this contains both generator, opertors generator and operators axioms as well as some basic helpers such a chek type and a *pretty print* function.
 
 To access to axioms, generators and operators there are always two method a long and a shortcut, e.g. ```get_generator("name")``` and ```g("name")```.
@@ -110,21 +115,26 @@ Finally to manage the *ADT* and have the possibility to mixit togheter in the fu
 To avoid the creation of multiple ADTManager, there is a single ADTManager (as the constructor is private) instance called **ADTs**.
 
 To get or add an ADT from the instance **ADTs**:
+
 ```swift
 let nat : ADT = ADTs["nat"] // to get adt
 /// or
 ADTs["boolean"] = Boolean() // to add adt
 ```
+
 To pretty print any term:
+
 ```swift
 let nat : ADT = ADTs["nat"] // to get adt
 let t = nat["+"](nat["succ"](nat["zero"]()),nat["succ"](nat["zero"]))
 print("\(ADTs.pprit(t))") //// 1 + 1
+
 ```
 
 ### Universal Evaluator
 
 A simple inner most universal evaluator is implemented. To use it:
+
 ```swift
 let operation : Term = ADTs["nat"]["*"](Nat.n(2),Nat.n(3))
 let result : Term = ADTs.eval(operation)
@@ -133,6 +143,10 @@ print(" \(ADTs.pprint(operation)) => \(ADTs.pprint(result))")
 ```
 
 To be able to perform any type of computation it trys to solve the inner most operation first using the operation axioms and the generator evaluator.
+
+## Equational Proof
+
+
 
 ## Example
 
