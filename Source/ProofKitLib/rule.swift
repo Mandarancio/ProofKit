@@ -12,6 +12,7 @@ public struct Rule {
 
     self._variables = [:]
     var counter = 0
+
     create_subst_table(lT, self.id, &counter, &self._variables)
     counter = 0
     create_subst_table(rT, self.id,&counter, &self._variables)
@@ -35,15 +36,11 @@ public struct Rule {
 
   //Set new names for variables
   public mutating func set_variables(_ vs: [Variable:Variable]){
-    let okeys = Array(self._variables.keys)
-    let nkeys = Array(vs.keys)
-    if okeys.count == 0 {
-      return
-    }
     var vars : [Variable:Variable] = [:]
-    let min = okeys.count>nkeys.count ? nkeys.count : okeys.count
-    for i in 0...min-1{
-      vars[nkeys[i]] = self._variables[okeys[i]]
+    for (k, v) in vs{
+      if _variables[v] != nil{
+        vars[k] = _variables[v]
+      }
     }
     self._variables = vars
     self._r_variables = reverse_subs_table(self._variables)
@@ -112,9 +109,7 @@ public struct Rule {
 
 
 extension Rule: CustomStringConvertible {
-
     public var description: String {
         return self.pprint()
     }
-
 }

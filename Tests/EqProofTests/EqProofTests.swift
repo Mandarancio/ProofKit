@@ -41,15 +41,20 @@ class EqProofTests: XCTestCase {
     let nat = adt["nat"]
     // -- x + 0 = x
     let t1 = nat.a("+")[0]
+    print("t1. \(t1)")
     // -- x + s(y) = s(x + y)
     let t2 = nat.a("+")[1]
+    print("t2. \(t2)")
     // -- x + s(0) = s(x + 0)
     let t3 = Proof.substitution(t2, Variable(named:"y"), Nat.zero())
+    print("t3. \(t3)")
     // -- s(x + 0) = s(x)
     let t4 = Proof.substitutivity(Nat.succ, [t1])
+    print(t4)
+    print("t4. \(t4)")
     // -- x + s(0) = s(x)
     let t5 = Proof.transitivity (t3, t4)
-
+    print("t5. \(t5)")
     self.TAssert(t5, Rule(
       Nat.add(Variable(named: "a"), Nat.succ(x: Nat.zero())),
       Nat.succ(x: Variable(named:"a"))
