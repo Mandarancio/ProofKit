@@ -50,7 +50,6 @@ class EqProofTests: XCTestCase {
     print("t3. \(t3)")
     // -- s(x + 0) = s(x)
     let t4 = Proof.substitutivity(Nat.succ, [t1])
-    print(t4)
     print("t4. \(t4)")
     // -- x + s(0) = s(x)
     let t5 = Proof.transitivity (t3, t4)

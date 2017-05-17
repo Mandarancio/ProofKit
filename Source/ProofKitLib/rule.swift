@@ -3,6 +3,22 @@ import LogicKit
 // RULE IDENTIFIER COUNTER
 internal var rule_counter = 0;
 
+private func uname(_ s: String) -> String{
+  let x = s.components(separatedBy: "#")
+  if x.count == 2{
+    return "#\(x[1])"
+  }
+  return s
+}
+
+internal func uvariables(_ v: [Variable:Variable])->[Variable:Variable]{
+  var vx : [Variable:Variable] = [:]
+  for (v1,v2) in v{
+    vx[Variable(named: uname(v1.name))] = Variable(named: uname(v2.name))
+  }
+  return vx
+}
+
 //// Proved tehorem and axioms data struct
 public struct Rule {
 
@@ -35,11 +51,23 @@ public struct Rule {
   }
 
   //Set new names for variables
-  public mutating func set_variables(_ vs: [Variable:Variable]){
+  public mutating func set_variables(_ varx: [Variable:Variable]){
     var vars : [Variable:Variable] = [:]
+    let vs = uvariables(varx)
     for (k, v) in vs{
       if _variables[v] != nil{
         vars[k] = _variables[v]
+      }
+    }
+    for (k, v) in _variables{
+      var check = false
+      for (_, x) in vs {
+        if x == k {
+          check = true
+        }
+      }
+      if !check {
+        vars[k] = v
       }
     }
     self._variables = vars

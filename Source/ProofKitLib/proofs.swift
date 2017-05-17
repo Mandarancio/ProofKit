@@ -50,8 +50,8 @@ public struct Proof {
     var tlhs : [Term] = []
     var trhs : [Term] = []
     for r in rules{
-      tlhs.append(r.lTerm)
-      trhs.append(r.rTerm)
+      tlhs.append(r.ulTerm())
+      trhs.append(r.urTerm())
     }
 
     let lhs : Term = operation_c(tlhs)
@@ -62,15 +62,16 @@ public struct Proof {
   }
 
   public static func substitution(_ rule: Rule, _ variable: Variable, _ replacement: Term)-> Rule{
-    let v = rule.variables()[variable]
+    let v = uvariables(rule.variables())[variable]
     if v == nil{
       return rule
     }
 
-    let lhs = subst_variable(rule.lTerm, v!, replacement)
-    let rhs = subst_variable(rule.rTerm, v!, replacement)
-    let condition = subst_variable(rule.condition, v!, replacement)
-    var r =  Rule(lhs,rhs,condition)
+    let lhs = subst_variable(rule.ulTerm(), v!, replacement)
+    let rhs = subst_variable(rule.urTerm(), v!, replacement)
+    let condition = subst_variable(rule.ucondition(), v!, replacement)
+    // return Rule(lhs,rhs,condition)
+    var r = Rule(lhs, rhs, condition)
     r.set_variables(rule.variables())
     return r
   }

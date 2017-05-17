@@ -14,9 +14,9 @@ let t1 = Proof.symmetry(t0)
 let t = Proof.transitivity(t0,t1)
 
 // AXIOMS
-print(t0.pprint())
-print(t1.pprint())
-print(t.pprint())
+print(t0)
+print(t1)
+print(t)
 
 // VARIABLES
 print(t0.variables())
