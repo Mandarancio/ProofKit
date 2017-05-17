@@ -1,11 +1,20 @@
 import LogicKit
 
+private func replace(_ term: Term, _ search: Term) ->Term{
+  if term is Variable{
+    return term
+  }
+  return term
+  // if equivalence(term, search){
+  //   let emap = eq_map(term, search, [:])
+  //
+  // }
+  // else{
+  // }
+}
+
 //// namespace containing all the operations to prove an axiom
 public struct Proof {
-
-  // public static func subst(_ t: Term, _ x: Term, _ st: Term, _ r: Term)-> Goal{
-  //   return x === st && r === t
-  // }
 
   public static func reflexivity(_ term: Term)->Rule{
     return Rule(term,term)
@@ -33,24 +42,23 @@ public struct Proof {
   }
 
 
-  public static func substitutivity(_ operation: (Term...)->Term, _ tlhs: [Term], _ trhs: [Term])->Rule{
-    // TODO Implement substitutivity
-    let lhs : Term
-    let rhs : Term
-    if tlhs.count == 1{
-      lhs  = operation(tlhs[0])
-      rhs = operation(trhs[0])
-    }else if tlhs.count == 2{
-      lhs  = operation(tlhs[0], tlhs[1])
-      rhs = operation(trhs[0], trhs[1])
-    }else if tlhs.count == 3{
-      lhs  = operation(tlhs[0], tlhs[1], tlhs[2])
-      rhs = operation(trhs[0], trhs[1], tlhs[2])
-    }else{
-      lhs = vFail
-      rhs = vFail
+  public static func substitutivity(_ operation: (Term...)->Term, _ rules: [Rule])->Rule{
+    //TODO Replace this horrible cast
+    typealias Function = ([Term]) -> Term
+    let operation_c = unsafeBitCast(operation, to: Function.self)
+
+    var tlhs : [Term] = []
+    var trhs : [Term] = []
+    for r in rules{
+      tlhs.append(r.lTerm)
+      trhs.append(r.rTerm)
     }
-    return Rule(lhs,rhs)
+
+    let lhs : Term = operation_c(tlhs)
+    let rhs : Term = operation_c(trhs)
+    var r = Rule(lhs, rhs)
+    r.set_variables(rules[0].variables())
+    return r
   }
 
   public static func substitution(_ rule: Rule, _ variable: Variable, _ replacement: Term)-> Rule{
@@ -68,10 +76,15 @@ public struct Proof {
   }
 
   public static func cut(_ rule: Rule, _ replacement: Rule) -> Rule{
+    // if c1 ^ u = u' ^ c2 => t = t'
+    //    c => u = u'
+    // then
+    //    c1 ^ c ^ c2 => t = t'
+
     let x = Variable(named: "cut.x")
-    let lhs = get_result(rule.ulTerm() === x && rule.ulTerm() === replacement.ulTerm() && rule.urTerm() === replacement.urTerm(),x)
-    let rhs = get_result(rule.urTerm() === x && rule.ulTerm() === replacement.ulTerm() && rule.urTerm() === replacement.urTerm(),x)
-    let condition = get_result(rule.ucondition() === x && rule.ulTerm() === replacement.ulTerm() && rule.urTerm() === replacement.urTerm(),x)
+    let lhs = get_result(rule.lTerm === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
+    let rhs = get_result(rule.rTerm === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
+    let condition = get_result(rule.condition === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
     var r = Rule(lhs, rhs, condition)
     r.set_variables(rule.variables())
     return r

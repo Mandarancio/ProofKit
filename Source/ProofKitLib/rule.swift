@@ -41,7 +41,8 @@ public struct Rule {
       return
     }
     var vars : [Variable:Variable] = [:]
-    for i in 0...nkeys.count-1{
+    let min = okeys.count>nkeys.count ? nkeys.count : okeys.count
+    for i in 0...min-1{
       vars[nkeys[i]] = self._variables[okeys[i]]
     }
     self._variables = vars
@@ -107,4 +108,13 @@ public struct Rule {
   public let id : String
   private var _variables : [Variable:Variable]
   private var _r_variables : [Variable:Variable]
+}
+
+
+extension Rule: CustomStringConvertible {
+
+    public var description: String {
+        return self.pprint()
+    }
+
 }

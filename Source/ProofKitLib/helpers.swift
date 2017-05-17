@@ -98,6 +98,38 @@ public func replace_variable(_ a: Term, _ vx: [Variable]) -> Term{
   return a
 }
 
+public func eq_map(_ a:Term, _ b:Term, _ map: [Variable:Variable] ) -> [Variable:Variable]{
+  var emap : [Variable:Variable] = map
+  if a is Variable && b is Variable{
+    let av = a as! Variable
+    let bv = b as! Variable
+    if emap[av] != nil && emap[av] != bv{
+      return [:]
+    }
+    emap[av] = bv
+    return emap
+  }
+  if a is Map && b is Map {
+    let am = a as! Map
+    let bm = b as! Map
+    for (k,v) in am{
+      if bm[k] == nil{
+        return [:]
+      }
+      else{
+        for (v1,v2) in eq_map(v,bm[k]!, emap){
+          emap[v1] = v2
+        }
+      }
+    }
+    return emap
+  }
+  else if a.equals(b){
+    return emap
+  }
+  return [:]
+}
+
 public func equivalence(_ a: Term, _ b: Term) ->Bool{
   //RECURSIVE EQUIVALENCE
   if a.equals(b){
@@ -166,4 +198,8 @@ public func resolve(_ op: Term, _ rules: [Rule]) -> Term{
 
 public func /(left: Term, right: [Variable:Variable])->Term{
   return apply_subst_table(left,right)
+}
+
+public func *(left: Term, right: [Variable:Variable])->Term{
+  return apply_subst_table(left, reverse_subs_table(right))
 }

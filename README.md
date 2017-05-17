@@ -18,23 +18,22 @@ Currently implemented ADT and Operators
 |ADT|Base ADT|Generators|Constructor|Operators|
 |---|--------|----------|-----------|---------|
 |Boolean|ADT|```True() False()```|```n(Bool)```|```not(x) and(x,y) or(x,y)```|
-|Nat|ADT|```zero() succ(x)```|```n(Int)```|```add(x,y) mul(x,y)```|
+|Nat|ADT|```zero() succ(x)```|```n(Int)```|```add(x,y) mul(x,y) ```|
 |[Multiset](https://en.wikipedia.org/wiki/Linked_list)|ADT|```empty() cons(first, rest)```|```n([Term])```|```first(x) rest(x) contains(x,y) size(x) concat(x,y)```|
 |[Set](https://en.wikipedia.org/wiki/Set_%28abstract_data_type%29)|Bunch|```insert(x,y)```|```n([Term])```|```union(x,y) subSet(x,y) intersection(x,y) difference```|
 |Sequence|ADT|```empty(), cons(value,index,rest)```|```n([Term])```|```push(value,rest), getAt(sequence, index), setAt(sequence, index, value)```|
 
 Equational Proofs:
 
-|Name| Status|
-|----|------:|
-|reflexivity| **tested**|
-|simmetry|**tested**|
-|transitivity* | **tested**|
-|substitution| implemented|
-|substitutivity| implemented|
-|cut|implemented|
-|inductive| - |
-* variable name problem to b
+|Name|Call|Status|
+|----|----|------:|
+|reflexivity|```Proof.reflexivity(Term) -> Rule```| **tested**|
+|simmetry |```Proof.symmetry(Rule) -> Rule``` |**tested** |
+|transitivity |```Proof.transitivity(Rule, Rule) -> Rule```| **tested**|
+|substitution|```Proof.substitution(Rule, Variable, Term) -> Rule```| **tested**|
+|substitutivity|```Proof.substitutivity((Term...)->Term, [Term], [Term]) -> Rule```| **tested**|
+|cut|```Proof.cut(Rule, Rule) -> Rule```| implemented |
+|inductive|-| - |
 
 ## Operator
 
