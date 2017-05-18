@@ -5,12 +5,6 @@ private func replace(_ term: Term, _ search: Term) ->Term{
     return term
   }
   return term
-  // if equivalence(term, search){
-  //   let emap = eq_map(term, search, [:])
-  //
-  // }
-  // else{
-  // }
 }
 
 //// namespace containing all the operations to prove an axiom
@@ -21,22 +15,18 @@ public struct Proof {
   }
 
   public static func symmetry(_ rule: Rule) -> Rule{
-    var r = Rule(rule.urTerm(), rule.ulTerm(), rule.ucondition())
-    r.set_variables(rule.variables())
-    return r
+    return  Rule(rule.rTerm(), rule.lTerm(), rule.condition())/rule.variables()
   }
 
   public static func transitivity(_ lhs: Rule, _ rhs: Rule) -> Rule{
-    if equivalence(lhs.rTerm,rhs.lTerm){
+    if equivalence(lhs.rTerm(),rhs.lTerm()){
       let condition : Term
-      if equivalence(lhs.condition, rhs.condition){
-        condition = lhs.ucondition()
+      if equivalence(lhs.condition(), rhs.condition()){
+        condition = lhs.condition()
       }else{
-        condition = Boolean.and(lhs.ucondition(), rhs.ucondition())
+        condition = Boolean.and(lhs.condition(), rhs.condition())
       }
-      var rule =  Rule(lhs.ulTerm(), rhs.urTerm(), condition)
-      rule.set_variables(lhs.variables())
-      return rule
+      return  Rule(lhs.lTerm(), rhs.rTerm(), condition)/lhs.variables()
     }
     return Rule(vNil,vNil)
   }
@@ -50,30 +40,23 @@ public struct Proof {
     var tlhs : [Term] = []
     var trhs : [Term] = []
     for r in rules{
-      tlhs.append(r.ulTerm())
-      trhs.append(r.urTerm())
+      tlhs.append(r.lTerm())
+      trhs.append(r.rTerm())
     }
 
     let lhs : Term = operation_c(tlhs)
     let rhs : Term = operation_c(trhs)
-    var r = Rule(lhs, rhs)
-    r.set_variables(rules[0].variables())
-    return r
+    return Rule(lhs, rhs)/rules[0].variables()
   }
 
   public static func substitution(_ rule: Rule, _ variable: Variable, _ replacement: Term)-> Rule{
-    let v = uvariables(rule.variables())[variable]
-    if v == nil{
-      return rule
-    }
+    let v = variable
 
-    let lhs = subst_variable(rule.ulTerm(), v!, replacement)
-    let rhs = subst_variable(rule.urTerm(), v!, replacement)
-    let condition = subst_variable(rule.ucondition(), v!, replacement)
-    // return Rule(lhs,rhs,condition)
-    var r = Rule(lhs, rhs, condition)
-    r.set_variables(rule.variables())
-    return r
+    let lhs = subst_variable(rule.h_lTerm(), v, replacement)
+    let rhs = subst_variable(rule.h_rTerm(), v, replacement)
+    let condition = subst_variable(rule.h_condition(), v, replacement)
+
+    return Rule(lhs, rhs, condition)
   }
 
   public static func cut(_ rule: Rule, _ replacement: Rule) -> Rule{
@@ -81,14 +64,13 @@ public struct Proof {
     //    c => u = u'
     // then
     //    c1 ^ c ^ c2 => t = t'
-
-    let x = Variable(named: "cut.x")
-    let lhs = get_result(rule.lTerm === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
-    let rhs = get_result(rule.rTerm === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
-    let condition = get_result(rule.condition === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
-    var r = Rule(lhs, rhs, condition)
-    r.set_variables(rule.variables())
-    return r
+    //
+    // let x = Variable(named: "cut.x")
+    // let lhs = get_result(rule.lTerm() === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
+    // let rhs = get_result(rule.rTerm() === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
+    // let condition = get_result(rule.condition === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
+    // return Rule(lhs, rhs, condition)/rule.variables()
+    return rule
   }
 
 }

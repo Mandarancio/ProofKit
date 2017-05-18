@@ -41,19 +41,19 @@ class EqProofTests: XCTestCase {
     let nat = adt["nat"]
     // -- x + 0 = x
     let t1 = nat.a("+")[0]
-    print("t1. \(t1)")
+    print("t1 - nat.+.ax[0]\n\t\(t1)")
     // -- x + s(y) = s(x + y)
     let t2 = nat.a("+")[1]
-    print("t2. \(t2)")
+    print("t2 - nat.+.ax[1]\n\t\(t2)")
     // -- x + s(0) = s(x + 0)
     let t3 = Proof.substitution(t2, Variable(named:"y"), Nat.zero())
-    print("t3. \(t3)")
+    print("t3 - substitution[ax1,y,0]\n\t\(t3)")
     // -- s(x + 0) = s(x)
     let t4 = Proof.substitutivity(Nat.succ, [t1])
-    print("t4. \(t4)")
+    print("t4 - substitutivity[succ, ax[0]]\n\t\(t4)")
     // -- x + s(0) = s(x)
     let t5 = Proof.transitivity (t3, t4)
-    print("t5. \(t5)")
+    print("t5 - transitivity[t3,t4]\n\t\(t5)")
     self.TAssert(t5, Rule(
       Nat.add(Variable(named: "a"), Nat.succ(x: Nat.zero())),
       Nat.succ(x: Variable(named:"a"))
@@ -75,8 +75,8 @@ class EqProofTests: XCTestCase {
     t = Proof.symmetry(Rule(Boolean.True(), Boolean.not(Boolean.False())))
     self.TAssert(t, Rule(Boolean.not(Boolean.False()), Boolean.True()))
     // transitivity
-    var t0 = Rule(Variable(named: "x"), Boolean.not(Boolean.not(Variable(named:"x"))))
-    var t1 = Rule(Boolean.not(Boolean.not(Variable(named:"w"))), Variable(named:"w"))
+    let t0 = Rule(Variable(named: "x"), Boolean.not(Boolean.not(Variable(named:"x"))))
+    let t1 = Rule(Boolean.not(Boolean.not(Variable(named:"w"))), Variable(named:"w"))
     t = Proof.transitivity(t0,t1)
     print("can apply transitivity")
     self.TAssert(t, Rule(Variable(named:"x"), Variable(named:"x")))
@@ -96,20 +96,19 @@ class EqProofTests: XCTestCase {
       Nat.succ(x: Variable(named:"x"))
     ))
 
-    print("Can apply cut")
-    t0 = Rule(
-      Boolean.True(),
-      Boolean.True(),
-      Boolean.eq(Variable(named:"x"), Boolean.not(Boolean.not(Variable(named:"x"))))
-    )
-    t1 = Rule(
-      Variable(named:"x"),
-      Boolean.not(Boolean.not(Variable(named:"x")))
-    )
-    let term = Nat.succ(x:Variable(named:"X"))
-    let emap = eq_map(Nat.succ(x:Variable(named:"z")), term, [:])
-    print(term*emap)
-    print(emap)
+    // print("Can apply cut")
+    // t0 = Rule(
+    //   Boolean.True(),
+    //   Boolean.True(),
+    //   Boolean.eq(Variable(named:"x"), Boolean.not(Boolean.not(Variable(named:"x"))))
+    // )
+    // t1 = Rule(
+    //   Variable(named:"x"),
+    //   Boolean.not(Boolean.not(Variable(named:"x")))
+    // )
+    // // let term = Nat.succ(x:Variable(named:"X"))
+    // // let emap = eq_map(Nat.succ(x:Variable(named:"z")), term, [:])
+
   }
 
 

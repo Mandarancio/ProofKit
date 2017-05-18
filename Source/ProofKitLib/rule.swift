@@ -1,5 +1,5 @@
 import LogicKit
-
+// TODO refactor the names of method of Rule (h_lTerm, h_rTerm,...)
 // RULE IDENTIFIER COUNTER
 internal var rule_counter = 0;
 
@@ -34,10 +34,10 @@ public struct Rule {
     create_subst_table(rT, self.id,&counter, &self._variables)
     self._r_variables = reverse_subs_table(self._variables)
 
-    self.lTerm = lT/self._variables
-    self.rTerm = rT/self._variables
+    self._lTerm = lT/self._variables
+    self._rTerm = rT/self._variables
 
-    self.condition = condition/self._variables
+    self._condition = condition/self._variables
   }
 
 
@@ -77,59 +77,73 @@ public struct Rule {
   //// Applay axiom to term t and result in r
   public func apply(_ t: Term, _ r: Term)->Goal{
     let x = Variable(named: "r.x")
-    let c = get_result(condition === x && self.lTerm === t && self.rTerm === r, x)
-    return t === self.lTerm && r === self.rTerm && ADTs.eval(c) === Boolean.True()
+    let c = get_result(_condition === x && self._lTerm === t && self._rTerm === r, x)
+    return t === self._lTerm && r === self._rTerm && ADTs.eval(c) === Boolean.True()
   }
 
   //// Pretty print of the axiom
   public func pprint() -> String{
-    let lt =  self.lTerm/self._r_variables
-    let rt = self.rTerm/self._r_variables
+    let lt =  self._lTerm/self._r_variables
+    let rt = self._rTerm/self._r_variables
 
-    if condition.equals(Boolean.True()){
+    if _condition.equals(Boolean.True()){
       return "\(ADTs.pprint(lt)) = \(ADTs.pprint(rt))"
     }else{
-      let c = self.condition/self._r_variables
+      let c = self._condition/self._r_variables
       return "if \(ADTs.pprint(c)) then \n\t\(ADTs.pprint(lt)) = \(ADTs.pprint(rt))"
     }
   }
 
   // equivalence between proofs
   public func equals(_ r: Rule) -> Bool{
-    return equivalence(self.lTerm, r.lTerm) && equivalence(self.rTerm, r.rTerm) && equivalence(self.condition, r.condition)
+    return equivalence(self.lTerm(), r.lTerm()) && equivalence(self.rTerm(), r.rTerm()) && equivalence(self.condition(), r.condition())
   }
 
   // universaly formatted left term
-  public func ulTerm() -> Term{
+  public func lTerm() -> Term{
     var counter : Int = 0
     var vx : [Variable:Variable] = [:]
-    create_subst_table(lTerm, "", &counter, &vx)
-    return lTerm/vx
+    create_subst_table(_lTerm, "", &counter, &vx)
+    return _lTerm/vx
   }
 
   // universaly formatted right term
-  public func urTerm()->Term{
+  public func rTerm()->Term{
     var counter : Int = 0
     var vx : [Variable:Variable] = [:]
-    create_subst_table(lTerm, "", &counter, &vx)
+    create_subst_table(_lTerm, "", &counter, &vx)
     counter = 0
-    create_subst_table(rTerm, "", &counter, &vx)
-    return rTerm/vx
+    create_subst_table(_rTerm, "", &counter, &vx)
+    return _rTerm/vx
   }
+
 
   // universaly formatted condition
-  public func ucondition() -> Term{
+  public func condition() -> Term{
     var counter : Int = 0
     var vx : [Variable:Variable] = [:]
-    create_subst_table(lTerm, "", &counter, &vx)
+    create_subst_table(_lTerm, "", &counter, &vx)
     counter = 0
-    create_subst_table(rTerm, "", &counter, &vx)
-    return condition/vx
+    create_subst_table(_rTerm, "", &counter, &vx)
+    return _condition/vx
   }
 
-  public let lTerm : Term
-  public let rTerm : Term
-  public let condition : Term
+  // human variable names
+  public func h_lTerm() -> Term{
+    return _lTerm/_r_variables
+  }
+  // human variable names
+  public func h_rTerm() -> Term{
+    return _rTerm/_r_variables
+  }
+
+  public func h_condition()->Term{
+    return _condition/_r_variables
+  }
+
+  private let _lTerm : Term
+  private let _rTerm : Term
+  private let _condition : Term
   public let id : String
   private var _variables : [Variable:Variable]
   private var _r_variables : [Variable:Variable]
@@ -140,4 +154,10 @@ extension Rule: CustomStringConvertible {
     public var description: String {
         return self.pprint()
     }
+}
+
+public func /(left: Rule, right: [Variable:Variable])->Rule{
+  var r = Rule(left.lTerm(),left.rTerm(), left.condition())
+  r.set_variables(right)
+  return r
 }

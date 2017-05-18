@@ -23,4 +23,4 @@ print(t0.variables())
 print(t1.variables())
 print(t.variables())
 
-print(equivalence(t.lTerm, t.rTerm))
+print(equivalence(t.lTerm(), t.rTerm()))
