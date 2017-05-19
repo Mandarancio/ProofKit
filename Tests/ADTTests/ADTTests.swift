@@ -92,24 +92,25 @@ class ADTTests: XCTestCase {
     self.TAssert(Nat.eq(Nat.n(10),Nat.n(10)), Boolean.True())
     // 10==9 = false
     self.TAssert(Nat.eq(Nat.n(10),Nat.n(9)), Boolean.False())
-    //9==10 = false
+    // 9==10 = false
     self.TAssert(Nat.eq(Nat.n(9),Nat.n(10)), Boolean.False())
-    //mod(20,3) = 2
+    // mod(20,3) = 2
     self.TAssert(Nat.mod(Nat.n(20),Nat.n(3)), Nat.n(2))
-    //mod(0,5) = 0
+    // mod(0,5) = 0
     self.TAssert(Nat.mod(Nat.n(0),Nat.n(5)), Nat.n(0))
-    //gcd(20,0) = 20
+    // gcd(20,0) = 20
     self.TAssert(Nat.gcd(Nat.n(20),Nat.n(0)), Nat.n(20))
-    //gcd(20,16) = 4
+    // gcd(20,16) = 4
     self.TAssert(Nat.gcd(Nat.n(20),Nat.n(16)), Nat.n(4))
-    //div(10/0) = vFail
+    // div(10/0) = vFail
     self.TAssert(Nat.div(Nat.n(10),Nat.n(0)), vFail)
-    //div(22/5) = 4
+    // div(22/5) = 4
     self.TAssert(Nat.div(Nat.n(22),Nat.n(5)), Nat.n(4))
   }
 
   func testInt(){
 
+    // (3,0) + (2,0) = +5
     self.TAssert(Integer.add(Integer.n(3),Integer.n(2)), Integer.n(5))
     //abs(3) = 3
     self.TAssert(Integer.abs(Integer.n(3)), Integer.n(3))
