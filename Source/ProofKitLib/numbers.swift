@@ -363,6 +363,18 @@ public class Integer: ADT{
     return Nat.to_string(term)
   }
 
+  public override func eval(_ t: Term) -> Term{
+    if t.equals(Nat.zero()){
+      return t
+    }
+    if let m = (t as? Map){
+      let a = m["a"]!
+      let b = m["b"]!
+      return Integer.int(ADTs.eval(a),ADTs.eval(b))
+    }
+    return t
+  }
+
   static public func add(_ terms: Term...)->Term{
     return Operator.n("I+",terms[0], terms[1])
   }
