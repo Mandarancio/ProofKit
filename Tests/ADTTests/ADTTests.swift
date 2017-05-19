@@ -110,6 +110,17 @@ class ADTTests: XCTestCase {
 
   func testInt(){
 
+    self.TAssert(Integer.add(Integer.n(3),Integer.n(2)), Integer.n(5))
+    //abs(3) = 3
+    self.TAssert(Integer.abs(Integer.n(3)), Integer.n(3))
+    //abs(-3) = 3
+    self.TAssert(Integer.abs(Integer.n(-3)), Integer.n(3))
+
+    var res = ADTs.eval(Integer.add(Integer.n(3),Integer.n(2)))
+    print(res)
+    print("\n \(ADTs.pprint(res))")
+    var res2 = Integer.n(5)
+    print("\n \(ADTs.pprint(res2))")
   }
 
   func testMultiset(){

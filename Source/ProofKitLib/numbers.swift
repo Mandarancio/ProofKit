@@ -290,6 +290,33 @@ public class Integer: ADT{
         )
       )
     ])
+    self.add_operator("I-", Integer.sub, [
+      Rule(
+        Integer.sub(
+          Integer.int(Variable(named: "I-.0.$0"),Variable(named: "I-.0.$1")),
+          Integer.int(Variable(named: "I-.0.$2"),Variable(named: "I-.0.$3"))
+        ),
+        Integer.int(
+          Nat.sub(Variable(named: "I-.0.$0"),Variable(named: "I-.0.$2")),
+          Nat.sub(Variable(named: "I-.0.$1"),Variable(named: "I-.0.$3"))
+        )
+      )
+    ])
+    self.add_operator("abs", Integer.abs, [
+      Rule(
+        Integer.abs(
+          Integer.int(Variable(named: "abs.0.$0"),Variable(named: "abs.0.$1"))
+        ),
+        Integer.int(Variable(named: "abs.0.$1"),Variable(named: "abs.0.$0")),
+        Nat.lt(Variable(named: "abs.0.$0"), Variable(named: "abs.0.$1"))
+      ),
+      Rule(
+        Integer.abs(
+          Integer.int(Variable(named: "abs.0.$0"),Variable(named: "abs.0.$1"))
+        ),
+        Integer.int(Variable(named: "abs.0.$0"),Variable(named: "abs.0.$1"))
+      )
+    ])
   }
 
   static public func int(_ x: Term...) -> Term {
@@ -302,10 +329,6 @@ public class Integer: ADT{
       return Integer.int(Nat.n(abs_x),Nat.zero())
     }
     return Integer.int(Nat.zero(),Nat.n(abs_x))
-  }
-
-  static public func add(_ terms: Term...)->Term{
-    return Operator.n("I+",terms[0], terms[1])
   }
 
   public override func check(_ term: Term) -> Bool{
@@ -338,6 +361,18 @@ public class Integer: ADT{
       return variable.description
     }
     return Nat.to_string(term)
+  }
+
+  static public func add(_ terms: Term...)->Term{
+    return Operator.n("I+",terms[0], terms[1])
+  }
+
+  static public func sub(_ terms: Term...)->Term{
+    return Operator.n("I-",terms[0], terms[1])
+  }
+
+  static public func abs(_ terms: Term...)->Term{
+    return Operator.n("abs",terms[0])
   }
 
 }
