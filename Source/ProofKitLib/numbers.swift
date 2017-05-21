@@ -297,12 +297,12 @@ public class Integer: ADT{
           Integer.int(Variable(named: "I-.0.$2"),Variable(named: "I-.0.$3"))
         ),
         Integer.int(
-          Nat.sub(Variable(named: "I-.0.$0"),Variable(named: "I-.0.$2")),
-          Nat.sub(Variable(named: "I-.0.$1"),Variable(named: "I-.0.$3"))
+          Nat.add(Variable(named: "I-.0.$0"),Variable(named: "I-.0.$3")),
+          Nat.add(Variable(named: "I-.0.$1"),Variable(named: "I-.0.$2"))
         )
       )
     ])
-    self.add_operator("abs", Integer.abs, [
+    /*self.add_operator("abs", Integer.abs, [
       Rule(
         Integer.abs(
           Integer.int(Variable(named: "abs.0.$0"),Variable(named: "abs.0.$1"))
@@ -312,9 +312,24 @@ public class Integer: ADT{
       ),
       Rule(
         Integer.abs(
+          Integer.int(Variable(named: "abs.1.$0"),Variable(named: "abs.1.$1"))
+        ),
+        Integer.int(Variable(named: "abs.1.$0"),Variable(named: "abs.1.$1"))
+      )
+    ])*/
+    self.add_operator("abs", Integer.abs, [
+      Rule(
+        Integer.abs(
           Integer.int(Variable(named: "abs.0.$0"),Variable(named: "abs.0.$1"))
         ),
-        Integer.int(Variable(named: "abs.0.$0"),Variable(named: "abs.0.$1"))
+        Nat.sub(Variable(named: "abs.0.$1"),Variable(named: "abs.0.$0")),
+        Nat.lt(Variable(named: "abs.0.$0"), Variable(named: "abs.0.$1"))
+      ),
+      Rule(
+        Integer.abs(
+          Integer.int(Variable(named: "abs.1.$0"),Variable(named: "abs.1.$1"))
+        ),
+        Nat.sub(Variable(named: "abs.1.$0"),Variable(named: "abs.1.$1"))
       )
     ])
     self.add_operator("normalize", Integer.normalize, [
@@ -330,11 +345,11 @@ public class Integer: ADT{
       ),
       Rule(
         Integer.normalize(
-          Integer.int(Variable(named: "normalize.0.$0"),Variable(named: "normalize.0.$1"))
+          Integer.int(Variable(named: "normalize.1.$0"),Variable(named: "normalize.1.$1"))
         ),
         Integer.normalize(
           Integer.int(
-            Nat.pre(Variable(named: "normalize.0.$0")), Nat.pre(Variable(named: "normalize.0.$1"))
+            Nat.pre(Variable(named: "normalize.1.$0")), Nat.pre(Variable(named: "normalize.1.$1"))
           )
         )
       )
@@ -396,6 +411,80 @@ public class Integer: ADT{
             Nat.add(Variable(named: "I>.0.$1"), Variable(named: "I>.0.$2"))
           ),
           Boolean.True()
+        )
+      )
+    ])
+    //Condition for the division is a simple xor which verify
+    //a < b xor c < d
+    self.add_operator("I/", Integer.div, [
+      Rule(
+        Integer.div(
+          Integer.int(Variable(named: "I/.0.$0"),Variable(named: "I/.0.$1")),
+          Integer.int(Variable(named: "I/.0.$2"),Variable(named: "I/.0.$3"))
+        ),
+        Integer.int(
+          Nat.zero(),
+          Nat.div(
+            Integer.abs(
+              Integer.int(
+                Variable(named: "I/.0.$0"),
+                Variable(named: "I/.0.$1")
+              )
+            ),
+            Integer.abs(
+              Integer.int(
+                Variable(named: "I/.0.$2"),
+                Variable(named: "I/.0.$3")
+              )
+            )
+          )
+        ),
+        Boolean.and(
+          Boolean.or(
+            Nat.lt(
+              Variable(named: "I/.0.$0"),
+              Variable(named: "I/.0.$1")
+            ),
+            Nat.lt(
+              Variable(named: "I/.0.$2"),
+              Variable(named: "I/.0.$3")
+            )
+          ),
+          Boolean.not(
+            Boolean.and(
+              Nat.lt(
+                Variable(named: "I/.0.$0"),
+                Variable(named: "I/.0.$1")
+              ),
+              Nat.lt(
+                Variable(named: "I/.0.$2"),
+                Variable(named: "I/.0.$3")
+              )
+            )
+          )
+        )
+      ),
+      Rule(
+        Integer.div(
+          Integer.int(Variable(named: "I/.1.$0"),Variable(named: "I/.1.$1")),
+          Integer.int(Variable(named: "I/.1.$2"),Variable(named: "I/.1.$3"))
+        ),
+        Integer.int(
+          Nat.div(
+            Integer.abs(
+              Integer.int(
+                Variable(named: "I/.1.$0"),
+                Variable(named: "I/.1.$1")
+              )
+            ),
+            Integer.abs(
+              Integer.int(
+                Variable(named: "I/.1.$2"),
+                Variable(named: "I/.1.$3")
+              )
+            )
+          ),
+          Nat.zero()
         )
       )
     ])
@@ -480,6 +569,9 @@ public class Integer: ADT{
   }
   public static func gt(_ operands: Term...) -> Term{
     return Operator.n("I>", operands[0], operands[1])
+  }
+  public static func div(_ operands: Term...) -> Term{
+    return Operator.n("I/", operands[0], operands[1])
   }
 
 }
