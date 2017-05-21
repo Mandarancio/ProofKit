@@ -109,26 +109,34 @@ class ADTTests: XCTestCase {
   }
 
   func testInt(){
-    // (3,0) + (2,0) = +5
+    // (3,0)+(2,0) = +5
     self.TAssert(Integer.add(Integer.n(3),Integer.n(2)), Integer.n(5))
+    //(3,6)-(2,4) = 4
+    var a : Term = Nat.n(3)
+    var b : Term = Nat.n(6)
+    var c : Term = Nat.n(2)
+    var d : Term = Nat.n(4)
+    var integer1 = Integer.int(a,b)
+    var integer2 = Integer.int(c,d)
+    self.TAssert(Integer.normalize(Integer.sub(integer1, integer2)), Integer.n(-1))
     // abs(3) = 3
     self.TAssert(Integer.abs(Integer.n(3)), Integer.n(3))
     // abs(-3) = 3
     self.TAssert(Integer.abs(Integer.n(-3)), Integer.n(3))
     //normalize((5,10)) = (0,5)
-    var a : Term = Nat.n(5)
-    var b : Term = Nat.n(10)
-    var integer1 = Integer.int(a,b)
-    var integer2 = Integer.int(Nat.zero(), a)
+    a = Nat.n(5)
+    b = Nat.n(10)
+    integer1 = Integer.int(a,b)
+    integer2 = Integer.int(Nat.zero(), a)
     self.TAssert(Integer.normalize(integer1), integer2)
-    //normalize((3,1)*(2,4)) = -4
-    a = Nat.n(3)
-    b = Nat.n(1)
-    var c : Term = Nat.n(2)
-    var d : Term = Nat.n(4)
+    //normalize((1,3)*(2,4)) = 4
+    a = Nat.n(1)
+    b = Nat.n(3)
+    c = Nat.n(2)
+    d = Nat.n(4)
     integer1 = Integer.int(a, b)
     integer2 = Integer.int(c, d)
-    self.TAssert(Integer.normalize(Integer.mul(integer1, integer2)), Integer.n(-4))
+    self.TAssert(Integer.normalize(Integer.mul(integer1, integer2)), Integer.n(4))
     //(4,2)==(4,2) = true
     a = Nat.n(4)
     b = Nat.n(2)
