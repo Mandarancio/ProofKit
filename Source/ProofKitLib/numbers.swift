@@ -414,23 +414,80 @@ public class Integer: ADT{
         )
       )
     ])
-    /*self.add_operator("I/", Integer.div, [
+    //Condition for the division is a simple xor which verify
+    //a < b xor c < d
+    self.add_operator("I/", Integer.div, [
       Rule(
         Integer.div(
           Integer.int(Variable(named: "I/.0.$0"),Variable(named: "I/.0.$1")),
           Integer.int(Variable(named: "I/.0.$2"),Variable(named: "I/.0.$3"))
         ),
         Integer.int(
+          Nat.zero(),
           Nat.div(
-            Variable(named: "I/.0.$0"),
-            Integer.abs(Variable(named: "I/.0.$2"),Variable(named: "I/.0.$3"))
+            Integer.abs(
+              Integer.int(
+                Variable(named: "I/.0.$0"),
+                Variable(named: "I/.0.$1")
+              )
+            ),
+            Integer.abs(
+              Integer.int(
+                Variable(named: "I/.0.$2"),
+                Variable(named: "I/.0.$3")
+              )
+            )
+          )
+        ),
+        Boolean.and(
+          Boolean.or(
+            Nat.lt(
+              Variable(named: "I/.0.$0"),
+              Variable(named: "I/.0.$1")
+            ),
+            Nat.lt(
+              Variable(named: "I/.0.$2"),
+              Variable(named: "I/.0.$3")
+            )
           ),
-          Nat.div(
-
+          Boolean.not(
+            Boolean.and(
+              Nat.lt(
+                Variable(named: "I/.0.$0"),
+                Variable(named: "I/.0.$1")
+              ),
+              Nat.lt(
+                Variable(named: "I/.0.$2"),
+                Variable(named: "I/.0.$3")
+              )
+            )
           )
         )
+      ),
+      Rule(
+        Integer.div(
+          Integer.int(Variable(named: "I/.1.$0"),Variable(named: "I/.1.$1")),
+          Integer.int(Variable(named: "I/.1.$2"),Variable(named: "I/.1.$3"))
+        ),
+        Integer.int(
+          Nat.div(
+            Integer.abs(
+              Integer.int(
+                Variable(named: "I/.1.$0"),
+                Variable(named: "I/.1.$1")
+              )
+            ),
+            Integer.abs(
+              Integer.int(
+                Variable(named: "I/.1.$2"),
+                Variable(named: "I/.1.$3")
+              )
+            )
+          ),
+          Nat.zero()
+        )
       )
-    ])*/
+    ])
   }
 
   static public func int(_ x: Term...) -> Term {

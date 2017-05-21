@@ -120,9 +120,15 @@ class ADTTests: XCTestCase {
     var integer2 = Integer.int(c,d)
     self.TAssert(Integer.normalize(Integer.sub(integer1, integer2)), Integer.n(-1))
     // abs(3) = 3
-    self.TAssert(Integer.abs(Integer.n(3)), Nat.n(3))
+    a = Nat.n(4)
+    b = Nat.n(1)
+    integer1 = Integer.int(a, b)
+    self.TAssert(Integer.abs(integer1), Nat.n(3))
     // abs(-3) = 3
-    self.TAssert(Integer.abs(Integer.n(-3)), Nat.n(3))
+    a = Nat.n(1)
+    b = Nat.n(4)
+    integer1 = Integer.int(a, b)
+    self.TAssert(Integer.abs(integer1), Nat.n(3))
     //normalize((5,10)) = (0,5)
     a = Nat.n(5)
     b = Nat.n(10)
@@ -161,15 +167,22 @@ class ADTTests: XCTestCase {
     integer1 = Integer.int(a, b)
     integer2 = Integer.int(c, d)
     self.TAssert(Integer.gt(integer1, integer2), Boolean.True())
-
-
-
-    /*var res = ADTs.eval(Integer.add(Integer.n(3),Integer.n(2)))
-    print(res)
-    print("\n \(ADTs.pprint(res))")
-    var res2 = Integer.n(5)
-    print("\n \(ADTs.pprint(res2))")*/
-
+    //(10,5) / (4,2) = 2
+    a = Nat.n(10)
+    b = Nat.n(5)
+    c = Nat.n(4)
+    d = Nat.n(2)
+    integer1 = Integer.int(a, b)
+    integer2 = Integer.int(c, d)
+    self.TAssert(Integer.div(integer1, integer2), Integer.n(2))
+    //(6,2) / (1,4) = -1
+    a = Nat.n(6)
+    b = Nat.n(2)
+    c = Nat.n(1)
+    d = Nat.n(4)
+    integer1 = Integer.int(a, b)
+    integer2 = Integer.int(c, d)
+    self.TAssert(Integer.div(integer1, integer2), Integer.n(-1))
   }
 
   func testMultiset(){
