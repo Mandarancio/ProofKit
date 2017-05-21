@@ -302,7 +302,7 @@ public class Integer: ADT{
         )
       )
     ])
-    self.add_operator("abs", Integer.abs, [
+    /*self.add_operator("abs", Integer.abs, [
       Rule(
         Integer.abs(
           Integer.int(Variable(named: "abs.0.$0"),Variable(named: "abs.0.$1"))
@@ -315,6 +315,21 @@ public class Integer: ADT{
           Integer.int(Variable(named: "abs.1.$0"),Variable(named: "abs.1.$1"))
         ),
         Integer.int(Variable(named: "abs.1.$0"),Variable(named: "abs.1.$1"))
+      )
+    ])*/
+    self.add_operator("abs", Integer.abs, [
+      Rule(
+        Integer.abs(
+          Integer.int(Variable(named: "abs.0.$0"),Variable(named: "abs.0.$1"))
+        ),
+        Nat.sub(Variable(named: "abs.0.$1"),Variable(named: "abs.0.$0")),
+        Nat.lt(Variable(named: "abs.0.$0"), Variable(named: "abs.0.$1"))
+      ),
+      Rule(
+        Integer.abs(
+          Integer.int(Variable(named: "abs.1.$0"),Variable(named: "abs.1.$1"))
+        ),
+        Nat.sub(Variable(named: "abs.1.$0"),Variable(named: "abs.1.$1"))
       )
     ])
     self.add_operator("normalize", Integer.normalize, [
@@ -405,12 +420,14 @@ public class Integer: ADT{
           Integer.int(Variable(named: "I/.0.$0"),Variable(named: "I/.0.$1")),
           Integer.int(Variable(named: "I/.0.$2"),Variable(named: "I/.0.$3"))
         ),
-        Boolean.eq(
-          Nat.gt(
-            Nat.add(Variable(named: "I>.0.$0"), Variable(named: "I>.0.$3")),
-            Nat.add(Variable(named: "I>.0.$1"), Variable(named: "I>.0.$2"))
+        Integer.int(
+          Nat.div(
+            Variable(named: "I/.0.$0"),
+            Integer.abs(Variable(named: "I/.0.$2"),Variable(named: "I/.0.$3"))
           ),
-          Boolean.True()
+          Nat.div(
+
+          )
         )
       )
     ])*/

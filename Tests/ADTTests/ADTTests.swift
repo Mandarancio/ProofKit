@@ -120,9 +120,9 @@ class ADTTests: XCTestCase {
     var integer2 = Integer.int(c,d)
     self.TAssert(Integer.normalize(Integer.sub(integer1, integer2)), Integer.n(-1))
     // abs(3) = 3
-    self.TAssert(Integer.abs(Integer.n(3)), Integer.n(3))
+    self.TAssert(Integer.abs(Integer.n(3)), Nat.n(3))
     // abs(-3) = 3
-    self.TAssert(Integer.abs(Integer.n(-3)), Integer.n(3))
+    self.TAssert(Integer.abs(Integer.n(-3)), Nat.n(3))
     //normalize((5,10)) = (0,5)
     a = Nat.n(5)
     b = Nat.n(10)
