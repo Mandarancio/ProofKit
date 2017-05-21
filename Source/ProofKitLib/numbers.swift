@@ -339,7 +339,7 @@ public class Integer: ADT{
         )
       )
     ])
-    self.add_operator("I*", Integer.add, [
+    self.add_operator("I*", Integer.mul, [
       Rule(
         Integer.mul(
           Integer.int(Variable(named: "I*.0.$0"),Variable(named: "I*.0.$1")),
@@ -354,6 +354,18 @@ public class Integer: ADT{
             Nat.mul(Variable(named: "I*.0.$0"),Variable(named: "I*.0.$3")),
             Nat.mul(Variable(named: "I*.0.$1"),Variable(named: "I*.0.$2"))
           )
+        )
+      )
+    ])
+    self.add_operator("I==", Integer.eq, [
+      Rule(
+        Integer.eq(
+          Integer.int(Variable(named: "I==.0.$0"),Variable(named: "I==.0.$1")),
+          Integer.int(Variable(named: "I==.0.$2"),Variable(named: "I==.0.$3"))
+        ),
+        Boolean.and(
+          Nat.eq(Variable(named: "I==.0.$0"), Variable(named: "I==.0.$2")),
+          Nat.eq(Variable(named: "I==.0.$1"), Variable(named: "I==.0.$3"))
         )
       )
     ])
@@ -432,6 +444,9 @@ public class Integer: ADT{
   }
   static public func mul(_ terms: Term...)->Term{
     return Operator.n("I*",terms[0], terms[1])
+  }
+  static public func eq(_ terms: Term...)->Term{
+    return Operator.n("I==",terms[0], terms[1])
   }
 
 }
