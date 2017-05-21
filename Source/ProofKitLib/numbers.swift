@@ -317,6 +317,28 @@ public class Integer: ADT{
         Integer.int(Variable(named: "abs.0.$0"),Variable(named: "abs.0.$1"))
       )
     ])
+    self.add_operator("normalize", Integer.normalize, [
+      Rule(
+        Integer.normalize(
+          Integer.int(Variable(named: "normalize.0.$0"),Variable(named: "normalize.0.$1"))
+        ),
+        Integer.int(Variable(named: "normalize.0.$0"),Variable(named: "normalize.0.$1")),
+        Boolean.or(
+          Nat.eq(Variable(named: "normalize.0.$0"), Nat.zero()),
+          Nat.eq(Variable(named: "normalize.0.$1"), Nat.zero())
+        )
+      ),
+      Rule(
+        Integer.normalize(
+          Integer.int(Variable(named: "normalize.0.$0"),Variable(named: "normalize.0.$1"))
+        ),
+        Integer.normalize(
+          Integer.int(
+            Nat.pre(Variable(named: "normalize.0.$0")), Nat.pre(Variable(named: "normalize.0.$1"))
+          )
+        )
+      )
+    ])
   }
 
   static public func int(_ x: Term...) -> Term {
@@ -385,6 +407,10 @@ public class Integer: ADT{
 
   static public func abs(_ terms: Term...)->Term{
     return Operator.n("abs",terms[0])
+  }
+
+  static public func normalize(_ terms: Term...)->Term{
+    return Operator.n("normalize",terms[0])
   }
 
 }

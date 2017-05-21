@@ -116,6 +116,13 @@ class ADTTests: XCTestCase {
     self.TAssert(Integer.abs(Integer.n(3)), Integer.n(3))
     // abs(-3) = 3
     self.TAssert(Integer.abs(Integer.n(-3)), Integer.n(3))
+    //normalize((5,10)) = (0,5)
+    let a : Term = Nat.n(5)
+    let b : Term = Nat.n(10)
+    var test1 = Integer.int(a,b)
+    var test2 = Integer.int(Nat.zero(), a)
+    self.TAssert(Integer.normalize(test1), test2)
+
 
     /*var res = ADTs.eval(Integer.add(Integer.n(3),Integer.n(2)))
     print(res)
