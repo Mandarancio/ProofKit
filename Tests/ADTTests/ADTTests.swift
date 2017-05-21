@@ -118,16 +118,16 @@ class ADTTests: XCTestCase {
     //normalize((5,10)) = (0,5)
     var a : Term = Nat.n(5)
     var b : Term = Nat.n(10)
-    let test1 = Integer.int(a,b)
-    let test2 = Integer.int(Nat.zero(), a)
-    self.TAssert(Integer.normalize(test1), test2)
+    var integer1 = Integer.int(a,b)
+    var integer2 = Integer.int(Nat.zero(), a)
+    self.TAssert(Integer.normalize(integer1), integer2)
     //normalize((3,1)*(2,4)) = -4
     a = Nat.n(3)
     b = Nat.n(1)
     var c : Term = Nat.n(2)
     var d : Term = Nat.n(4)
-    var integer1 = Integer.int(a, b)
-    var integer2 = Integer.int(c, d)
+    integer1 = Integer.int(a, b)
+    integer2 = Integer.int(c, d)
     self.TAssert(Integer.normalize(Integer.mul(integer1, integer2)), Integer.n(-4))
     //(4,2)==(4,2) = true
     a = Nat.n(4)
@@ -137,8 +137,14 @@ class ADTTests: XCTestCase {
     integer1 = Integer.int(a, b)
     integer2 = Integer.int(c, d)
     self.TAssert(Integer.eq(integer1, integer2), Boolean.True())
-
-
+    //(7,5) < (4,1) = true
+    a = Nat.n(7)
+    b = Nat.n(5)
+    c = Nat.n(5)
+    d = Nat.n(1)
+    integer1 = Integer.int(a, b)
+    integer2 = Integer.int(c, d)
+    self.TAssert(Integer.lt(integer1, integer2), Boolean.True())
     /*var res = ADTs.eval(Integer.add(Integer.n(3),Integer.n(2)))
     print(res)
     print("\n \(ADTs.pprint(res))")
