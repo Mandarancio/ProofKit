@@ -339,6 +339,24 @@ public class Integer: ADT{
         )
       )
     ])
+    self.add_operator("I*", Integer.add, [
+      Rule(
+        Integer.mul(
+          Integer.int(Variable(named: "I*.0.$0"),Variable(named: "I*.0.$1")),
+          Integer.int(Variable(named: "I*.0.$2"),Variable(named: "I*.0.$3"))
+        ),
+        Integer.int(
+          Nat.add(
+            Nat.mul(Variable(named: "I*.0.$0"),Variable(named: "I*.0.$2")),
+            Nat.mul(Variable(named: "I*.0.$1"),Variable(named: "I*.0.$3"))
+          ),
+          Nat.add(
+            Nat.mul(Variable(named: "I*.0.$0"),Variable(named: "I*.0.$3")),
+            Nat.mul(Variable(named: "I*.0.$1"),Variable(named: "I*.0.$2"))
+          )
+        )
+      )
+    ])
   }
 
   static public func int(_ x: Term...) -> Term {
@@ -411,6 +429,9 @@ public class Integer: ADT{
 
   static public func normalize(_ terms: Term...)->Term{
     return Operator.n("normalize",terms[0])
+  }
+  static public func mul(_ terms: Term...)->Term{
+    return Operator.n("I*",terms[0], terms[1])
   }
 
 }
