@@ -145,6 +145,17 @@ class ADTTests: XCTestCase {
     integer1 = Integer.int(a, b)
     integer2 = Integer.int(c, d)
     self.TAssert(Integer.lt(integer1, integer2), Boolean.True())
+    //(10,5) > (4,1) = true
+    a = Nat.n(10)
+    b = Nat.n(5)
+    c = Nat.n(5)
+    d = Nat.n(1)
+    integer1 = Integer.int(a, b)
+    integer2 = Integer.int(c, d)
+    self.TAssert(Integer.gt(integer1, integer2), Boolean.True())
+
+
+
     /*var res = ADTs.eval(Integer.add(Integer.n(3),Integer.n(2)))
     print(res)
     print("\n \(ADTs.pprint(res))")

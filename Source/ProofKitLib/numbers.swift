@@ -384,6 +384,21 @@ public class Integer: ADT{
         )
       )
     ])
+    self.add_operator("I>", Integer.gt, [
+      Rule(
+        Integer.gt(
+          Integer.int(Variable(named: "I>.0.$0"),Variable(named: "I>.0.$1")),
+          Integer.int(Variable(named: "I>.0.$2"),Variable(named: "I>.0.$3"))
+        ),
+        Boolean.eq(
+          Nat.gt(
+            Nat.add(Variable(named: "I>.0.$0"), Variable(named: "I>.0.$3")),
+            Nat.add(Variable(named: "I>.0.$1"), Variable(named: "I>.0.$2"))
+          ),
+          Boolean.True()
+        )
+      )
+    ])
   }
 
   static public func int(_ x: Term...) -> Term {
@@ -462,6 +477,9 @@ public class Integer: ADT{
   }
   public static func lt(_ operands: Term...) -> Term{
     return Operator.n("I<", operands[0], operands[1])
+  }
+  public static func gt(_ operands: Term...) -> Term{
+    return Operator.n("I>", operands[0], operands[1])
   }
 
 }
