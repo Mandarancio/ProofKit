@@ -1,9 +1,10 @@
 import LogicKit
+
 public class Petrinet : ADT {
     public init(){
       super.init("petrinet")
       self.add_generator("null", Petrinet.null)
-      self.add_generator("add_edge", Petrinet.add_edge, arity: 5)
+      self.add_generator("add_edge", Petrinet.add_edge, arity: 4)
     }
 
     public static func null(_:Term...) -> Term{
@@ -31,7 +32,7 @@ public class Petrinet : ADT {
         let t = Nat.to_int(map["to_trans"]!)
         let w = Integer.to_int(map["weight"]!)
         let net_mat = to_matrix(map["net"]!)
-        net_mat[(p,t)] = w
+        net_mat[(p,t)] = net_mat[(p,t)] - w
         return net_mat
       }
     }
