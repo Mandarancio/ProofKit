@@ -534,6 +534,17 @@ public class Integer: ADT{
     return 0
   }
 
+  public static func to_string(_ term: Term) -> String {
+    if let map = (term as? Map){
+      if map["a"] != nil && map["b"] != nil {
+        let pos = Nat.to_string(map["a"]!)
+        let neg = Nat.to_string(map["b"]!)
+        return "Int(+:\(pos), -:\(neg))"
+      }
+    }
+    return ""
+  }
+
   public override func check(_ term: Term) -> Bool{
     if let map = (term as? Map) {
       return map["a"] != nil && map["b"] != nil
