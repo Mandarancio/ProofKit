@@ -172,13 +172,23 @@ public class Nat: ADT{
   	if x==0{
   		return Nat.zero()
   	}
-
     var t = Nat.zero()
   	for _ in 1..<x+1 {
   		t = Nat.succ(x: t)
   	}
     return t
   }
+
+  static public func to_int(_ term:Term) -> Int {
+    if let map = (term as? Map){
+      if map["succ"] != nil{
+        let k = Nat.to_int(map["succ"]!)
+        return k+1
+      }
+    }
+    return 0
+  }
+
   public class override func belong(_ x: Term) -> Goal{
     return (x === Nat.zero() || delayed(fresh {y in x === Nat.succ(x:y) && Nat.belong(y)}))
   }
@@ -511,6 +521,17 @@ public class Integer: ADT{
       return Integer.int(Nat.n(abs_x),Nat.zero())
     }
     return Integer.int(Nat.zero(),Nat.n(abs_x))
+  }
+
+  static public func to_int(_ term:Term) -> Int {
+    if let map = (term as? Map){
+      if map["a"] != nil && map["b"] != nil {
+        let pos = Nat.to_int(map["a"]!)
+        let neg = Nat.to_int(map["b"]!)
+        return pos-neg
+      }
+    }
+    return 0
   }
 
   public override func check(_ term: Term) -> Bool{
