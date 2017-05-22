@@ -379,8 +379,22 @@ public class Integer: ADT{
           Integer.int(Variable(named: "I==.0.$2"),Variable(named: "I==.0.$3"))
         ),
         Boolean.and(
-          Nat.eq(Variable(named: "I==.0.$0"), Variable(named: "I==.0.$2")),
-          Nat.eq(Variable(named: "I==.0.$1"), Variable(named: "I==.0.$3"))
+          Boolean.eq(
+            Integer.abs(
+              Integer.int(Variable(named: "I==.0.$0"),Variable(named: "I==.0.$1"))
+            ),
+            Integer.abs(
+              Integer.int(Variable(named: "I==.0.$2"),Variable(named: "I==.0.$3"))
+            )
+          ),
+          Boolean.eq(
+            Integer.sign(
+              Integer.int(Variable(named: "I==.0.$0"),Variable(named: "I==.0.$1"))
+            ),
+            Integer.sign(
+              Integer.int(Variable(named: "I==.0.$2"),Variable(named: "I==.0.$3"))
+            )
+          )
         )
       )
     ])
@@ -411,6 +425,17 @@ public class Integer: ADT{
             Nat.add(Variable(named: "I>.0.$1"), Variable(named: "I>.0.$2"))
           ),
           Boolean.True()
+        )
+      )
+    ])
+    self.add_operator("sign", Integer.sign, [
+      Rule(
+        Integer.sign(
+          Integer.int(Variable(named: "I>.0.$0"),Variable(named: "I>.0.$1"))
+        ),
+        Nat.gt(
+          Variable(named: "I>.0.$0"),
+          Variable(named: "I>.0.$1")
         )
       )
     ])
@@ -572,6 +597,9 @@ public class Integer: ADT{
   }
   public static func div(_ operands: Term...) -> Term{
     return Operator.n("I/", operands[0], operands[1])
+  }
+  public static func sign(_ operands: Term...) -> Term{
+    return Operator.n("sign", operands[0])
   }
 
 }

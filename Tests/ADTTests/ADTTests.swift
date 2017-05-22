@@ -143,11 +143,11 @@ class ADTTests: XCTestCase {
     integer1 = Integer.int(a, b)
     integer2 = Integer.int(c, d)
     self.TAssert(Integer.normalize(Integer.mul(integer1, integer2)), Integer.n(4))
-    //(4,2)==(4,2) = true
-    a = Nat.n(4)
+    //(6,2)==(5,1) = true
+    a = Nat.n(6)
     b = Nat.n(2)
-    c = Nat.n(4)
-    d = Nat.n(2)
+    c = Nat.n(5)
+    d = Nat.n(1)
     integer1 = Integer.int(a, b)
     integer2 = Integer.int(c, d)
     self.TAssert(Integer.eq(integer1, integer2), Boolean.True())
@@ -175,6 +175,16 @@ class ADTTests: XCTestCase {
     integer1 = Integer.int(a, b)
     integer2 = Integer.int(c, d)
     self.TAssert(Integer.div(integer1, integer2), Integer.n(2))
+    //sign(6,2) = true
+    a = Nat.n(6)
+    b = Nat.n(2)
+    integer1 = Integer.int(a,b)
+    self.TAssert(Integer.sign(integer1), Boolean.True())
+    //sign(2,6) = false
+    a = Nat.n(2)
+    b = Nat.n(6)
+    integer1 = Integer.int(a,b)
+    self.TAssert(Integer.sign(integer1), Boolean.False())
     //(6,2) / (1,4) = -1
     a = Nat.n(6)
     b = Nat.n(2)
