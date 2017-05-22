@@ -43,7 +43,9 @@ public struct Operator{
 
   public static func is_operator(_ t: Term)->Bool{
     if let op = (t as? Map){
-      return vType.equals(op["type"]!)
+      if (op["type"] != nil){
+        return vType.equals(op["type"]!)
+      }
     }
     return false
   }

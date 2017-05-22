@@ -5,6 +5,9 @@ internal let ADTs : ADTManager = ADTManager()
 //// To be used to store all the ADTs
 public struct ADTManager{
 
+  private var adts : [String:ADT] = [:]
+  private var opers : [String:[Rule]] = [:]
+
   public static func instance()->ADTManager{
     return ADTs
   }
@@ -24,10 +27,12 @@ public struct ADTManager{
       }
       set{
         adts[i] = newValue
+        for op in newValue.get_operators(){
+          self.opers[op] = newValue.a(op)
+        }
       }
   }
 
-  private var adts : [String:ADT] = [:]
 
   public func get_adts() -> [String] {
     return Array(self.adts.keys)
@@ -37,32 +42,23 @@ public struct ADTManager{
     if term.equals(vNil){
       return vNil
     }
-    for (_,adt) in self.adts{
-      if adt.check(term){
-        return adt.eval(term)
-      }
-    }
 
-    if let op = (term as? Map){
-      if Operator.is_operator(op) {
-
+    if Operator.is_operator(term) {
+      if let op = (term as? Map){
         let name = (op["name"] as! Value<String>).description
         let k : Term = Operator.eval(op)
-        for (_,adt) in self.adts{
-          if adt.get_operators().contains(name) {
-            let axioms = adt.a(name)
-            let res = resolve(k, axioms)
-            if res.equals(op){
-              return op
-            }
-            return self.eval(res)
+        if self.opers[name] != nil{
+          let axioms = self.opers[name]!
+          let res = resolve(k, axioms)
+          if res.equals(op){
+            return op
           }
+          return self.eval(res)
         }
-
+        return k
       }
-      return op
     }
-    return term
+    return ADT.eval(term)
   }
 
   public func pprint(_ term: Term) -> String{

@@ -197,16 +197,16 @@ public class Nat: ADT{
     return false
   }
 
-  public override func eval(_ t: Term) -> Term{
-    if t.equals(Nat.zero()){
-      return t
-    }
-    if let m = (t as? Map){
-      let data = m["succ"]!
-      return Nat.succ(x: ADTs.eval(data))
-    }
-    return t
-  }
+  // public override func eval(_ t: Term) -> Term{
+  //   if t.equals(Nat.zero()){
+  //     return t
+  //   }
+  //   if let m = (t as? Map){
+  //     let data = m["succ"]!
+  //     return Nat.succ(x: ADTs.eval(data))
+  //   }
+  //   return t
+  // }
 
   static public func to_string(_ x: Term) -> String{
    	if x.equals(Nat.zero()){
@@ -302,21 +302,7 @@ public class Integer: ADT{
         )
       )
     ])
-    /*self.add_operator("abs", Integer.abs, [
-      Rule(
-        Integer.abs(
-          Integer.int(Variable(named: "abs.0.$0"),Variable(named: "abs.0.$1"))
-        ),
-        Integer.int(Variable(named: "abs.0.$1"),Variable(named: "abs.0.$0")),
-        Nat.lt(Variable(named: "abs.0.$0"), Variable(named: "abs.0.$1"))
-      ),
-      Rule(
-        Integer.abs(
-          Integer.int(Variable(named: "abs.1.$0"),Variable(named: "abs.1.$1"))
-        ),
-        Integer.int(Variable(named: "abs.1.$0"),Variable(named: "abs.1.$1"))
-      )
-    ])*/
+
     self.add_operator("abs", Integer.abs, [
       Rule(
         Integer.abs(
@@ -557,18 +543,6 @@ public class Integer: ADT{
       return variable.description
     }
     return Nat.to_string(term)
-  }
-
-  public override func eval(_ t: Term) -> Term{
-    if t.equals(Nat.zero()){
-      return t
-    }
-    if let m = (t as? Map){
-      let a = m["a"]!
-      let b = m["b"]!
-      return Integer.int(ADTs.eval(a),ADTs.eval(b))
-    }
-    return t
   }
 
   static public func add(_ terms: Term...)->Term{

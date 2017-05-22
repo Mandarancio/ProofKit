@@ -33,8 +33,15 @@ public class ADT{
   public func name() -> String {
     return self._name
   }
-
-  public func eval(_ t: Term)-> Term{
+  // eval operation for each ADT
+  public static func eval(_ t: Term)-> Term{
+    if let tm = (t as? Map){
+      var om = tm
+      for (k, v) in tm{
+        om = om.with(key: k, value: ADTs.eval(v))
+      }
+      return om
+    }
     return t
   }
 

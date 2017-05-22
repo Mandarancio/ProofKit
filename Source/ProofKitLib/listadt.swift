@@ -185,18 +185,6 @@ public class Multiset : ADT {
       }
       return false
     }
-
-    public override func eval(_ t: Term) -> Term{
-      if t.equals(Multiset.empty()){
-        return t
-      }
-      if let m = (t as? Map){
-        let first = m["first"]!
-        let rest = m["rest"]!
-        return Multiset.cons(ADTs.eval(first), ADTs.eval(rest))
-      }
-      return t
-    }
 }
 
 //// SET
@@ -331,18 +319,6 @@ public class Set : Multiset {
       return m["s.rest"] != nil && m["s.first"] != nil
     }
     return false
-  }
-
-  public override func eval(_ t: Term) -> Term{
-    if t.equals(Set.empty()){
-      return t
-    }
-    if let m = (t as? Map){
-      let first = m["s.first"]!
-      let rest = m["s.rest"]!
-      return Set.cons(ADTs.eval(first), ADTs.eval(rest))
-    }
-    return t
   }
 
   public class override func belong(_ x: Term) -> Goal{
@@ -480,18 +456,4 @@ public class Sequence : ADT {
     return false
   }
 
-  public override func eval(_ t: Term) -> Term{
-
-    if t.equals(Sequence.empty()){
-      return t
-    }
-
-    if let m = (t as? Map){
-      let val = m["value"]!
-      let ind = m["index"]!
-      let rest = m["rest"]!
-      return Sequence.cons(ADTs.eval(val), ADTs.eval(ind), ADTs.eval(rest))
-    }
-    return t
-  }
 }
