@@ -4,7 +4,7 @@ public class DynamicMatrix {
   private var data : [[Int]]
 
   public init(){
-    data = [[]]
+    data = [[0]]
   }
 
   public init(_ initial_data: [[Int]]){
@@ -27,7 +27,7 @@ public class DynamicMatrix {
   }
 
   private func add_lines(_ number:Int) -> () {
-    guard number <= 0 else {
+    guard number > 0 else {
       return
     }
 
@@ -40,11 +40,11 @@ public class DynamicMatrix {
   }
 
   private func add_columns(_ number:Int) -> () {
-    guard number <= 0 else {
+    guard number > 0 else {
       return
     }
 
-    for i in 1...(data.count-1) {
+    for i in 0...(data.count-1) {
       for _ in 1...number {
         data[i].append(0)
       }
