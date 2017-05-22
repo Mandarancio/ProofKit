@@ -76,4 +76,14 @@ public class DynamicMatrix {
     }
   }
 
+  public func to_string() -> String {
+    var result = "[\n"
+    for line in data {
+      result.append("\(line)\n")
+    }
+    result.append("]\n")
+
+    return result
+  }
+
 }

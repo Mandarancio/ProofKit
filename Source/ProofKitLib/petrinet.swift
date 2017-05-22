@@ -24,9 +24,33 @@ public class Petrinet : ADT {
           })
     }
 
-  public static func to_matrix() -> DynamicMatrix {
-    let mat = DynamicMatrix()
-    //TODO complete
-    return mat
+  public static func to_matrix(_ net: Term) -> DynamicMatrix {
+    if let map = (net as? Map) {
+      if map["from_place"] != nil && map["to_trans"] != nil && map["weight"] != nil && map["net"] != nil {
+        let p = Nat.to_int(map["from_place"]!)
+        let t = Nat.to_int(map["to_trans"]!)
+        let w = Integer.to_int(map["weight"]!)
+        let net_mat = to_matrix(map["net"]!)
+        net_mat[(p,t)] = w
+        return net_mat
+      }
+    }
+    return DynamicMatrix()
+  }
+
+  public static func to_string(_ net: Term) -> String {
+    if net.equals(Petrinet.null()) {
+        return "null_petrinet"
+    }
+    else if let map = (net as? Map) {
+      if map["from_place"] != nil && map["to_trans"] != nil && map["weight"] != nil && map["net"] != nil {
+        let p_str = Nat.to_string(map["from_place"]!)
+        let t_str = Nat.to_string(map["to_trans"]!)
+        let w_str = Integer.to_string(map["weight"]!)
+        let net_str = to_string(map["net"]!)
+        return "add_edge(p:\(p_str), t:\(t_str), w:\(w_str), \(net_str))"
+      }
+    }
+    return ""
   }
 }
