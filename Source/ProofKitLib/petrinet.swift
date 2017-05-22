@@ -11,7 +11,7 @@ public class Petrinet : ADT {
     }
 
     public static func add_edge(_ operands: Term...) -> Term{
-      return Map(["from":operands[0], "to":operands[1], "isInput":operands[2], "weight":operands[3], "net":operands[4]])
+      return Map(["from_place":operands[0], "to_trans":operands[1], "weight":operands[2], "net":operands[3]])
     }
 
     public class override func belong(_ term: Term ) -> Goal {
@@ -19,23 +19,14 @@ public class Petrinet : ADT {
             ops in term === Petrinet.add_edge(ops["0"], ops["1"], ops["2"], ops["3"], ops["4"]) 
               && Nat.belong(ops["0"])
               && Nat.belong(ops["1"])
-              && Boolean.belong(ops["2"])
-              && Nat.belong(ops["3"])
-              && Petrinet.belong(ops["4"]) 
+              && Integer.belong(ops["2"])
+              && Petrinet.belong(ops["3"]) 
           })
     }
 
-    public override func pprint(_ term: Term) -> String{
-      if term.equals(Boolean.True()){
-        return "true"
-      }
-      if term.equals(Boolean.False()){
-        return "false"
-      }
-      return "?"
-    }
-
-    public override func check(_ term: Term) -> Bool{
-      return term.equals(Boolean.False()) || term.equals(Boolean.True())
-    }
+  public static func to_matrix() -> DynamicMatrix {
+    let mat = DynamicMatrix()
+    //TODO complete
+    return mat
+  }
 }
