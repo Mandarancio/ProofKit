@@ -1,5 +1,33 @@
 import LogicKit
 
+////
+public struct OperatorFootprint {
+  public let types : [String]
+  public let name : String
+  public init(_ name: String,_ ts: [String]){
+    self.types = ts
+    self.name = name
+  }
+
+  public func arity() -> Int {
+    return types.count
+  }
+}
+
+extension OperatorFootprint: Hashable {
+  var hashValue: Int {
+    var hash = name.hashValue
+    for ty in types{
+      hash = hash ^ ty.hashValue
+    }
+    return hash
+  }
+
+  static func == (lhs: OperatorFootprint, rhs: OperatorFootprint) -> Bool {
+    return lhs.name == rhs.name && lhs.types == rhs.types
+  }
+}
+
 //// Basic form of an operator
 public struct Operator{
   public static let vType : Value<String> = Value<String>("operator")
