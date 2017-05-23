@@ -15,10 +15,11 @@ public struct ADTManager{
   fileprivate init(){
     self["nat"] = Nat()
     self["boolean"] = Boolean()
-    // self["multiset"] = Multiset()
+    self["multiset"] = Multiset()
     // self["set"] = Set()
     // self["sequence"] = Sequence()
-    // self["int"] = Integer()
+    self["int"] = Integer()
+    // print(self.opers)
   }
 
   public subscript ( i : String) -> ADT{
@@ -59,19 +60,7 @@ public struct ADTManager{
     }
     return ADT.eval(term)
   }
-  public func tprint(_ term: Term, _ spacer: String) -> String{
-    if let m = (term as? Map){
-      var s = "\n\(spacer)"
 
-      for (k,v) in m{
-        s += "\(spacer)\(k): \(self.tprint(v, spacer+" "))"
-      }
-      return s
-    }
-    else{
-      return "\(term)\n"
-    }
-  }
 
   public func pprint(_ term: Term) -> String{
     if term.equals(vNil){

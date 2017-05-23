@@ -9,7 +9,7 @@ public class Nat: ADT{
     self.add_generator("succ", Nat.succ,arity: 1)
 
     self.add_operator("+", Nat.add, [
-      Rule(Nat.add(Variable(named: "x"), Value(0)),
+      Rule(Nat.add(Variable(named: "x"), Nat.zero()),
                   Variable(named: "x")),
              Rule(Nat.add(Variable(named: "x"), Nat.succ(x: Variable(named: "y"))),
                   Nat.succ(x: Nat.add(Variable(named: "x"),Variable(named:"y"))))
@@ -262,12 +262,12 @@ public class Nat: ADT{
   }
 }
 
-/*
+
 public class Integer: ADT{
   public init(){
     super.init("int")
     self.add_generator("int", Integer.int)
-    self.add_operator("I+", Integer.add, [
+    self.add_operator("+", Integer.add, [
       Rule(
         Integer.add(
           Integer.int(Variable(named: "I+.0.$0"),Variable(named: "I+.0.$1")),
@@ -279,7 +279,7 @@ public class Integer: ADT{
         )
       )
     ], ["int", "int"])
-    self.add_operator("I-", Integer.sub, [
+    self.add_operator("-", Integer.sub, [
       Rule(
         Integer.sub(
           Integer.int(Variable(named: "I-.0.$0"),Variable(named: "I-.0.$1")),
@@ -329,7 +329,7 @@ public class Integer: ADT{
         )
       )
     ], ["int"])
-    self.add_operator("I*", Integer.mul, [
+    self.add_operator("*", Integer.mul, [
       Rule(
         Integer.mul(
           Integer.int(Variable(named: "I*.0.$0"),Variable(named: "I*.0.$1")),
@@ -347,7 +347,7 @@ public class Integer: ADT{
         )
       )
     ], ["int", "int"])
-    self.add_operator("I==", Integer.eq, [
+    self.add_operator("==", Integer.eq, [
       Rule(
         Integer.eq(
           Integer.int(Variable(named: "I==.0.$0"),Variable(named: "I==.0.$1")),
@@ -373,7 +373,7 @@ public class Integer: ADT{
         )
       )
     ], ["int", "int"])
-    self.add_operator("I<", Integer.lt, [
+    self.add_operator("<", Integer.lt, [
       Rule(
         Integer.lt(
           Integer.int(Variable(named: "I<.0.$0"),Variable(named: "I<.0.$1")),
@@ -388,7 +388,7 @@ public class Integer: ADT{
         )
       )
     ], ["int", "int"])
-    self.add_operator("I>", Integer.gt, [
+    self.add_operator(">", Integer.gt, [
       Rule(
         Integer.gt(
           Integer.int(Variable(named: "I>.0.$0"),Variable(named: "I>.0.$1")),
@@ -416,7 +416,7 @@ public class Integer: ADT{
     ], ["int"])
     //Condition for the division is a simple xor which verify
     //a < b xor c < d
-    self.add_operator("I/", Integer.div, [
+    self.add_operator("/", Integer.div, [
       Rule(
         Integer.div(
           Integer.int(Variable(named: "I/.0.$0"),Variable(named: "I/.0.$1")),
@@ -491,7 +491,7 @@ public class Integer: ADT{
   }
 
   static public func int(_ x: Term...) -> Term {
-    return Map(["a": x[0], "b":x[1]])
+    return new_term(Map(["a": x[0], "b":x[1]]),"int")
   }
 
   static public func n(_ x: Int) -> Term {
@@ -515,9 +515,10 @@ public class Integer: ADT{
 
   public override func pprint(_ term: Term) -> String{
     if let map = (term as? Map) {
+
       let a : Term = ADTs.eval(map["a"]!)
       let b : Term = ADTs.eval(map["b"]!)
-      if  ADTs["nat"].check(a) && ADTs["nat"].check(b){
+      if type(a)=="nat" && type(b) == "nat"{
         if ADTs.eval(Nat.eq(a,b)).equals(Boolean.True()){
           return "0"
         }
@@ -535,10 +536,10 @@ public class Integer: ADT{
   }
 
   static public func add(_ terms: Term...)->Term{
-    return Operator.n("I+",terms[0], terms[1])
+    return Operator.n("+",terms[0], terms[1])
   }
   static public func sub(_ terms: Term...)->Term{
-    return Operator.n("I-",terms[0], terms[1])
+    return Operator.n("-",terms[0], terms[1])
   }
   static public func abs(_ terms: Term...)->Term{
     return Operator.n("abs",terms[0])
@@ -547,23 +548,22 @@ public class Integer: ADT{
     return Operator.n("normalize",terms[0])
   }
   static public func mul(_ terms: Term...)->Term{
-    return Operator.n("I*",terms[0], terms[1])
+    return Operator.n("*",terms[0], terms[1])
   }
   static public func eq(_ terms: Term...)->Term{
-    return Operator.n("I==",terms[0], terms[1])
+    return Operator.n("==",terms[0], terms[1])
   }
   public static func lt(_ operands: Term...) -> Term{
-    return Operator.n("I<", operands[0], operands[1])
+    return Operator.n("<", operands[0], operands[1])
   }
   public static func gt(_ operands: Term...) -> Term{
-    return Operator.n("I>", operands[0], operands[1])
+    return Operator.n(">", operands[0], operands[1])
   }
   public static func div(_ operands: Term...) -> Term{
-    return Operator.n("I/", operands[0], operands[1])
+    return Operator.n("/", operands[0], operands[1])
   }
   public static func sign(_ operands: Term...) -> Term{
     return Operator.n("sign", operands[0])
   }
 
 }
-*/

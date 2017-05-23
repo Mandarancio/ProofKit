@@ -1,5 +1,5 @@
 import LogicKit
-/*
+
 //// https://en.wikipedia.org/wiki/Linked_list
 //// Linked List
 public class Multiset : ADT {
@@ -13,7 +13,7 @@ public class Multiset : ADT {
         Rule(
           Multiset.concat(Multiset.cons(Variable(named: "x"), Variable(named: "rest")),Variable(named: "z")),
           Multiset.concat(Variable(named: "rest"), Multiset.cons(Variable(named: "x"), Variable(named: "z"))))
-      ])
+      ], ["multiset", "multiset"])
       self.add_operator("contains", Multiset.contains, [
         Rule(Multiset.contains(Multiset.empty(), Variable(named: "x")), Boolean.False()),
         Rule(
@@ -24,28 +24,28 @@ public class Multiset : ADT {
           Multiset.contains(Multiset.cons(Variable(named: "x"), Variable(named: "rest")), Variable(named: "y")),
           Multiset.contains(Variable(named: "rest"), Variable(named: "y"))
         )
-      ])
+      ], ["multiset", "any"])
       self.add_operator("size", Multiset.size, [
         Rule(Multiset.size(Multiset.empty()), Nat.zero()),
         Rule(
           Multiset.size(Multiset.cons(Variable(named: "x"), Variable(named: "rest"))),
           Nat.succ(x: Multiset.size(Variable(named:"rest")))
         )
-      ], arity: 1)
+      ], ["multiset"])
       self.add_operator("rest", Multiset.rest, [
         Rule(Multiset.rest(Multiset.empty()), Multiset.empty()),
         Rule(
           Multiset.rest(Multiset.cons(Variable(named: "x"), Variable(named: "rest"))),
           Variable(named: "rest")
         )
-      ], arity:1)
+      ], ["multiset"])
       self.add_operator("first", Multiset.first, [
         Rule(Multiset.first(Multiset.empty()), vNil),
         Rule(
           Multiset.first(Multiset.cons(Variable(named: "x"), Variable(named: "rest"))),
           Variable(named: "x")
         )
-      ], arity:1)
+      ], ["multiset"])
       self.add_operator("removeOne", Multiset.removeOne,[
         Rule(
           Multiset.removeOne(Variable(named:"x"),Multiset.empty()),
@@ -63,7 +63,7 @@ public class Multiset : ADT {
           Multiset.removeOne(Multiset.cons(Variable(named:"first"),Variable(named:"rest")), Variable(named:"element")),
           Multiset.cons(Variable(named:"first"), Multiset.removeOne(Variable(named:"rest"),Variable(named:"element")))
         )
-      ])
+      ], ["multiset", "any"])
       self.add_operator("removeAll",Multiset.removeAll, [
         Rule(
           Multiset.removeAll(Variable(named:"x"), Multiset.empty()),
@@ -79,7 +79,7 @@ public class Multiset : ADT {
           Multiset.removeAll(Multiset.removeOne(Variable(named:"set"),Variable(named:"element")),Variable(named:"element")),
           Multiset.contains(Variable(named:"set"), Variable(named:"element"))
         )
-      ])
+      ], ["multiset", "any"])
       self.add_operator("==",Multiset.eq,[
         Rule(
           Multiset.eq(Variable(named:"x"),Variable(named:"x")),
@@ -95,18 +95,18 @@ public class Multiset : ADT {
           Multiset.eq(Variable(named:"rest"), Multiset.removeOne(Variable(named:"rhs"), Variable(named:"first"))),
           Boolean.and(Multiset.contains(Variable(named:"rhs"), Variable(named:"first")), Nat.eq(Nat.add(Multiset.size(Variable(named:"rest")),Nat.n(1)), Multiset.size(Variable(named:"rhs"))))
         )
-      ])
+      ], ["multiset", "multiset"])
     }
 
     public static func empty(_ :Term...) -> Term{
-      return Value<String>("Multiset.tail")
+      return new_term(Value<String>("Multiset.tail"),"multiset")
     }
 
     public static func cons(_ terms: Term...) -> Term{
-      return Map([
+      return new_term(Map([
         "first": terms[0],
         "rest": terms[1]
-      ])
+      ]), "multiset")
     }
 
     public class func n(_ terms: [Term]) -> Term{
@@ -122,39 +122,39 @@ public class Multiset : ADT {
     }
 
     public static func concat(_ terms: Term...)->Term{
-      let o =  Operator.n("concat","multiset", terms[0], terms[1])
+      let o =  Operator.n("concat", terms[0], terms[1])
       return o
     }
     public static func contains(_ terms: Term...)->Term{
-      return Operator.n("contains","bool", terms[0], terms[1] )
+      return Operator.n("contains", terms[0], terms[1] )
     }
     public static func size(_ terms: Term...)->Term{
-      return Operator.n("size","nat",terms[0])
+      return Operator.n("size",terms[0])
     }
 
     public static func rest(_ terms: Term...)->Term{
-      return Operator.n("rest","multiset", terms[0])
+      return Operator.n("rest", terms[0])
     }
 
     public static func first(_ terms: Term...)-> Term{
-      return Operator.n("first","any", terms[0])
+      return Operator.n("first", terms[0])
     }
 
     public static func removeOne(_ terms: Term...)->Term{
-      return Operator.n("removeOne","multiset",terms[0], terms[1])
+      return Operator.n("removeOne",terms[0], terms[1])
     }
     public static func removeAll(_ terms: Term...)->Term{
-      return Operator.n("removeAll","multiset",terms[0],terms[1])
+      return Operator.n("removeAll", terms[0],terms[1])
     }
 
     public class func eq(_ terms: Term...)-> Term{
-      return Operator.n("==","bool",terms[0],terms[1])
+      return Operator.n("==",terms[0],terms[1])
     }
 
     public override func pprint(_ t: Term) -> String{
       var s : String = "["
       var x = t
-      while !x.equals(Multiset.empty()){
+      while !x.equals(value(Multiset.empty())){
         if let m = (x as? Map){
           ////
           if m["rest"] != nil {
@@ -162,7 +162,7 @@ public class Multiset : ADT {
               s += ", "
             }
             s += ADTs.pprint(m["first"]!)
-            x = m["rest"]!
+            x = value(m["rest"]!)
           }else{
             x = Multiset.empty()
           }
@@ -187,7 +187,7 @@ public class Multiset : ADT {
       return false
     }
 }
-
+/*
 //// SET
 //// https://en.wikipedia.org/wiki/Set_(abstract_data_type)
 public class Set : Multiset {
@@ -457,5 +457,4 @@ public class Sequence : ADT {
     return false
   }
 
-}
-*/
+}*/
