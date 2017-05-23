@@ -47,9 +47,12 @@ public struct ADTManager{
       if let op = (term as? Map){
         let k : Term = Operator.eval(op)
         let footprint = Operator.get_footprint(k)
-        if  self.opers[footprint] != nil{
-          let axioms = self.opers[footprint]!
-          let res = resolve(k, axioms)
+        var axioms = self.opers[footprint]
+        if axioms == nil {
+          axioms = self.find_polyoper(footprint)
+        }
+        if  axioms!.count > 0{
+          let res = resolve(k, axioms!)
           if res.equals(op){
             return op
           }
@@ -59,6 +62,15 @@ public struct ADTManager{
       }
     }
     return ADT.eval(term)
+  }
+
+  private func find_polyoper(_ footprint: OperatorFootprint) -> [Rule]{
+    for (k, v) in self.opers{
+      if k == footprint{
+        return v
+      }
+    }
+    return []
   }
 
 

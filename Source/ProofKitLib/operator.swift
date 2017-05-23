@@ -18,13 +18,30 @@ extension OperatorFootprint: Hashable {
   public var hashValue: Int {
     var hash = name.hashValue
     for ty in types{
-      hash = hash ^ ty.hashValue
+      if ty != "any"{
+        hash = hash ^ ty.hashValue
+      }
     }
     return hash
   }
 
   public static func == (lhs: OperatorFootprint, rhs: OperatorFootprint) -> Bool {
-    return lhs.name == rhs.name && lhs.types == rhs.types
+    // print(" - \(lhs)")
+    if lhs.name != rhs.name{
+      return false
+    }
+    // print(" -- name passed")
+    if lhs.types.count != rhs.types.count{
+      return false
+    }
+    // print(" -- arity passed")
+    for i in 0...lhs.types.count-1{
+      if lhs.types[i] != rhs.types[i] && (lhs.types[i] != "any" && rhs.types[i] != "any"){
+        return false
+      }
+    }
+    // print("\(lhs) == \(rhs)")
+    return true
   }
 }
 

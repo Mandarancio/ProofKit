@@ -1,5 +1,4 @@
 import LogicKit
-/*
 
 public class Petrinet : ADT {
     public init(){
@@ -9,11 +8,11 @@ public class Petrinet : ADT {
     }
 
     public static func null(_:Term...) -> Term{
-      return Value<Bool>(false)
+      return new_term(Value<Bool>(false), "petrinet")
     }
 
     public static func add_edge(_ operands: Term...) -> Term{
-      return Map(["from_place":operands[0], "to_trans":operands[1], "weight":operands[2], "net":operands[3]])
+      return new_term(Map(["from_place":operands[0], "to_trans":operands[1], "weight":operands[2], "net":operands[3]]), "petrinet")
     }
 
     public class override func belong(_ term: Term ) -> Goal {
@@ -32,4 +31,3 @@ public class Petrinet : ADT {
     return mat
   }
 }
-*/

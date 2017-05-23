@@ -18,7 +18,7 @@ public class Boolean : ADT {
         Rule(Boolean.or(Variable(named:"x"),Boolean.True()),Boolean.True()),
         Rule(Boolean.or(Boolean.False(),Boolean.False()),Boolean.False())
       ], ["bool", "bool"])
-      self.add_operator("B==",Boolean.eq, [
+      self.add_operator("==",Boolean.eq, [
         Rule(Boolean.eq(Variable(named:"x"),Variable(named:"x")), Boolean.True()),
         Rule(Boolean.eq(Variable(named:"x"),Variable(named:"y")), Boolean.False()),
       ], ["bool", "bool"])

@@ -76,7 +76,7 @@ public class Nat: ADT{
         Nat.gt(Variable(named: ">.2.$0"), Variable(named: ">.2.$1"))
       )
     ],["nat", "nat"])
-    self.add_operator("N==", Nat.eq,[
+    self.add_operator("==", Nat.eq,[
       Rule(
         Nat.eq(Nat.zero(), Nat.zero()),
         Boolean.True()

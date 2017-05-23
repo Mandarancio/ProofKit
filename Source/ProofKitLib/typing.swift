@@ -19,8 +19,8 @@ public func type(_ term: Term) -> String{
 
 public func value(_ term: Term)->Term{
   if let tm = (term as? Map){
-    if let tp = (tm["value"] as? Term){
-      return tp
+    if tm["value"] != nil{
+      return tm["value"]!
     }
   }
   return vNil
