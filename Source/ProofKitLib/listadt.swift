@@ -1,4 +1,5 @@
 import LogicKit
+/*
 //// https://en.wikipedia.org/wiki/Linked_list
 //// Linked List
 public class Multiset : ADT {
@@ -79,7 +80,7 @@ public class Multiset : ADT {
           Multiset.contains(Variable(named:"set"), Variable(named:"element"))
         )
       ])
-      self.add_operator("BU==",Multiset.eq,[
+      self.add_operator("==",Multiset.eq,[
         Rule(
           Multiset.eq(Variable(named:"x"),Variable(named:"x")),
           Boolean.True()
@@ -121,33 +122,33 @@ public class Multiset : ADT {
     }
 
     public static func concat(_ terms: Term...)->Term{
-      let o =  Operator.n("concat", terms[0], terms[1])
+      let o =  Operator.n("concat","multiset", terms[0], terms[1])
       return o
     }
     public static func contains(_ terms: Term...)->Term{
-      return Operator.n("contains", terms[0], terms[1] )
+      return Operator.n("contains","bool", terms[0], terms[1] )
     }
     public static func size(_ terms: Term...)->Term{
-      return Operator.n("size",terms[0])
+      return Operator.n("size","nat",terms[0])
     }
 
     public static func rest(_ terms: Term...)->Term{
-      return Operator.n("rest", terms[0])
+      return Operator.n("rest","multiset", terms[0])
     }
 
     public static func first(_ terms: Term...)-> Term{
-      return Operator.n("first", terms[0])
+      return Operator.n("first","any", terms[0])
     }
 
     public static func removeOne(_ terms: Term...)->Term{
-      return Operator.n("removeOne",terms[0], terms[1])
+      return Operator.n("removeOne","multiset",terms[0], terms[1])
     }
     public static func removeAll(_ terms: Term...)->Term{
-      return Operator.n("removeAll",terms[0],terms[1])
+      return Operator.n("removeAll","multiset",terms[0],terms[1])
     }
 
     public class func eq(_ terms: Term...)-> Term{
-      return Operator.n("BU==",terms[0],terms[1])
+      return Operator.n("==","bool",terms[0],terms[1])
     }
 
     public override func pprint(_ t: Term) -> String{
@@ -195,7 +196,7 @@ public class Set : Multiset {
     self._name = "set"
     self.remove_operator("concat")
     self.remove_operator("removeOne")
-    self.remove_operator("BU==")
+    self.remove_operator("==")
     self.add_operator("insert", Set.insert, [
       Rule(
         Set.insert(Variable(named: "element"), Set.empty()),
@@ -284,30 +285,30 @@ public class Set : Multiset {
 
   public override class func eq(_ terms: Term...)-> Term
   {
-    return Operator.n("S==",terms[0],terms[1])
+    return Operator.n("==","bool",terms[0],terms[1])
   }
 
   public static func norm(_ terms: Term...)-> Term{
-    return Operator.n("S_norm",terms[0])
+    return Operator.n("S_norm","set",terms[0])
   }
   public static func insert(_ terms: Term...)->Term{
-    return Operator.n("insert",terms[0], terms[1])
+    return Operator.n("insert","set",terms[0], terms[1])
   }
 
   public static func union(_ terms: Term...)->Term{
-    return Operator.n("union", terms[0], terms[1])
+    return Operator.n("union","set", terms[0], terms[1])
   }
 
   public static func intersection(_ terms: Term...)->Term{
-    return Operator.n("intersection", terms[0], terms[1])
+    return Operator.n("intersection","set", terms[0], terms[1])
   }
 
   public static func diff(_ terms: Term...)->Term{
-    return Operator.n("diff", terms[0], terms[1])
+    return Operator.n("diff","set", terms[0], terms[1])
   }
 
   public static func subSet(_ terms: Term...)->Term{
-    return Operator.n("subSet",terms[0], terms[1])
+    return Operator.n("subSet","set",terms[0], terms[1])
   }
 
 
@@ -401,14 +402,14 @@ public class Sequence : ADT {
   }
 
   public static func push(_ t: Term...)->Term{
-    return Operator.n("push",t[0],t[1])
+    return Operator.n("push","sequence",t[0],t[1])
   }
 
   public static func getAt(_ t: Term...)->Term{
-    return Operator.n("get",t[0],t[1])
+    return Operator.n("get","any",t[0],t[1])
   }
   public static func setAt(_ t:Term...)->Term{
-    return Operator.n("set",t[0],t[1],t[2])
+    return Operator.n("set","sequence",t[0],t[1],t[2])
   }
 
   public static func size(_ t: Term...)->Term{
@@ -457,3 +458,4 @@ public class Sequence : ADT {
   }
 
 }
+*/

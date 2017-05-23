@@ -6,7 +6,7 @@ internal let ADTs : ADTManager = ADTManager()
 public struct ADTManager{
 
   private var adts : [String:ADT] = [:]
-  private var opers : [String:[Rule]] = [:]
+  private var opers : [OperatorFootprint:[Rule]] = [:]
 
   public static func instance()->ADTManager{
     return ADTs
@@ -15,10 +15,10 @@ public struct ADTManager{
   fileprivate init(){
     self["nat"] = Nat()
     self["boolean"] = Boolean()
-    self["multiset"] = Multiset()
-    self["set"] = Set()
-    self["sequence"] = Sequence()
-    self["int"] = Integer()
+    // self["multiset"] = Multiset()
+    // self["set"] = Set()
+    // self["sequence"] = Sequence()
+    // self["int"] = Integer()
   }
 
   public subscript ( i : String) -> ADT{
@@ -42,13 +42,12 @@ public struct ADTManager{
     if term.equals(vNil){
       return vNil
     }
-
     if Operator.is_operator(term) {
       if let op = (term as? Map){
-        let name = (op["name"] as! Value<String>).description
         let k : Term = Operator.eval(op)
-        if self.opers[name] != nil{
-          let axioms = self.opers[name]!
+        let footprint = Operator.get_footprint(k)
+        if  self.opers[footprint] != nil{
+          let axioms = self.opers[footprint]!
           let res = resolve(k, axioms)
           if res.equals(op){
             return op
@@ -60,36 +59,53 @@ public struct ADTManager{
     }
     return ADT.eval(term)
   }
+  public func tprint(_ term: Term, _ spacer: String) -> String{
+    if let m = (term as? Map){
+      var s = "\n\(spacer)"
+
+      for (k,v) in m{
+        s += "\(spacer)\(k): \(self.tprint(v, spacer+" "))"
+      }
+      return s
+    }
+    else{
+      return "\(term)\n"
+    }
+  }
 
   public func pprint(_ term: Term) -> String{
     if term.equals(vNil){
       return "nil"
     }
-    for (_,adt) in self.adts{
-      if adt.check(term){
-        return adt.pprint(term)
-      }
-    }
-    if let op = (term as? Map){
-      if Operator.is_operator(op){
-        return Operator.pprint(op)
-      }
-      return op.description
-    }
-    if let op = (term as? Value<Int>){
-      return op.description
-    }
-    if let op = (term as? Value<String>){
-      return op.description
-    }
-    if let op = (term as? Variable) {
-      let name = op.description
+
+    if let v = (term as? Variable) {
+      let name = v.name
       let ks = name.components(separatedBy:"$")
       if ks.count == 2{
         return "$"+ks[1]
       }
       return name
     }
+
+    if Operator.is_operator(term){
+      return Operator.pprint(term)
+    }
+
+    let ty = type(term)
+    if ty != "none" && ty != "any"{
+      if self.adts[ty] != nil{
+        let adt = self.adts[ty]!
+        return adt.pprint(value(term))
+      }
+    }
+
+    if let op = (term as? Value<Int>){
+      return op.description
+    }
+    if let op = (term as? Value<String>){
+      return op.description
+    }
+
     return "?"
   }
 }

@@ -1,4 +1,6 @@
 import LogicKit
+/*
+
 public class Petrinet : ADT {
     public init(){
       super.init("petrinet")
@@ -16,11 +18,11 @@ public class Petrinet : ADT {
 
     public class override func belong(_ term: Term ) -> Goal {
           return term === Petrinet.null() || delayed( freshn {
-            ops in term === Petrinet.add_edge(ops["0"], ops["1"], ops["2"], ops["3"], ops["4"]) 
+            ops in term === Petrinet.add_edge(ops["0"], ops["1"], ops["2"], ops["3"], ops["4"])
               && Nat.belong(ops["0"])
               && Nat.belong(ops["1"])
               && Integer.belong(ops["2"])
-              && Petrinet.belong(ops["3"]) 
+              && Petrinet.belong(ops["3"])
           })
     }
 
@@ -30,3 +32,4 @@ public class Petrinet : ADT {
     return mat
   }
 }
+*/

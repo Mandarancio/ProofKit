@@ -1,39 +1,39 @@
 import LogicKit
 public class Boolean : ADT {
     public init(){
-      super.init("boolean")
+      super.init("bool")
       self.add_generator("true", Boolean.True)
       self.add_generator("false", Boolean.False)
       self.add_operator("not", Boolean.not, [
         Rule(Boolean.not(Boolean.False()),Boolean.True()),
         Rule(Boolean.not(Boolean.True()),Boolean.False())
-      ], arity: 1)
+      ], ["bool"])
       self.add_operator("and", Boolean.and, [
         Rule(Boolean.and(Boolean.False(),Variable(named:"x")),Boolean.False()),
         Rule(Boolean.and(Variable(named:"x"),Boolean.False()),Boolean.False()),
         Rule(Boolean.and(Boolean.True(),Boolean.True()),Boolean.True())
-      ])
+      ], ["bool", "bool"])
       self.add_operator("or", Boolean.or, [
         Rule(Boolean.or(Boolean.True(),Variable(named:"x")),Boolean.True()),
         Rule(Boolean.or(Variable(named:"x"),Boolean.True()),Boolean.True()),
         Rule(Boolean.or(Boolean.False(),Boolean.False()),Boolean.False())
-      ])
+      ], ["bool", "bool"])
       self.add_operator("B==",Boolean.eq, [
         Rule(Boolean.eq(Variable(named:"x"),Variable(named:"x")), Boolean.True()),
         Rule(Boolean.eq(Variable(named:"x"),Variable(named:"y")), Boolean.False()),
-      ])
+      ], ["bool", "bool"])
     }
 
     public static func True(_:Term...) -> Term{
-      return Value<Bool>(true)
+      return new_term(Value<Bool>(true), "bool")
     }
 
     public static func False(_:Term...) -> Term{
-      return Value<Bool>(false)
+      return new_term(Value<Bool>(false), "bool")
     }
 
     public static func eq(_ ops: Term...)->Term{
-      return Operator.n("B==",ops[0],ops[1])
+      return Operator.n("==",ops[0],ops[1])
     }
 
     ////Helper

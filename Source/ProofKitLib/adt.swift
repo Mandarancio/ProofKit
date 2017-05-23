@@ -1,12 +1,14 @@
 import LogicKit
 
+enum MyError : Error {
+    case RuntimeError(String)
+}
 
 //// This base class contains all needed information to define a datatype
 public class ADT{
   var _name : String
-  private var _axioms : [String:[Rule]]
-  private var _operators : [String: (Term ...) ->Term]
-  private var _arity : [String: Int]
+  private var _axioms : [OperatorFootprint:[Rule]]
+  private var _operators : [OperatorFootprint: (Term ...) ->Term]
   private var _generators : [String :  (Term...)->Term]
   private var _gen_arity : [String : Int]
 
@@ -15,16 +17,19 @@ public class ADT{
     self._generators = [:]
     self._operators = [:]
     self._axioms = [:]
-    self._arity = [:]
     self._gen_arity = [:]
   }
 
-  public subscript ( i : String) -> ((Term...)->Term){
+  public subscript ( i : String) -> ((Term...)->Term)
+  {
       get{
-        if _generators[i] != nil{
-          return _generators[i]!
+        for (o, v) in self._operators{
+          if o.name == i{
+            return v
+          }
         }
-        return _operators[i]!
+        return _generators[i]!
+      //  throw MyError.RuntimeError("No operator \(i) found")
       }
       set{
       }
@@ -45,7 +50,7 @@ public class ADT{
     return t
   }
 
-  public func get_operators() -> [String]{
+  public func get_operators() -> [OperatorFootprint]{
     return Array(self._operators.keys)
   }
 
@@ -72,12 +77,12 @@ public class ADT{
   }
 
   //// Retrive axioms for an operation
-  public func get_axioms(_ name: String) -> [Rule]{
+  public func get_axioms(_ name: OperatorFootprint) -> [Rule]{
     return self._axioms[name]!
   }
 
   //// Shortcut to retrive axioms
-  public func a(_ name: String) -> [Rule] {
+  public func a(_ name: OperatorFootprint) -> [Rule] {
     return self.get_axioms(name)
   }
 
@@ -87,24 +92,25 @@ public class ADT{
     self._generators[name] = generator
     self._gen_arity[name] = arity
   }
+
   //// Internal use only
-  internal func add_operator(_ name: String, _ oper: @escaping((Term...)->Term), _ axioms: [Rule], arity: Int = 2){
-    self._operators[name] = oper
-    self._arity[name] = arity
-    self._axioms[name] = axioms
+  internal func add_operator(_ name: String, _ oper: @escaping((Term...)->Term), _ axioms: [Rule], _ types: [String]){
+    let ofoot = OperatorFootprint(name, types)
+    self._operators[ofoot] = oper
+    self._axioms[ofoot] = axioms
   }
 
-  internal func remove_operator(_ name: String){
+  internal func remove_operator(_ name: OperatorFootprint){
     self._operators[name] = nil
   }
 
   //// Retrive operator generator
-  public func get_operator(_ name: String)-> ((Term...)->Term){
+  public func get_operator(_ name: OperatorFootprint)-> ((Term...)->Term){
     return  self._operators[name]!
   }
 
   //// Shortcut to retrive an operator generator
-  public func o(_ name: String)-> ((Term...)->Term){
+  public func o(_ name: OperatorFootprint)-> ((Term...)->Term){
     return self.get_operator(name)
   }
 

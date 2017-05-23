@@ -171,6 +171,7 @@ public func get_result(_ goal : Goal, _ x : Variable) -> Term{
   var res: Term = vNil
   for s in solve(goal){
     for (t,v) in s.reified().prefix(10){
+        print("\(t): \(v)")
         if t.equals(x) {
           res = v
         }
@@ -183,13 +184,18 @@ public func resolve(_ op: Term, _ rules: [Rule]) -> Term{
   let x = Variable(named: "resolver.x")
   var curr = op
   var res : Term = op
+  print(ADTs.pprint(op))
   while !vNil.equals(res){
     res = vNil
     for r in rules{
       res = get_result(r.apply(curr, x),x)
       if !vNil.equals(res){
+        print("ok: \(r)")
         curr = res
         break
+      }
+      else{
+        print("not ok: \(r)")
       }
     }
   }

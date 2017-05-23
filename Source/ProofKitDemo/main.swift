@@ -1,6 +1,6 @@
 import LogicKit
 import ProofKitLib
-
+/*
 func print_ax(_ ax: [Rule]){
   var i = 0
   for a in ax{
@@ -86,4 +86,4 @@ let a = Integer.n(-2)
 let b = Integer.n(2)
 let c = Integer.add(a,b)
 res = ADTs.eval(c)
-print("\(ADTs.pprint(c)) => \(ADTs.pprint(res))")
+print("\(ADTs.pprint(c)) => \(ADTs.pprint(res))")*/

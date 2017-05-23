@@ -13,7 +13,7 @@ public class Nat: ADT{
                   Variable(named: "x")),
              Rule(Nat.add(Variable(named: "x"), Nat.succ(x: Variable(named: "y"))),
                   Nat.succ(x: Nat.add(Variable(named: "x"),Variable(named:"y"))))
-    ])
+    ],["nat", "nat"])
     self.add_operator("*", Nat.mul,[
       Rule(
         Nat.mul(Variable(named: "*.0.$0"), Nat.zero()),
@@ -23,7 +23,7 @@ public class Nat: ADT{
         Nat.mul(Variable(named: "*.1.$0"), Nat.succ(x: Variable(named: "*.1.$1"))),
         Nat.add(Variable(named: "*.1.$0"), Nat.mul(Variable(named: "*.1.$0"), Variable(named: "*.1.$1")))
       )
-    ])
+    ],["nat", "nat"])
     self.add_operator("pre", Nat.pre,[
       Rule(
         Nat.pre(Nat.zero()),
@@ -33,7 +33,7 @@ public class Nat: ADT{
         Nat.pre(Nat.succ(x: Variable(named: "pre.1.$0"))),
         Variable(named: "pre.1.$0")
       )
-    ])
+    ],["nat"])
     self.add_operator("-", Nat.sub,[
       Rule(
         Nat.sub(Variable(named: "-.0.$0"), Nat.zero()),
@@ -47,7 +47,7 @@ public class Nat: ADT{
         Nat.sub(Variable(named: "-.2.$0"), Nat.succ(x: Variable(named: "-.2.$1"))),
         Nat.pre(Nat.sub(Variable(named: "-.2.$0"), Variable(named: "-.2.$1")))
       )
-    ])
+    ],["nat", "nat"])
     self.add_operator("<", Nat.lt,[
       Rule(
         Nat.lt(Variable(named: "<.0.$0"), Nat.zero()),
@@ -61,7 +61,7 @@ public class Nat: ADT{
         Nat.lt(Nat.succ(x: Variable(named: "<.2.$0")), Nat.succ(x: Variable(named: "<.2.$1"))),
         Nat.lt(Variable(named: "<.2.$0"), Variable(named: "<.2.$1"))
       )
-    ])
+    ],["nat", "nat"])
     self.add_operator(">", Nat.gt,[
       Rule(
         Nat.gt(Nat.zero(), Variable(named: ">.0.$0")),
@@ -75,7 +75,7 @@ public class Nat: ADT{
         Nat.gt(Nat.succ(x: Variable(named: ">.2.$0")), Nat.succ(x: Variable(named: ">.2.$1"))),
         Nat.gt(Variable(named: ">.2.$0"), Variable(named: ">.2.$1"))
       )
-    ])
+    ],["nat", "nat"])
     self.add_operator("N==", Nat.eq,[
       Rule(
         Nat.eq(Nat.zero(), Nat.zero()),
@@ -93,7 +93,7 @@ public class Nat: ADT{
         Nat.eq(Nat.succ(x: Variable(named: "N==.3.$0")), Nat.succ(x:  Variable(named: "N==.3.$1"))),
         Nat.eq(Variable(named: "N==.3.$0"), Variable(named: "N==.3.$1"))
       )
-    ])
+    ],["nat", "nat"])
     self.add_operator("%", Nat.mod,[
       Rule(
         Nat.mod(Variable(named: "%.0.$0"), Nat.zero()),
@@ -112,7 +112,7 @@ public class Nat: ADT{
         Nat.mod(Variable(named: "%.3.$0"), Variable(named: "%.3.$1")),
         Nat.mod(Nat.sub(Variable(named: "%.3.$0"), Variable(named: "%.3.$1")), Variable(named: "%.3.$1"))
       )
-    ])
+    ],["nat", "nat"])
     self.add_operator("gcd", Nat.gcd,[
       Rule(
         Nat.gcd(Variable(named: "gcd.0.$0"), Variable(named: "gcd.0.$1")),
@@ -128,7 +128,7 @@ public class Nat: ADT{
         Nat.gcd(Variable(named: "gcd.2.$0"), Variable(named: "gcd.2.$1")),
         Nat.gcd(Variable(named: "gcd.2.$1"), Nat.mod(Variable(named: "gcd.2.$0"), Variable(named: "gcd.2.$1")))
       )
-    ])
+    ],["nat", "nat"])
     self.add_operator("/", Nat.div,[
       Rule(
         Nat.div(Variable(named: "/.0.$0"), Nat.zero()),
@@ -156,16 +156,16 @@ public class Nat: ADT{
         )
 
       )
-    ])
+    ],["nat", "nat"])
   }
 
   //Generator
   static public func zero(_:Term...) -> Term{
-    return Value<Int>(0)
+    return new_term(Value<Int>(0),"nat")
   }
 
   static public func succ(x: Term...) -> Term {
-    return Map(["succ": x[0]])
+    return new_term(Map(["succ": x[0]]),"nat")
   }
 
   static public func n(_ x: Int) -> Term {
@@ -196,17 +196,6 @@ public class Nat: ADT{
     }
     return false
   }
-
-  // public override func eval(_ t: Term) -> Term{
-  //   if t.equals(Nat.zero()){
-  //     return t
-  //   }
-  //   if let m = (t as? Map){
-  //     let data = m["succ"]!
-  //     return Nat.succ(x: ADTs.eval(data))
-  //   }
-  //   return t
-  // }
 
   static public func to_string(_ x: Term) -> String{
    	if x.equals(Nat.zero()){
@@ -266,17 +255,17 @@ public class Nat: ADT{
     return Operator.n(">", operands[0], operands[1])
   }
   public class func eq(_ operands: Term...) -> Term{
-    return Operator.n("N==", operands[0], operands[1])
+    return Operator.n("==", operands[0], operands[1])
   }
   public class func gcd(_ operands: Term...) -> Term{
     return Operator.n("gcd", operands[0], operands[1])
   }
 }
 
-
+/*
 public class Integer: ADT{
   public init(){
-    super.init("Integer")
+    super.init("int")
     self.add_generator("int", Integer.int)
     self.add_operator("I+", Integer.add, [
       Rule(
@@ -289,7 +278,7 @@ public class Integer: ADT{
           Nat.add(Variable(named: "I+.0.$1"),Variable(named: "I+.0.$3"))
         )
       )
-    ])
+    ], ["int", "int"])
     self.add_operator("I-", Integer.sub, [
       Rule(
         Integer.sub(
@@ -301,7 +290,7 @@ public class Integer: ADT{
           Nat.add(Variable(named: "I-.0.$1"),Variable(named: "I-.0.$2"))
         )
       )
-    ])
+    ], ["int", "int"])
 
     self.add_operator("abs", Integer.abs, [
       Rule(
@@ -317,7 +306,7 @@ public class Integer: ADT{
         ),
         Nat.sub(Variable(named: "abs.1.$0"),Variable(named: "abs.1.$1"))
       )
-    ])
+    ], ["int", "int"])
     self.add_operator("normalize", Integer.normalize, [
       Rule(
         Integer.normalize(
@@ -339,7 +328,7 @@ public class Integer: ADT{
           )
         )
       )
-    ])
+    ], ["int"])
     self.add_operator("I*", Integer.mul, [
       Rule(
         Integer.mul(
@@ -357,7 +346,7 @@ public class Integer: ADT{
           )
         )
       )
-    ])
+    ], ["int", "int"])
     self.add_operator("I==", Integer.eq, [
       Rule(
         Integer.eq(
@@ -383,7 +372,7 @@ public class Integer: ADT{
           )
         )
       )
-    ])
+    ], ["int", "int"])
     self.add_operator("I<", Integer.lt, [
       Rule(
         Integer.lt(
@@ -398,7 +387,7 @@ public class Integer: ADT{
           Boolean.True()
         )
       )
-    ])
+    ], ["int", "int"])
     self.add_operator("I>", Integer.gt, [
       Rule(
         Integer.gt(
@@ -413,7 +402,7 @@ public class Integer: ADT{
           Boolean.True()
         )
       )
-    ])
+    ], ["int", "int"])
     self.add_operator("sign", Integer.sign, [
       Rule(
         Integer.sign(
@@ -424,7 +413,7 @@ public class Integer: ADT{
           Variable(named: "I>.0.$1")
         )
       )
-    ])
+    ], ["int"])
     //Condition for the division is a simple xor which verify
     //a < b xor c < d
     self.add_operator("I/", Integer.div, [
@@ -498,7 +487,7 @@ public class Integer: ADT{
           Nat.zero()
         )
       )
-    ])
+    ], ["int", "int"])
   }
 
   static public func int(_ x: Term...) -> Term {
@@ -577,3 +566,4 @@ public class Integer: ADT{
   }
 
 }
+*/
