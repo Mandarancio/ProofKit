@@ -1,12 +1,11 @@
 import LogicKit
 import ProofKitLib
-/*
+
 func print_ax(_ ax: [Rule]){
-  var i = 0
-  for a in ax{
-    print(" \(i). \(a.pprint())")
-    i += 1
-  }
+  // print(ax.count)
+  // for i in 0...ax.count-1{
+  //   print(" \(i). \(ax[i].pprint())")
+  // }
 }
 
 var res : Term
@@ -14,8 +13,8 @@ let ADTs = ADTManager.instance()
 let multiset = ADTs["multiset"]
 
 for o in multiset.get_operators(){
-  print("\nMultiset - \(o):")
-  print_ax(multiset.a(o))
+  print("Multiset - \(o):")
+  // print_ax(multiset.a(o))
 }
 var k = Multiset.n([Nat.n(2),Nat.n(5),Nat.n(3), Nat.n(1),Nat.n(4)])
 var exists = ADTs["multiset"]["contains"](k,Nat.n(1))
@@ -35,7 +34,7 @@ print(" \(ADTs.pprint(l0)) => \(ADTs.pprint(res))")
 
 let a_set = ADTs["set"]
 for o in a_set.get_operators(){
-  print("\nSet - \(o):")
+  print("Set - \(o):")
   print_ax(a_set.a(o))
 }
 
@@ -58,7 +57,7 @@ print(" \(ADTs.pprint(s6)) => \(ADTs.pprint(res))")
 
 let seq = ADTs["sequence"]
 for i in seq.get_operators(){
-  print("\nSequence - \(i):")
+  print("Sequence - \(i):")
   print_ax( seq.a(i))
 }
 s0 = ADTs.eval(Sequence.n([Nat.n(2), Nat.n(3), Nat.n(4)]))
@@ -72,7 +71,7 @@ print(" \(ADTs.pprint(s3)) => \(ADTs.pprint(res))")
 
 let o = ADTs["nat"]["+"](Nat.n(2), Nat.n(3))
 for i in ADTs["nat"].get_operators(){
-  print("\nNat - \(i):")
+  print("Nat - \(i):")
   print_ax( ADTs["nat"].a(i))
 }
 res = ADTs.eval(o)
@@ -86,4 +85,4 @@ let a = Integer.n(-2)
 let b = Integer.n(2)
 let c = Integer.add(a,b)
 res = ADTs.eval(c)
-print("\(ADTs.pprint(c)) => \(ADTs.pprint(res))")*/
+print("\(ADTs.pprint(c)) => \(ADTs.pprint(res))")

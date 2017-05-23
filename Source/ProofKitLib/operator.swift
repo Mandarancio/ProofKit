@@ -14,6 +14,12 @@ public struct OperatorFootprint {
   }
 }
 
+extension OperatorFootprint: CustomStringConvertible {
+    public var description: String {
+        return "\(self.name) : \(self.types)"
+    }
+}
+
 extension OperatorFootprint: Hashable {
   public var hashValue: Int {
     var hash = name.hashValue

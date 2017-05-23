@@ -16,10 +16,9 @@ public struct ADTManager{
     self["nat"] = Nat()
     self["boolean"] = Boolean()
     self["multiset"] = Multiset()
-    // self["set"] = Set()
-    // self["sequence"] = Sequence()
+    self["set"] = Set()
+    self["sequence"] = Sequence()
     self["int"] = Integer()
-    // print(self.opers)
   }
 
   public subscript ( i : String) -> ADT{
