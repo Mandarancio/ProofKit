@@ -19,6 +19,8 @@ public struct ADTManager{
     self["set"] = Set()
     self["sequence"] = Sequence()
     self["int"] = Integer()
+    self["petrinet"] = Petrinet()
+    self["marking"] = Marking()
   }
 
   public subscript ( i : String) -> ADT{

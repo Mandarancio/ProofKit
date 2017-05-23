@@ -10,7 +10,7 @@ public class Marking : ADT {
       //has_enough(null, [a, b], p) => a == b
       Rule(
       Marking.has_enough(
-          Marking.null(), 
+          Marking.null(),
           Integer.int(Variable(named: "a"), Variable(named: "b")),
           Variable(named: "p")),
         Nat.eq(Variable(named: "a"), Variable(named: "b"))
@@ -19,7 +19,7 @@ public class Marking : ADT {
       //has_enough(next_place(v, x), [a, b], zero) => v+1 > (a-b)
       Rule(
       Marking.has_enough(
-          Marking.next_place(Variable(named: "v"), Variable(named: "x")), 
+          Marking.next_place(Variable(named: "v"), Variable(named: "x")),
           Integer.int(Variable(named: "a"), Variable(named: "b")),
           Nat.zero()),
         Nat.gt(
@@ -31,7 +31,7 @@ public class Marking : ADT {
       //has_enough(next_place(v, x), w, succ(y)) => has_enough(x, w, y)
       Rule(
         Marking.has_enough(
-          Marking.next_place(Variable(named: "v"), Variable(named: "x")), 
+          Marking.next_place(Variable(named: "v"), Variable(named: "x")),
           Variable(named: "w"),
           Nat.succ(x:Variable(named: "y"))),
         Marking.has_enough(
@@ -54,7 +54,7 @@ public class Marking : ADT {
 
     public class override func belong(_ term: Term ) -> Goal {
           return term === Marking.null() || delayed( freshn {
-            ops in term === Marking.next_place(ops["0"], ops["1"]) 
+            ops in term === Marking.next_place(ops["0"], ops["1"])
               && Nat.belong(ops["0"])
               && Marking.belong(ops["1"])
           })
@@ -135,11 +135,11 @@ public class Petrinet : ADT {
 
     public class override func belong(_ term: Term ) -> Goal {
           return term === Petrinet.null() || delayed( freshn {
-            ops in term === Petrinet.add_edge(ops["0"], ops["1"], ops["2"], ops["3"], ops["4"]) 
+            ops in term === Petrinet.add_edge(ops["0"], ops["1"], ops["2"], ops["3"], ops["4"])
               && Nat.belong(ops["0"])
               && Nat.belong(ops["1"])
               && Integer.belong(ops["2"])
-              && Petrinet.belong(ops["3"]) 
+              && Petrinet.belong(ops["3"])
           })
     }
 
