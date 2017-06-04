@@ -76,6 +76,37 @@ public class DynamicMatrix {
     }
   }
 
+  // = t_invariant with transposed matrix
+  public func is_p_invariant(_ v: DynamicVector) -> Bool {
+    let columnNumber = max(dim().0, v.size())
+
+    for i in 1 ... dim().1 {
+      var lineProduct = 0
+      for j in 0 ... (columnNumber-1){
+        lineProduct += self[(j, i)] * v[j]
+      }
+      if lineProduct != 0 {
+        return false
+      }
+    }
+    return true
+  }
+
+  public func is_t_invariant(_ v: DynamicVector) -> Bool {
+    let columnNumber = max(dim().1, v.size())
+
+    for i in 1 ... dim().0 {
+      var lineProduct = 0
+      for j in 0 ... (columnNumber-1){
+        lineProduct += self[(j, i)] * v[j]
+      }
+      if lineProduct != 0 {
+        return false
+      }
+    }
+    return true
+  }
+
   public func to_string() -> String {
     var result = "[\n"
     for line in data {

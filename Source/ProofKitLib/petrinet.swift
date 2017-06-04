@@ -72,6 +72,10 @@ public class Marking : ADT {
       return []
     }
 
+    public static func to_vector(_ marking: Term) -> DynamicVector {
+      return DynamicVector(to_array(marking))
+    }
+
     public static func to_string(_ marking: Term) -> String {
       if let map = (marking as? Map) {
         if map["value"] != nil && map["rest"] != nil{
@@ -141,6 +145,15 @@ public class Petrinet : ADT {
               && Integer.belong(ops["2"])
               && Petrinet.belong(ops["3"])
           })
+    }
+
+//TODO check belong
+    public static func is_p_invariant(net: Term, invariant: Term) -> Goal {
+      return Boolean.n(to_matrix(net).is_p_invariant(Marking.to_vector(invariant))) === Boolean.True()
+    }
+
+    public static func is_t_invariant(net: Term, invariant: Term) -> Goal {
+      return Boolean.n(to_matrix(net).is_t_invariant(Marking.to_vector(invariant))) === Boolean.True()
     }
 
   public static func to_matrix(_ net: Term) -> DynamicMatrix {
