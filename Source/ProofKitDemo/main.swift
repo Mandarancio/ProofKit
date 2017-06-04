@@ -1,5 +1,6 @@
 import LogicKit
 import ProofKitLib
+import Foundation
 
 func print_ax(_ ax: [Rule]){
   var i = 0
