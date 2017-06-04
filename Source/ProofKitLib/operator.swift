@@ -16,7 +16,14 @@ public struct OperatorFootprint {
 
 extension OperatorFootprint: CustomStringConvertible {
     public var description: String {
-        return "\(self.name) : \(self.types)"
+      var s = "\(self.name)(\(self.types[0])"
+      if self.types.count > 1{
+        for i in 1...self.types.count-1{
+          s += ", \(self.types[i])"
+        }
+      }
+      s += ")"
+      return s
     }
 }
 
@@ -150,11 +157,11 @@ public struct Operator{
 
   public static func pprint(_ t: Term)->String{
     if let m = (t as? Map){
-      let name: String = (m["name"]! as! Value<String>).description
-      if m.keys.count == 4{
+      let name: String = (m["name"]! as! Value<String>).wrapped
+      let arity: Int = (m["arity"]! as! Value<Int>).wrapped
+      if arity == 2{
         return "(\(ADTs.pprint(m["0"]!)) \(name) \(ADTs.pprint(m["1"]!)))"
       }else{
-        let arity = Operator.arity(m)
         var s :String = "\(name)(\(ADTs.pprint(m["0"]!))"
         if arity>1{
           for i in 1...arity-1{

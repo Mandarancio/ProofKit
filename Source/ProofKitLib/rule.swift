@@ -152,7 +152,7 @@ public struct Rule {
 
 extension Rule: CustomStringConvertible {
     public var description: String {
-        return self.pprint()
+      return self.pprint()
     }
 }
 

@@ -86,6 +86,15 @@ public class ADT{
     return self.get_axioms(name)
   }
 
+  //// Super shuortcut:
+  public func a(_ name: String) -> [Rule]{
+    for (of,a) in self._axioms{
+      if of.name == name{
+        return a
+      }
+    }
+    return []
+  }
 
   //// Internal use only
   internal func add_generator(_ name: String, _ generator: @escaping((Term...)->Term), arity: Int = 0){

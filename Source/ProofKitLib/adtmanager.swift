@@ -14,7 +14,7 @@ public struct ADTManager{
 
   fileprivate init(){
     self["nat"] = Nat()
-    self["boolean"] = Boolean()
+    self["bool"] = Boolean()
     self["multiset"] = Multiset()
     self["set"] = Set()
     self["sequence"] = Sequence()
@@ -95,7 +95,7 @@ public struct ADTManager{
     if ty != "none" && ty != "any"{
       if self.adts[ty] != nil{
         let adt = self.adts[ty]!
-        return adt.pprint(value(term))
+        return adt.pprint(term)
       }
     }
 

@@ -201,7 +201,7 @@ public class Nat: ADT{
    	if x.equals(Nat.zero()){
    		return "0"
    	}
-   	if let map = (x as? Map){
+   	if let map = (value(x) as? Map){
       if map["succ"] != nil{
         let k = Nat.to_string(map["succ"]!)
         let f = k.components(separatedBy:"+")
@@ -514,7 +514,7 @@ public class Integer: ADT{
   }
 
   public override func pprint(_ term: Term) -> String{
-    if let map = (term as? Map) {
+    if let map = (value(term) as? Map) {
 
       let a : Term = ADTs.eval(map["a"]!)
       let b : Term = ADTs.eval(map["b"]!)

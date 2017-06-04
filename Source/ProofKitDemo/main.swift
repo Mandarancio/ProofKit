@@ -2,10 +2,9 @@ import LogicKit
 import ProofKitLib
 
 func print_ax(_ ax: [Rule]){
-  // print(ax.count)
-  // for i in 0...ax.count-1{
-  //   print(" \(i). \(ax[i].pprint())")
-  // }
+  for i in 0...ax.count-1{
+    print(" \(i). \(ax[i])")
+  }
 }
 
 var res : Term
@@ -14,7 +13,7 @@ let multiset = ADTs["multiset"]
 
 for o in multiset.get_operators(){
   print("Multiset - \(o):")
-  // print_ax(multiset.a(o))
+  print_ax(multiset.a(o))
 }
 var k = Multiset.n([Nat.n(2),Nat.n(5),Nat.n(3), Nat.n(1),Nat.n(4)])
 var exists = ADTs["multiset"]["contains"](k,Nat.n(1))
