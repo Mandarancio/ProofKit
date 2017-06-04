@@ -19,10 +19,10 @@ public class DynamicVector {
     guard number > 0 else {
       return
     }
-  }
 
     for _ in 1...number {
       data.append(0)
+    }
   }
 
   private func verify_access_to(_ x:Int) -> () {
