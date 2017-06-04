@@ -164,3 +164,7 @@ results in:
 axiom 1: $1 + succ($2) = succ($1 + $2)
 2 + 1 => succ(2 + 0)
 ```
+
+
+## Notes
+Performance difference in function goal is around ~2.5x faster without typing.

@@ -188,7 +188,7 @@ public func resolve(_ op: Term, _ rules: [Rule]) -> Term{
   var curr = op
   var res : Term = op
   ncall += 1
-  
+
   while !vNil.equals(res){
     res = vNil
     for r in rules{
