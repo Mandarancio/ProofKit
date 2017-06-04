@@ -2,6 +2,15 @@ import LogicKit
 import ProofKitLib
 import Foundation
 
+
+//Date to milliseconds
+func mills() -> Int {
+    let currentDate = Date()
+    let since1970 = currentDate.timeIntervalSince1970
+    return Int(since1970 * 1000)
+}
+
+
 func print_ax(_ ax: [Rule]){
   var i = 0
   for a in ax{
@@ -10,6 +19,7 @@ func print_ax(_ ax: [Rule]){
   }
 }
 
+let time = mills()
 var res : Term
 let ADTs = ADTManager.instance()
 let multiset = ADTs["multiset"]
@@ -88,3 +98,5 @@ let b = Integer.n(2)
 let c = Integer.add(a,b)
 res = ADTs.eval(c)
 print("\(ADTs.pprint(c)) => \(ADTs.pprint(res))")
+print("time : \(mills()-time)ms")
+print("Counter: \(counter)")

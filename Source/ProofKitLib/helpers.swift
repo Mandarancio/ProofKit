@@ -3,6 +3,8 @@ import LogicKit
 public let vNil = Value("nil")
 public let vFail = Value("fail")
 
+public var counter = 0
+
 public func variables(_ a: Term)-> [Variable]{
   var l : [Variable] = []
   if a is Variable{
@@ -183,6 +185,7 @@ public func resolve(_ op: Term, _ rules: [Rule]) -> Term{
   let x = Variable(named: "resolver.x")
   var curr = op
   var res : Term = op
+  counter += 1
   while !vNil.equals(res){
     res = vNil
     for r in rules{
