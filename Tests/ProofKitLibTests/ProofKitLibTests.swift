@@ -13,11 +13,11 @@ class ProofKitLibTests: XCTestCase {
 
   let adt : ADTManager = ADTManager.instance()
 
- 
+
 
   override func setUp() {
     super.setUp()
    }
 
- 
+
 }
