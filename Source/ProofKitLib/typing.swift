@@ -1,5 +1,6 @@
 import LogicKit
 
+public var ncalls = 0
 
 public func new_term(_ term: Term, _ type: String) -> Term{
   return Map([
@@ -18,6 +19,7 @@ public func type(_ term: Term) -> String{
 }
 
 public func value(_ term: Term)->Term{
+  ncalls += 1
   if let tm = (term as? Map){
     if tm["value"] != nil{
       return tm["value"]!

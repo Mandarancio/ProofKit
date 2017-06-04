@@ -1,5 +1,14 @@
 import LogicKit
 import ProofKitLib
+import Foundation
+
+//Date to milliseconds
+func currentTimeInMiliseconds() -> Int {
+    let currentDate = Date()
+    let since1970 = currentDate.timeIntervalSince1970
+    return Int(since1970 * 1000)
+}
+
 
 func print_ax(_ ax: [Rule]){
   for i in 0...ax.count-1{
@@ -7,6 +16,7 @@ func print_ax(_ ax: [Rule]){
   }
 }
 
+let time0 = currentTimeInMiliseconds()
 var res : Term
 let ADTs = ADTManager.instance()
 let multiset = ADTs["multiset"]
@@ -85,3 +95,4 @@ let b = Integer.n(2)
 let c = Integer.add(a,b)
 res = ADTs.eval(c)
 print("\(ADTs.pprint(c)) => \(ADTs.pprint(res))")
+print("\(ncalls) : \(currentTimeInMiliseconds()-time0)ms")
