@@ -19,6 +19,10 @@ public class ADT{
     self._gen_arity = [:]
   }
 
+  public func garity(_ name: String) -> Int{
+    return self._gen_arity[name]!
+  }
+
   public subscript ( i : String) -> ((Term...)->Term){
       get{
         if _generators[i] != nil{

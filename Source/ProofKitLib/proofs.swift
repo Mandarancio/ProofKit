@@ -1,11 +1,5 @@
 import LogicKit
 
-private func replace(_ term: Term, _ search: Term) ->Term{
-  if term is Variable{
-    return term
-  }
-  return term
-}
 
 //// namespace containing all the operations to prove an axiom
 public struct Proof {
@@ -59,18 +53,24 @@ public struct Proof {
     return Rule(lhs, rhs, condition)
   }
 
-  public static func cut(_ rule: Rule, _ replacement: Rule) -> Rule{
-    // if c1 ^ u = u' ^ c2 => t = t'
-    //    c => u = u'
-    // then
-    //    c1 ^ c ^ c2 => t = t'
-    //
-    // let x = Variable(named: "cut.x")
-    // let lhs = get_result(rule.lTerm() === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
-    // let rhs = get_result(rule.rTerm() === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
-    // let condition = get_result(rule.condition === x && rule.lTerm === replacement.lTerm && rule.rTerm === replacement.rTerm,x)
-    // return Rule(lhs, rhs, condition)/rule.variables()
-    return rule
+  public static func inductive(_ conjecture: Rule, _ variable: Variable, _ adt: ADT,_ induction: [String:(Rule...)->Rule]) throws ->Rule
+  {
+    for (gen_name, proof) in induction{
+      let generator : (Term...)->Term = adt[gen_name]
+      let arity = adt.garity(gen_name)
+      let subs_term : Term
+      if arity == 0{
+        subs_term = generator()
+      }else{
+        subs_term = generator(variable)
+      }
+      let lhs = Proof.substitution(conjecture, variable, subs_term)
+      let nr = proof(lhs)
+      if !lhs.equals(nr){
+        throw ProofError.InductionFail
+      }
+    }
+    return conjecture
   }
 
 }
