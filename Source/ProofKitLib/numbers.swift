@@ -306,7 +306,7 @@ public class Integer: ADT{
         ),
         Nat.sub(Variable(named: "abs.1.$0"),Variable(named: "abs.1.$1"))
       )
-    ], ["int", "int"])
+    ], ["int"])
     self.add_operator("normalize", Integer.normalize, [
       Rule(
         Integer.normalize(
