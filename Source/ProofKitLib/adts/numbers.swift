@@ -180,7 +180,7 @@ public class Nat: ADT{
   }
 
   static public func to_int(_ term:Term) -> Int {
-    if let map = (term as? Map){
+    if let map = (value(term) as? Map){
       if map["succ"] != nil{
         let k = Nat.to_int(map["succ"]!)
         return k+1
@@ -513,7 +513,7 @@ public class Integer: ADT{
   }
 
   static public func to_int(_ term:Term) -> Int {
-    if let map = (term as? Map){
+    if let map = (value(term) as? Map){
       if map["a"] != nil && map["b"] != nil {
         let pos = Nat.to_int(map["a"]!)
         let neg = Nat.to_int(map["b"]!)
