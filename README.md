@@ -196,14 +196,67 @@ To be able to perform any type of computation it trys to solve the inner most op
 Now we have all ADT that we need and we can use it for proofs.
 Firstly, you have several examples avaible in **Source/EqProofDemo**.  
 When you want to verify a proof, you need to write all the steps.
-You just have to specify axioms that you will use.
-```swift
-let ax0 = adtm["nat"].a("+")[0]
+For classical proof you just have to follow the example that are avaible.  
+
+If you want to create your own induction proof, here are the steps to follow:
+
+1. You just have to specify axioms that you will need.
+
+ ```swift
+  let ax0 = adtm["nat"].a("+")[0]
+  let ax1 = adtm["nat"].a("+")[1]
+ ```
+2. Write the conjecture you want to verify.  
+
+ ```swift
+ // We try to proof that succ(0) + x = suc(x)
+ let conj = Rule(
+   Nat.add(Nat.succ(x: Nat.zero()), Variable(named:"x")),
+   Nat.succ(x: Variable(named: "x"))
+ )
  ```
 
-If you want to create your own proof, here are the steps to follow:
-- Create a conjecture (which is a rule to verify)
+3. **For each** generators you have to verify the initial case and
+the higher rank. Here we have just one generator!
 
+ ```swift
+ // Initial case
+ func zero_proof(t: Rule...)->Rule{
+   let ax0 = adtm["nat"].a("+")[0]
+   // s(0)+0 = s(0)
+   return Proof.substitution(ax0, Variable(named: "x"), Nat.succ(x: Nat.zero()))
+ }
+```
+```swift
+// Higher rank
+ func succ_proof(t: Rule...)->Rule{
+   let ax1 = adtm["nat"].a("+")[1]
+   // s(0) + s(y) = s(s(0) + y)
+   let t2 = Proof.substitution(ax1, Variable(named: "x"), Nat.succ(x: Nat.zero()))
+   // s(s(0) + x) = s(s(x))
+   let t3 = Proof.substitutivity (Nat.succ, [t[0]])
+   // s(0) + s(y) = s(s(y))
+   return Proof.transitivity(t2, t3)
+ }
+ ```
+
+4. Now we can call out our function to know if steps are good.
+
+ ```swift
+ do {
+   let teo = try Proof.inductive(conj, Variable(named: "x"), adtm["nat"], [
+     "zero": zero_proof,
+     "succ": succ_proof
+   ])
+   print("Indcutive result: \(teo)")
+ }
+ // If the induction failed
+ catch ProofError.InductionFail {
+   print("Induction failed!")
+ }
+ ```
+
+ Great! Now you can see "true" if all are good!
 
 
 ## Example
