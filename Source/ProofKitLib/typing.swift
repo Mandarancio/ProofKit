@@ -2,6 +2,15 @@ import LogicKit
 
 public var ncalls = 0
 
+public struct ADTerm {
+    public let type : String
+    public let value : Term
+    public init(value: Term, type: String){
+      self.type = type
+      self.value = Term
+    }
+}
+
 public func new_term(_ term: Term, _ type: String) -> Term{
   return Map([
     "type": Value<String>(type),
