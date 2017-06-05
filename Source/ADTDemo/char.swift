@@ -16,7 +16,7 @@ class Char: ADT{
     self.add_operator("c==",Char.eq, [
       Rule(Char.eq(Variable(named: "x"),Variable(named: "x")), Boolean.True()),
       Rule(Char.eq(Variable(named: "x"),Variable(named: "y")), Boolean.False())
-    ], arity:2)
+    ], ["char", "char"])
   }
   // generator functions always (Term...)->Term
   static public func a(_ :Term...)-> Term{

@@ -5,7 +5,7 @@ enum MyError : Error {
 }
 
 //// This base class contains all needed information to define a datatype
-public class ADT{
+open class ADT{
   var _name : String
   private var _axioms : [OperatorFootprint:[Rule]]
   private var _operators : [OperatorFootprint: (Term ...) ->Term]
@@ -60,19 +60,19 @@ public class ADT{
 
   //// GOAL To detect if a term belongs to an ADT
   //// TODO Implement in each ADT sub-class
-  public class func belong(_ term: Term ) -> Goal {
+  open class func belong(_ term: Term ) -> Goal {
         return Boolean.isTrue(Boolean.True())
   }
 
   //// Boolean check if a term belongs to an ADT (used by ADTManager)
   //// TODO Implement in each ADT sub-class
-  public func check(_ term: Term) -> Bool{
+  open func check(_ term: Term) -> Bool{
     return false
   }
 
   //// Function to nicely print a TERM belonging to an ADT
   //// TODO Implement in each ADT sub-class
-  public func pprint(_ term: Term) -> String{
+  open func pprint(_ term: Term) -> String{
     return ""
   }
 
@@ -97,19 +97,19 @@ public class ADT{
   }
 
   //// Internal use only
-  internal func add_generator(_ name: String, _ generator: @escaping((Term...)->Term), arity: Int = 0){
+  public func add_generator(_ name: String, _ generator: @escaping((Term...)->Term), arity: Int = 0){
     self._generators[name] = generator
     self._gen_arity[name] = arity
   }
 
   //// Internal use only
-  internal func add_operator(_ name: String, _ oper: @escaping((Term...)->Term), _ axioms: [Rule], _ types: [String]){
+  public func add_operator(_ name: String, _ oper: @escaping((Term...)->Term), _ axioms: [Rule], _ types: [String]){
     let ofoot = OperatorFootprint(name, types)
     self._operators[ofoot] = oper
     self._axioms[ofoot] = axioms
   }
 
-  internal func remove_operator(_ name: OperatorFootprint){
+  public func remove_operator(_ name: OperatorFootprint){
     self._operators[name] = nil
   }
 
@@ -133,4 +133,7 @@ public class ADT{
     return self.get_generator(name)
   }
 
+  public func garity(_ name: String)-> Int{
+    return self._gen_arity[name]!
+  }
 }
