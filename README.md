@@ -29,7 +29,7 @@ Equational Proofs:
 |Name|Call|Status|
 |----|----|------:|
 |reflexivity|```Proof.reflexivity(Term) -> Rule```| **tested**|
-|simmetry |```Proof.symmetry(Rule) -> Rule``` |**tested** |
+|symmetry |```Proof.symmetry(Rule) -> Rule``` |**tested** |
 |transitivity |```Proof.transitivity(Rule, Rule) -> Rule```| **tested**|
 |substitution|```Proof.substitution(Rule, Variable, Term) -> Rule```| **tested**|
 |substitutivity|```Proof.substitutivity((Term...)->Term, [Term], [Term]) -> Rule```| **tested**|
