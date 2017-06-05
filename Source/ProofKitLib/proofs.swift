@@ -25,7 +25,6 @@ public struct Proof {
     return Rule(vNil,vNil)
   }
 
-
   public static func substitutivity(_ operation: (Term...)->Term, _ rules: [Rule])->Rule{
     //TODO Replace this horrible cast
     typealias Function = ([Term]) -> Term
@@ -53,8 +52,7 @@ public struct Proof {
     return Rule(lhs, rhs, condition)
   }
 
-  public static func inductive(_ conjecture: Rule, _ variable: Variable, _ adt: ADT,_ induction: [String:(Rule...)->Rule]) throws ->Rule
-  {
+  public static func inductive(_ conjecture: Rule, _ variable: Variable, _ adt: ADT,_ induction: [String:(Rule...)->Rule]) throws ->Rule  {
     for (gen_name, proof) in induction{
       let generator : (Term...)->Term = adt[gen_name]
       let arity = adt.garity(gen_name)
