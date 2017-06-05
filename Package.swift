@@ -8,7 +8,8 @@ let package = Package(
  		  Target(name: "ProofKitDemo", dependencies: ["ProofKitLib"]),
  		  Target(name: "EqProofDemo", dependencies: ["ProofKitLib"]),
       Target(name: "ADTDemo", dependencies: ["ProofKitLib"]),
-      Target(name: "PetrinetDemo", dependencies: ["ProofKitLib"]),
+      Target(name: "PetrinetLib", dependencies: ["ProofKitLib"]),
+      Target(name: "PetrinetDemo", dependencies: ["ProofKitLib", "PetrinetLib"]),
     ],
     dependencies: [
         .Package(url: "https://github.com/kyouko-taiga/LogicKit",
