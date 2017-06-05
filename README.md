@@ -131,7 +131,7 @@ print("\(ADTs.pprit(t))") //// 1 + 1
 
 ```
 
-### How to create an ADT?
+## How to create an ADT?
 
 You can see an exemple at **Source/ADTDemo**  
 First create a file with the name of your adt.
@@ -192,6 +192,17 @@ print(" \(ADTs.pprint(operation)) => \(ADTs.pprint(result))")
 To be able to perform any type of computation it trys to solve the inner most operation first using the operation axioms and the generator evaluator.
 
 ## Equational Proof
+
+Now we have all ADT that we need and we can use it for proofs.
+Firstly, you have several examples avaible in **Source/EqProofDemo**.  
+When you want to verify a proof, you need to write all the steps.
+You just have to specify axioms that you will use.
+```swift
+let ax0 = adtm["nat"].a("+")[0]
+ ```
+
+If you want to create your own proof, here are the steps to follow:
+- Create a conjecture (which is a rule to verify)
 
 
 
