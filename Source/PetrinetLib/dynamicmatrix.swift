@@ -86,6 +86,18 @@ public class DynamicMatrix {
     }
   }
 
+  public func transposed() -> DynamicMatrix {
+    let result = DynamicMatrix()
+
+    for i in 0 ... ((dim().0) - 1) {
+      for j in 0 ... ((dim().1) - 1) {
+        result[(j,i)] = self[(i,j)]
+      }
+    }
+
+    return result
+  }
+
   // = t_invariant with transposed matrix
   public func is_p_invariant(_ v: DynamicVector) -> Bool {
     let columnNumber = max(dim().0, v.size())
@@ -184,6 +196,14 @@ public class DynamicMatrix {
 
     return farkMat.data
   }
+
+  //Farkas Algorithm on transposed matrix
+  public func get_t_invariants() -> [[Int]] {
+    let transp = transposed()
+
+    return transp.get_p_invariants()
+  }
+
 
   public func to_string() -> String {
     var result = "[\n"
