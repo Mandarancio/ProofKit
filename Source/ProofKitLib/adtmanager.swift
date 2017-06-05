@@ -42,6 +42,27 @@ public struct ADTManager{
     return Array(self.adts.keys)
   }
 
+  private func replace(_ t: Term, _ s: Substitution) -> Term{
+    if t is Variable{
+      return s[t]
+    }
+    if let m = (t as? Map){
+      var nm = m
+      for (k,v) in m{
+        nm = nm.with(key: k, value: self.replace(v, s))
+      }
+      return nm
+    }
+    return t
+  }
+ /// GOAL Solver
+  public func geval (operation: Term, result: Term) -> Goal {
+    return inEnvironment { state in
+        let x = self.replace(operation, state)
+        return self.eval(x) === result
+     }
+  }
+
   public func eval(_ term: Term) -> Term {
     if term.equals(vNil){
       return vNil
