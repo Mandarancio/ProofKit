@@ -18,17 +18,18 @@ Currently implemented ADT and Operators
 |ADT|Base ADT|Generators|Constructor|Operators|
 |---|--------|----------|-----------|---------|
 |Boolean|ADT|```True() False()```|```n(Bool)```|```not(x) and(x,y) or(x,y)```|
-|Nat|ADT|```zero() succ(x)```|```n(Int)```|```add(x,y) mul(x,y) ```|
-|[Multiset](https://en.wikipedia.org/wiki/Linked_list)|ADT|```empty() cons(first, rest)```|```n([Term])```|```first(x) rest(x) contains(x,y) size(x) concat(x,y)```|
-|[Set](https://en.wikipedia.org/wiki/Set_%28abstract_data_type%29)|Bunch|```insert(x,y)```|```n([Term])```|```union(x,y) subSet(x,y) intersection(x,y) difference```|
-|Sequence|ADT|```empty(), cons(value,index,rest)```|```n([Term])```|```push(value,rest), getAt(sequence, index), setAt(sequence, index, value)```|
+|Nat|ADT|```zero() succ(x)```|```n(Int)```|```add(x,y) mul(x,y) pre(x) sub(x,y) div(x,y) mod(x) lt(x,y) gt(x,y) eq(x,y) gcd(x,y) ```|
+|Integer|ADT|```int(x,y)```|```n(Int)```|```add(x,y) mul(x,y) sub(x,y) div(x,y) abs(x), normalize(x) lt(x,y) gt(x,y) eq(x,y) sign(x) ```|
+|[Multiset](https://en.wikipedia.org/wiki/Linked_list)|ADT|```empty() cons(first, rest)```|```n([Term])```|```first(x) rest(x) contains(x,y) size(x) concat(x,y) removeOne(x,y) removeAll(x,y) eq(x,y)```|
+|[Set](https://en.wikipedia.org/wiki/Set_%28abstract_data_type%29)|Bunch|```empty() cons(first, rest)```|```n([Term])```|```union(x,y) subSet(x,y) intersection(x,y) difference(x,y)  contains(x,y) size(x) rest(x) first(x) removeOne(x,y) removeAll(x,y) eq(x,y) norm(x) insert(x,y)```|
+|Sequence|ADT|```empty(), cons(value,index,rest)```|```n([Term])```|```push(value,rest), getAt(sequence, index), setAt(sequence, index, value) size(sequence)```|
 
 Equational Proofs:
 
 |Name|Call|Status|
 |----|----|------:|
 |reflexivity|```Proof.reflexivity(Term) -> Rule```| **tested**|
-|simmetry |```Proof.symmetry(Rule) -> Rule``` |**tested** |
+|symmetry |```Proof.symmetry(Rule) -> Rule``` |**tested** |
 |transitivity |```Proof.transitivity(Rule, Rule) -> Rule```| **tested**|
 |substitution|```Proof.substitution(Rule, Variable, Term) -> Rule```| **tested**|
 |substitutivity|```Proof.substitutivity((Term...)->Term, [Term], [Term]) -> Rule```| **tested**|
