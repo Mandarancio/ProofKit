@@ -16,12 +16,12 @@ public class Nat: ADT{
     ],["nat", "nat"])
     self.add_operator("*", Nat.mul,[
       Rule(
-        Nat.mul(Variable(named: "*.0.$0"), Nat.zero()),
+        Nat.mul(Variable(named: "x"), Nat.zero()),
         Nat.zero()
       ),
       Rule(
-        Nat.mul(Variable(named: "*.1.$0"), Nat.succ(x: Variable(named: "*.1.$1"))),
-        Nat.add(Variable(named: "*.1.$0"), Nat.mul(Variable(named: "*.1.$0"), Variable(named: "*.1.$1")))
+        Nat.mul(Variable(named: "x"), Nat.succ(x: Variable(named: "y"))),
+        Nat.add(Variable(named: "x"), Nat.mul(Variable(named: "x"), Variable(named: "y")))
       )
     ],["nat", "nat"])
     self.add_operator("pre", Nat.pre,[
@@ -30,50 +30,50 @@ public class Nat: ADT{
         Nat.zero()
       ),
       Rule(
-        Nat.pre(Nat.succ(x: Variable(named: "pre.1.$0"))),
-        Variable(named: "pre.1.$0")
+        Nat.pre(Nat.succ(x: Variable(named: "x"))),
+        Variable(named: "x")
       )
     ],["nat"])
     self.add_operator("-", Nat.sub,[
       Rule(
-        Nat.sub(Variable(named: "-.0.$0"), Nat.zero()),
-        Variable(named: "-.0.$0")
+        Nat.sub(Variable(named: "x"), Nat.zero()),
+        Variable(named: "x")
       ),
       Rule(
-        Nat.sub(Nat.zero(), Variable(named: "-.1.$0")),
+        Nat.sub(Nat.zero(), Variable(named: "x")),
         Nat.zero()
       ),
       Rule(
-        Nat.sub(Variable(named: "-.2.$0"), Nat.succ(x: Variable(named: "-.2.$1"))),
-        Nat.pre(Nat.sub(Variable(named: "-.2.$0"), Variable(named: "-.2.$1")))
+        Nat.sub(Variable(named: "x"), Nat.succ(x: Variable(named: "y"))),
+        Nat.pre(Nat.sub(Variable(named: "x"), Variable(named: "y")))
       )
     ],["nat", "nat"])
     self.add_operator("<", Nat.lt,[
       Rule(
-        Nat.lt(Variable(named: "<.0.$0"), Nat.zero()),
+        Nat.lt(Variable(named: "x"), Nat.zero()),
         Boolean.False()
       ),
       Rule(
-        Nat.lt(Nat.zero(), Variable(named: "<.1.$0")),
+        Nat.lt(Nat.zero(), Variable(named: "x")),
         Boolean.True()
       ),
       Rule(
-        Nat.lt(Nat.succ(x: Variable(named: "<.2.$0")), Nat.succ(x: Variable(named: "<.2.$1"))),
-        Nat.lt(Variable(named: "<.2.$0"), Variable(named: "<.2.$1"))
+        Nat.lt(Nat.succ(x: Variable(named: "x")), Nat.succ(x: Variable(named: "y"))),
+        Nat.lt(Variable(named: "x"), Variable(named: "y"))
       )
     ],["nat", "nat"])
     self.add_operator(">", Nat.gt,[
       Rule(
-        Nat.gt(Nat.zero(), Variable(named: ">.0.$0")),
+        Nat.gt(Nat.zero(), Variable(named: "x")),
         Boolean.False()
       ),
       Rule(
-        Nat.gt(Variable(named: ">.1.$0"), Nat.zero()),
+        Nat.gt(Variable(named: "x"), Nat.zero()),
         Boolean.True()
       ),
       Rule(
-        Nat.gt(Nat.succ(x: Variable(named: ">.2.$0")), Nat.succ(x: Variable(named: ">.2.$1"))),
-        Nat.gt(Variable(named: ">.2.$0"), Variable(named: ">.2.$1"))
+        Nat.gt(Nat.succ(x: Variable(named: "x")), Nat.succ(x: Variable(named: "y"))),
+        Nat.gt(Variable(named: "x"), Variable(named: "y"))
       )
     ],["nat", "nat"])
     self.add_operator("==", Nat.eq,[
@@ -82,77 +82,77 @@ public class Nat: ADT{
         Boolean.True()
       ),
       Rule(
-        Nat.eq(Variable(named: "N==.1.$0"), Nat.zero()),
+        Nat.eq(Variable(named: "x"), Nat.zero()),
         Boolean.False()
       ),
       Rule(
-        Nat.eq(Nat.zero(), Variable(named: "*N==.2.$0")),
+        Nat.eq(Nat.zero(), Variable(named: "x")),
         Boolean.False()
       ),
       Rule(
-        Nat.eq(Nat.succ(x: Variable(named: "N==.3.$0")), Nat.succ(x:  Variable(named: "N==.3.$1"))),
-        Nat.eq(Variable(named: "N==.3.$0"), Variable(named: "N==.3.$1"))
+        Nat.eq(Nat.succ(x: Variable(named: "x")), Nat.succ(x:  Variable(named: "y"))),
+        Nat.eq(Variable(named: "x"), Variable(named: "y"))
       )
     ],["nat", "nat"])
     self.add_operator("%", Nat.mod,[
       Rule(
-        Nat.mod(Variable(named: "%.0.$0"), Nat.zero()),
+        Nat.mod(Variable(named: "x"), Nat.zero()),
         vFail
       ),
       Rule(
-        Nat.mod(Nat.zero(),  Variable(named: "%.1.$0")),
+        Nat.mod(Nat.zero(),  Variable(named: "x")),
         Nat.zero()
       ),
       Rule(
-        Nat.mod(Variable(named: "%.2.$0"), Variable(named: "%.2.$1")),
-        Variable(named: "%.2.$0"),
-        Nat.lt(Variable(named: "%.2.$0"), Variable(named: "%.2.$1"))
+        Nat.mod(Variable(named: "x"), Variable(named: "y")),
+        Variable(named: "x"),
+        Nat.lt(Variable(named: "x"), Variable(named: "y"))
       ),
       Rule(
-        Nat.mod(Variable(named: "%.3.$0"), Variable(named: "%.3.$1")),
-        Nat.mod(Nat.sub(Variable(named: "%.3.$0"), Variable(named: "%.3.$1")), Variable(named: "%.3.$1"))
+        Nat.mod(Variable(named: "x"), Variable(named: "y")),
+        Nat.mod(Nat.sub(Variable(named: "x"), Variable(named: "y")), Variable(named: "y"))
       )
     ],["nat", "nat"])
     self.add_operator("gcd", Nat.gcd,[
       Rule(
-        Nat.gcd(Variable(named: "gcd.0.$0"), Variable(named: "gcd.0.$1")),
-        Variable(named: "gcd.0.$0"),
-        Nat.eq(Variable(named: "gcd.0.$1"), Nat.zero())
+        Nat.gcd(Variable(named: "x"), Variable(named: "y")),
+        Variable(named: "x"),
+        Nat.eq(Variable(named: "y"), Nat.zero())
       ),
       Rule(
-        Nat.gcd(Variable(named: "gcd.1.$0"), Variable(named: "gcd.1.$1")),
-        Variable(named: "gcd.1.$1"),
-        Nat.eq(Nat.mod(Variable(named: "gcd.1.$0"), Variable(named: "gcd.1.$1")), Nat.zero())
+        Nat.gcd(Variable(named: "x"), Variable(named: "y")),
+        Variable(named: "y"),
+        Nat.eq(Nat.mod(Variable(named: "x"), Variable(named: "y")), Nat.zero())
       ),
       Rule(
-        Nat.gcd(Variable(named: "gcd.2.$0"), Variable(named: "gcd.2.$1")),
-        Nat.gcd(Variable(named: "gcd.2.$1"), Nat.mod(Variable(named: "gcd.2.$0"), Variable(named: "gcd.2.$1")))
+        Nat.gcd(Variable(named: "x"), Variable(named: "y")),
+        Nat.gcd(Variable(named: "y"), Nat.mod(Variable(named: "x"), Variable(named: "y")))
       )
     ],["nat", "nat"])
     self.add_operator("/", Nat.div,[
       Rule(
-        Nat.div(Variable(named: "/.0.$0"), Nat.zero()),
+        Nat.div(Variable(named: "x"), Nat.zero()),
         vFail
       ),
       Rule(
-        Nat.div(Variable(named: "/.1.$0"), Variable(named: "/.1.$1")),
+        Nat.div(Variable(named: "x"), Variable(named: "y")),
         Nat.zero(),
-        Nat.lt(Variable(named: "/.1.$0"), Variable(named: "/.1.$1"))
+        Nat.lt(Variable(named: "x"), Variable(named: "y"))
       ),
       Rule(
-        Nat.div(Variable(named: "/.2.$0"), Variable(named: "/.2.$1")),
+        Nat.div(Variable(named: "x"), Variable(named: "y")),
         Nat.succ(
           x: Nat.div(
             Nat.sub(
-              Variable(named: "/.2.$0"),
-              Variable(named: "/.2.$1")
+              Variable(named: "x"),
+              Variable(named: "y")
             ),
-              Variable(named: "/.2.$1")
+              Variable(named: "y")
           )
         ),
         Boolean.or(
-          Nat.gt(Variable(named: "/.2.$0"), Variable(named: "/.2.$1")),
-          Nat.eq(Variable(named: "/.2.$0"), Variable(named: "/.2.$1"))
+          Nat.gt(Variable(named: "x"), Variable(named: "y")),
+          Nat.eq(Variable(named: "x"), Variable(named: "y"))
         )
 
       )
