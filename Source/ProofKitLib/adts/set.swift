@@ -232,7 +232,7 @@ public class Set : ADT {
   }
 
   public class override func belong(_ x: Term) -> Goal{
-    return (x === Set.empty() || delayed(fresh {y in fresh{w in x === Set.cons(y,w) && Set.belong(w) && ADTm.eval(Set.contains(w,y))===Boolean.False()}}))
+    return (x === Set.empty() || delayed(fresh {y in fresh{w in x === Set.cons(y,w) && Set.belong(w)}}))
   }
 
   public class func n(_ terms: [Term]) -> Term{
