@@ -98,7 +98,7 @@ public class Sequence : ADT {
         x = Sequence.empty()
       }
       else if let m = (value(x) as? Map){
-        s += "\(ADTs.pprint(m["index"]!)): \(ADTs.pprint(m["data"]!))"
+        s += "\(ADTm.pprint(m["index"]!)): \(ADTm.pprint(m["data"]!))"
         x = m["rest"]!
       }else{
         x = Sequence.empty()

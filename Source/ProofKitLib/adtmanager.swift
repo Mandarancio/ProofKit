@@ -1,6 +1,6 @@
 import LogicKit
 
-internal let ADTs : ADTManager = ADTManager()
+public var ADTm : ADTManager = ADTManager()
 public var op_time = 0
 public var s_time = 0
 
@@ -9,10 +9,10 @@ public struct ADTManager{
 
   private var adts : [String:ADT] = [:]
   private var opers : [OperatorFootprint:[Rule]] = [:]
-
-  public static func instance()->ADTManager{
-    return ADTs
-  }
+  //
+  // public static func instance()->ADTManager{
+  //   return ADTs
+  // }
 
   fileprivate init(){
     self["nat"] = Nat()

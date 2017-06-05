@@ -6,7 +6,7 @@ import ProofKitLib
 //     print(" \(i). \(ax[i])")
 //   }
 // }
-let adtm = ADTManager.instance()
+
 //
 // /*let a = Integer.n(5)
 // let b = Integer.n(3)
@@ -73,6 +73,17 @@ let adtm = ADTManager.instance()
 //
 // print(dynMat.get_p_invariants())
 
+// public func fixpoint(_ x: Term, _ lhs: Term, _ rhs: Term, _ y: Term) ->Goal{
+//   return {
+//     u in
+//     if x.equals(y){
+//       return solve( x === y )
+//     }else{
+//       return
+//     }
+//   }
+// }
+
 /// nothing at all if u and v cannot be unified.
 public func imost (_ u: Term, _ y: Term) -> Goal {
   print("    \(u) -> \(y)")
@@ -85,7 +96,7 @@ public func imost (_ u: Term, _ y: Term) -> Goal {
           for i in 1...count-1 {
             let v = values[i]
             print("     #\(i): \(v)")
-            next = next && imost(v, y)
+            next = next || imost(v, y)
           }
         }
         return solve(next)
@@ -104,17 +115,23 @@ func golify(term: Term, variable: Variable, _ ax: [Rule]) -> Goal{
   return g
 }
 let x = Variable(named: "x")
-let axs = adtm["nat"].a("<")
+let axs = ADTm["nat"].a("<")
 let op = Nat.lt(x, Nat.n(8))
 let y = Variable(named: "y")
 print(axs)
 // let g = Nat.belong(x) && y === Boolean.True() && golify(term: op, variable: y, axs)
 let t : Map = [
-  "a" : Value<String>("casa"),
-  "c" : Value<Int>(3)
+  "lhs" : Map(["succ": Value<Int>(0)]),
+  "rhs" : Value<Int>(0)
 ]
+let lhs: Map = [
+  "lhs" : Variable(named:"#0"),
+  "rhs" : Value<Int>(0)
+]
+let rhs = Variable(named:"#0")
 print(t)
-let g = imost(t, x)
+let g = t === x
+// let g = imost(t, lhs, rhs ,x)
 for s in solve(g){
   let SS = s.reified()
   print(" x => \(SS[x])")

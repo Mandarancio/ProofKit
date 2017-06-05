@@ -5,7 +5,7 @@ enum MyError : Error {
 }
 
 //// This base class contains all needed information to define a datatype
-open class ADT{
+open   class ADT{
   var _name : String
   private var _axioms : [OperatorFootprint:[Rule]]
   private var _operators : [OperatorFootprint: (Term ...) ->Term]
@@ -43,7 +43,7 @@ open class ADT{
     if let tm = (t as? Map){
         var om = tm
       for (k, v) in tm{
-        om = om.with(key: k, value: ADTs.eval(v))
+        om = om.with(key: k, value: ADTm.eval(v))
       }
       return om
     }
@@ -67,7 +67,7 @@ open class ADT{
   //// Boolean check if a term belongs to an ADT (used by ADTManager)
   //// TODO Implement in each ADT sub-class
   open func check(_ term: Term) -> Bool{
-    return false
+    return type(term) == self._name
   }
 
   //// Function to nicely print a TERM belonging to an ADT

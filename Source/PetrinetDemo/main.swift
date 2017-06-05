@@ -2,9 +2,9 @@ import LogicKit
 import ProofKitLib
 import PetrinetLib
 
-var adtm = ADTManager.instance()
-adtm["petrinet"] = Petrinet()
-adtm["marking"] = Marking()
+// var adtm = ADTManager.instance()
+ADTm["petrinet"] = Petrinet()
+ADTm["marking"] = Marking()
 /*
   [.] places
   |.| transitions
@@ -35,15 +35,10 @@ adtm["marking"] = Marking()
  print(Marking.to_string(mark))
  print(Marking.to_array(mark))
 
- let res = adtm.eval(Marking.has_enough(mark, Integer.n(1), Nat.n(1)))
-
- print(res)
-
- let res2 = adtm.eval(Petrinet.is_triggerable(net, Nat.n(1), mark))
-
- print(res2)
-
-
+ let res = ADTm.eval(Marking.has_enough(mark, Integer.n(1), Nat.n(1)))
+ print(ADTm.pprint(res))
+ let res2 = ADTm.eval(Petrinet.is_triggerable(net, Nat.n(1), mark))
+ print(ADTm.pprint(res2))
  print("\n ------ FARKAS ------ \n")
 
  let dynMat = DynamicMatrix(
@@ -56,4 +51,3 @@ adtm["marking"] = Marking()
            ])
 
  print(dynMat.get_p_invariants())
-

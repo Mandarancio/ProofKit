@@ -164,7 +164,7 @@ public class Multiset : ADT {
           x = Multiset.empty()
         }
         else if let m = (value(x) as? Map){
-          s += ADTs.pprint(m["first"]!)
+          s += ADTm.pprint(m["first"]!)
           x = m["rest"]!
         }else{
           x = Multiset.empty()

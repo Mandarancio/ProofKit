@@ -148,7 +148,7 @@ public struct Operator{
     if let m = (t as? Map){
       var nm = m
       for (k,w) in m{
-        nm = nm.with(key:k, value:ADTs.eval(w))
+        nm = nm.with(key:k, value:ADTm.eval(w))
       }
       return nm
     }
@@ -160,12 +160,12 @@ public struct Operator{
       let name: String = (m["name"]! as! Value<String>).wrapped
       let arity: Int = (m["arity"]! as! Value<Int>).wrapped
       if arity == 2{
-        return "(\(ADTs.pprint(m["0"]!)) \(name) \(ADTs.pprint(m["1"]!)))"
+        return "(\(ADTm.pprint(m["0"]!)) \(name) \(ADTm.pprint(m["1"]!)))"
       }else{
-        var s :String = "\(name)(\(ADTs.pprint(m["0"]!))"
+        var s :String = "\(name)(\(ADTm.pprint(m["0"]!))"
         if arity>1{
           for i in 1...arity-1{
-            s+=", \(ADTs.pprint(m[String(i)]!))"
+            s+=", \(ADTm.pprint(m[String(i)]!))"
           }
         }
         return s+")"

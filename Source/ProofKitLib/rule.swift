@@ -78,7 +78,7 @@ public struct Rule {
   public func apply(_ t: Term, _ r: Term)->Goal{
     let x = Variable(named: "cond.x")
     let c = get_result(_condition === x && self._lTerm === t && self._rTerm === r, x)
-    return t === self._lTerm && r === self._rTerm && ADTs.eval(c) === Boolean.True()
+    return t === self._lTerm && r === self._rTerm && ADTm.eval(c) === Boolean.True()
   }
 
   //// Pretty print of the axiom
@@ -87,10 +87,10 @@ public struct Rule {
     let rt = self._rTerm/self._r_variables
 
     if _condition.equals(Boolean.True()){
-      return "\(ADTs.pprint(lt)) = \(ADTs.pprint(rt))"
+      return "\(ADTm.pprint(lt)) = \(ADTm.pprint(rt))"
     }else{
       let c = self._condition/self._r_variables
-      return "if \(ADTs.pprint(c)) then \n\t\(ADTs.pprint(lt)) = \(ADTs.pprint(rt))"
+      return "if \(ADTm.pprint(c)) then \n\t\(ADTm.pprint(lt)) = \(ADTm.pprint(rt))"
     }
   }
 

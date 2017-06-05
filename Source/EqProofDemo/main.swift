@@ -1,7 +1,6 @@
 import LogicKit
 import ProofKitLib
 
-let adtm = ADTManager.instance()
 
 print("Test Equational Proof Demo")
 
@@ -27,8 +26,8 @@ print(equivalence(t.lTerm(), t.rTerm()))
 
 // induction
 
-let ax0 = adtm["nat"].a("+")[0]
-let ax1 = adtm["nat"].a("+")[1]
+let ax0 = ADTm["nat"].a("+")[0]
+let ax1 = ADTm["nat"].a("+")[1]
 
 let conj = Rule(
   Nat.add(Nat.succ(x: Nat.zero()), Variable(named:"x")),
@@ -37,13 +36,13 @@ let conj = Rule(
 
 /// Function for indcutive proof
 func zero_proof(t: Rule...)->Rule{
-  let ax0 = adtm["nat"].a("+")[0]
+  let ax0 = ADTm["nat"].a("+")[0]
   // s(0)+0 = s(0)
   return Proof.substitution(ax0, Variable(named: "x"), Nat.succ(x: Nat.zero()))
 }
 
 func succ_proof(t: Rule...)->Rule{
-  let ax1 = adtm["nat"].a("+")[1]
+  let ax1 = ADTm["nat"].a("+")[1]
   // s(0) + s(y) = s(s(0) + y)
   let t2 = Proof.substitution(ax1, Variable(named: "x"), Nat.succ(x: Nat.zero()))
   // s(s(0) + x) = s(s(x))
@@ -53,7 +52,7 @@ func succ_proof(t: Rule...)->Rule{
 }
 
 do {
-  let teo = try Proof.inductive(conj, Variable(named: "x"), adtm["nat"], [
+  let teo = try Proof.inductive(conj, Variable(named: "x"), ADTm["nat"], [
     "zero": zero_proof,
     "succ": succ_proof
   ])

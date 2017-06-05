@@ -232,12 +232,12 @@ public class Nat: ADT{
         }
         return "succ(\(k))"
       }
-      return ADTs.pprint(map)
+      return ADTm.pprint(map)
    	}
     if x is Variable {
-      return "+"+ADTs.pprint(x)
+      return "+"+ADTm.pprint(x)
     }
-   	return ADTs.pprint(x)
+   	return ADTm.pprint(x)
   }
 
   public static func add(_ operands: Term...) -> Term{
@@ -548,16 +548,16 @@ public class Integer: ADT{
   public override func pprint(_ term: Term) -> String{
     if let map = (value(term) as? Map) {
 
-      let a : Term = ADTs.eval(map["a"]!)
-      let b : Term = ADTs.eval(map["b"]!)
+      let a : Term = ADTm.eval(map["a"]!)
+      let b : Term = ADTm.eval(map["b"]!)
       if type(a)=="nat" && type(b) == "nat"{
-        if ADTs.eval(Nat.eq(a,b)).equals(Boolean.True()){
+        if ADTm.eval(Nat.eq(a,b)).equals(Boolean.True()){
           return "0"
         }
-        if ADTs.eval(Nat.gt(a,b)).equals(Boolean.True()){
-          return "+\(ADTs.pprint(ADTs.eval(Nat.sub(a,b))))"
+        if ADTm.eval(Nat.gt(a,b)).equals(Boolean.True()){
+          return "+\(ADTm.pprint(ADTm.eval(Nat.sub(a,b))))"
         }
-        return "-\(ADTs.pprint(ADTs.eval(Nat.sub(b,a))))"
+        return "-\(ADTm.pprint(ADTm.eval(Nat.sub(b,a))))"
       }
       return "FAIL"
     }
