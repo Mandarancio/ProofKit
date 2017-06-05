@@ -91,6 +91,11 @@ public class Marking : ADT {
   public static func has_enough(_ operands: Term...) -> Term{
     return Operator.n("has_enough", operands[0], operands[1], operands[2])
   }
+
+
+  public override func pprint(_ t: Term) -> String{
+    return Marking.to_string(t)
+  }
 }
 
 
@@ -190,5 +195,9 @@ public class Petrinet : ADT {
 
   public static func is_triggerable(_ operands: Term...) -> Term{
     return Operator.n("is_triggerable", operands[0], operands[1], operands[2])
+  }
+
+  public override func pprint(_ t: Term) -> String{
+    return Petrinet.to_string(t)
   }
 }
