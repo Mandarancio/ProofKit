@@ -1,12 +1,14 @@
 import LogicKit
 
 internal let ADTs : ADTManager = ADTManager()
+public var op_time = 0
+public var s_time = 0
 
 //// To be used to store all the ADTs
 public struct ADTManager{
 
   private var adts : [String:ADT] = [:]
-  private var opers : [String:[Rule]] = [:]
+  private var opers : [OperatorFootprint:[Rule]] = [:]
 
   public static func instance()->ADTManager{
     return ADTs
@@ -14,7 +16,7 @@ public struct ADTManager{
 
   fileprivate init(){
     self["nat"] = Nat()
-    self["boolean"] = Boolean()
+    self["bool"] = Boolean()
     self["multiset"] = Multiset()
     self["set"] = Set()
     self["sequence"] = Sequence()
@@ -44,14 +46,24 @@ public struct ADTManager{
     if term.equals(vNil){
       return vNil
     }
-
     if Operator.is_operator(term) {
+
       if let op = (term as? Map){
-        let name = (op["name"] as! Value<String>).description
         let k : Term = Operator.eval(op)
-        if self.opers[name] != nil{
-          let axioms = self.opers[name]!
-          let res = resolve(k, axioms)
+        let footprint = Operator.get_footprint(k)
+
+        let tk = mills()
+        var axioms = self.opers[footprint]
+
+        if axioms == nil {
+          axioms = self.find_polyoper(footprint)
+        }
+
+        op_time += (mills()-tk)
+        if  axioms!.count > 0{
+          let tk = mills()
+          let res = resolve(k, axioms!)
+          s_time += (mills()-tk)
           if res.equals(op){
             return op
           }
@@ -63,35 +75,49 @@ public struct ADTManager{
     return ADT.eval(term)
   }
 
+  private func find_polyoper(_ footprint: OperatorFootprint) -> [Rule]{
+    for (k, v) in self.opers{
+      if k == footprint{
+        return v
+      }
+    }
+    return []
+  }
+
+
   public func pprint(_ term: Term) -> String{
     if term.equals(vNil){
       return "nil"
     }
-    for (_,adt) in self.adts{
-      if adt.check(term){
-        return adt.pprint(term)
-      }
-    }
-    if let op = (term as? Map){
-      if Operator.is_operator(op){
-        return Operator.pprint(op)
-      }
-      return op.description
-    }
-    if let op = (term as? Value<Int>){
-      return op.description
-    }
-    if let op = (term as? Value<String>){
-      return op.description
-    }
-    if let op = (term as? Variable) {
-      let name = op.description
+
+    if let v = (term as? Variable) {
+      let name = v.name
       let ks = name.components(separatedBy:"$")
       if ks.count == 2{
         return "$"+ks[1]
       }
       return name
     }
+
+    if Operator.is_operator(term){
+      return Operator.pprint(term)
+    }
+
+    let ty = type(term)
+    if ty != "none" && ty != "any"{
+      if self.adts[ty] != nil{
+        let adt = self.adts[ty]!
+        return adt.pprint(term)
+      }
+    }
+
+    if let op = (term as? Value<Int>){
+      return op.description
+    }
+    if let op = (term as? Value<String>){
+      return op.description
+    }
+
     return "?"
   }
 }

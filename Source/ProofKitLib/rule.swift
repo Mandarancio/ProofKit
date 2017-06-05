@@ -76,7 +76,7 @@ public struct Rule {
 
   //// Applay axiom to term t and result in r
   public func apply(_ t: Term, _ r: Term)->Goal{
-    let x = Variable(named: "r.x")
+    let x = Variable(named: "cond.x")
     let c = get_result(_condition === x && self._lTerm === t && self._rTerm === r, x)
     return t === self._lTerm && r === self._rTerm && ADTs.eval(c) === Boolean.True()
   }
@@ -152,7 +152,7 @@ public struct Rule {
 
 extension Rule: CustomStringConvertible {
     public var description: String {
-        return self.pprint()
+      return self.pprint()
     }
 }
 

@@ -18,17 +18,18 @@ Currently implemented ADT and Operators
 |ADT|Base ADT|Generators|Constructor|Operators|
 |---|--------|----------|-----------|---------|
 |Boolean|ADT|```True() False()```|```n(Bool)```|```not(x) and(x,y) or(x,y)```|
-|Nat|ADT|```zero() succ(x)```|```n(Int)```|```add(x,y) mul(x,y) ```|
-|[Multiset](https://en.wikipedia.org/wiki/Linked_list)|ADT|```empty() cons(first, rest)```|```n([Term])```|```first(x) rest(x) contains(x,y) size(x) concat(x,y)```|
-|[Set](https://en.wikipedia.org/wiki/Set_%28abstract_data_type%29)|Bunch|```insert(x,y)```|```n([Term])```|```union(x,y) subSet(x,y) intersection(x,y) difference```|
-|Sequence|ADT|```empty(), cons(value,index,rest)```|```n([Term])```|```push(value,rest), getAt(sequence, index), setAt(sequence, index, value)```|
+|Nat|ADT|```zero() succ(x)```|```n(Int)```|```add(x,y) mul(x,y) pre(x) sub(x,y) div(x,y) mod(x) lt(x,y) gt(x,y) eq(x,y) gcd(x,y) ```|
+|Integer|ADT|```int(x,y)```|```n(Int)```|```add(x,y) mul(x,y) sub(x,y) div(x,y) abs(x), normalize(x) lt(x,y) gt(x,y) eq(x,y) sign(x) ```|
+|[Multiset](https://en.wikipedia.org/wiki/Linked_list)|ADT|```empty() cons(first, rest)```|```n([Term])```|```first(x) rest(x) contains(x,y) size(x) concat(x,y) removeOne(x,y) removeAll(x,y) eq(x,y)```|
+|[Set](https://en.wikipedia.org/wiki/Set_%28abstract_data_type%29)|Bunch|```empty() cons(first, rest)```|```n([Term])```|```union(x,y) subSet(x,y) intersection(x,y) difference(x,y)  contains(x,y) size(x) rest(x) first(x) removeOne(x,y) removeAll(x,y) eq(x,y) norm(x) insert(x,y)```|
+|Sequence|ADT|```empty(), cons(value,index,rest)```|```n([Term])```|```push(value,rest), getAt(sequence, index), setAt(sequence, index, value) size(sequence)```|
 
 Equational Proofs:
 
 |Name|Call|Status|
 |----|----|------:|
 |reflexivity|```Proof.reflexivity(Term) -> Rule```| **tested**|
-|simmetry |```Proof.symmetry(Rule) -> Rule``` |**tested** |
+|symmetry |```Proof.symmetry(Rule) -> Rule``` |**tested** |
 |transitivity |```Proof.transitivity(Rule, Rule) -> Rule```| **tested**|
 |substitution|```Proof.substitution(Rule, Variable, Term) -> Rule```| **tested**|
 |substitutivity|```Proof.substitutivity((Term...)->Term, [Term], [Term]) -> Rule```| **tested**|
@@ -130,6 +131,53 @@ print("\(ADTs.pprit(t))") //// 1 + 1
 
 ```
 
+## How to create an ADT?
+
+You can see an exemple at **Source/ADTDemo**  
+First create a file with the name of your adt.
+You have a typical example at **Source/ADTDemo/char.swift**  
+Two mains steps when you create your own ADT:  
+- Create **Generators**
+- Create **Operators**   
+
+You have to add this in ```public init()``` and create a function
+for each **generator** and **operator**.  
+
+Moreover you have to override some basics functions for the inheritance if you want that your ADT works!
+This functions are:
+- **belong** (Goal to know if a term belong to this adt)
+- **check** (Simple check to check if a term is of this adt type)
+- **pprint** (Print nicely your term)
+
+Nice you have your ADT, but it's not the end! We have seen above the **ADTManager**.
+You have to add all of your ADT in this **ADTManager**. You can do it easily as follows:
+```swift
+var adtm = ADTManager.instance()
+// Then you add your new adt to the manager
+adtm["char"] = Char()
+```
+You have created a key in your adtm where you have added your adt.
+If you want to add your ADT, go to **Source/ProofKitLib/adtmanager.swift**
+and complete:
+ ```swift
+fileprivate init(){
+  self["yourNameAdt"] = YourAdt()
+}
+```
+
+You have a simple example how ADTManager works at **Source/ADTDemo/main.swift**.
+You can make tests with your own ADT that you can add into an ADTManager to use it.  
+Now you can easily use and test your ADT. Use your ADT to create your variable and use the ADTManager to evaluate operations.
+
+```swift
+// Example:
+let a = Char.a()
+let b = Char.b()
+var op = Char.eq(a, b)
+var r = adtm.eval(op)
+print("\(adtm.pprint(op)) => \(adtm.pprint(r))")
+```
+
 ### Universal Evaluator
 
 A simple inner most universal evaluator is implemented. To use it:
@@ -144,6 +192,17 @@ print(" \(ADTs.pprint(operation)) => \(ADTs.pprint(result))")
 To be able to perform any type of computation it trys to solve the inner most operation first using the operation axioms and the generator evaluator.
 
 ## Equational Proof
+
+Now we have all ADT that we need and we can use it for proofs.
+Firstly, you have several examples avaible in **Source/EqProofDemo**.  
+When you want to verify a proof, you need to write all the steps.
+You just have to specify axioms that you will use.
+```swift
+let ax0 = adtm["nat"].a("+")[0]
+ ```
+
+If you want to create your own proof, here are the steps to follow:
+- Create a conjecture (which is a rule to verify)
 
 
 
@@ -164,3 +223,7 @@ results in:
 axiom 1: $1 + succ($2) = succ($1 + $2)
 2 + 1 => succ(2 + 0)
 ```
+
+
+## Notes
+Performance difference in function goal is around ~2.5x faster without typing.

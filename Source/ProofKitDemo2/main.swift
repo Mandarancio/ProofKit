@@ -1,6 +1,13 @@
 import LogicKit
 import ProofKitLib
+
+func print_ax(_ ax: [Rule]){
+  for i in 0...ax.count-1{
+    print(" \(i). \(ax[i])")
+  }
+}
 let adtm = ADTManager.instance()
+
 /*let a = Integer.n(5)
 let b = Integer.n(3)
 let c = Integer.add(a,b)

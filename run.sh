@@ -1,2 +1,2 @@
 #! /bin/sh
-.build/debug/EqProofDemo
+.build/debug/ProofKitDemo

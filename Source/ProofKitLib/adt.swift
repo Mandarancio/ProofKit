@@ -1,12 +1,14 @@
 import LogicKit
 
+enum MyError : Error {
+    case RuntimeError(String)
+}
 
 //// This base class contains all needed information to define a datatype
-open class ADT{
+public class ADT{
   var _name : String
-  private var _axioms : [String:[Rule]]
-  private var _operators : [String: (Term ...) ->Term]
-  private var _arity : [String: Int]
+  private var _axioms : [OperatorFootprint:[Rule]]
+  private var _operators : [OperatorFootprint: (Term ...) ->Term]
   private var _generators : [String :  (Term...)->Term]
   private var _gen_arity : [String : Int]
 
@@ -15,20 +17,19 @@ open class ADT{
     self._generators = [:]
     self._operators = [:]
     self._axioms = [:]
-    self._arity = [:]
     self._gen_arity = [:]
   }
 
-  public func garity(_ name: String) -> Int{
-    return self._gen_arity[name]!
-  }
-
-  public subscript ( i : String) -> ((Term...)->Term){
+  public subscript ( i : String) -> ((Term...)->Term)
+  {
       get{
-        if _generators[i] != nil{
-          return _generators[i]!
+        for (o, v) in self._operators{
+          if o.name == i{
+            return v
+          }
         }
-        return _operators[i]!
+        return _generators[i]!
+      //  throw MyError.RuntimeError("No operator \(i) found")
       }
       set{
       }
@@ -40,7 +41,7 @@ open class ADT{
   // eval operation for each ADT
   public static func eval(_ t: Term)-> Term{
     if let tm = (t as? Map){
-      var om = tm
+        var om = tm
       for (k, v) in tm{
         om = om.with(key: k, value: ADTs.eval(v))
       }
@@ -49,7 +50,7 @@ open class ADT{
     return t
   }
 
-  public func get_operators() -> [String]{
+  public func get_operators() -> [OperatorFootprint]{
     return Array(self._operators.keys)
   }
 
@@ -59,57 +60,66 @@ open class ADT{
 
   //// GOAL To detect if a term belongs to an ADT
   //// TODO Implement in each ADT sub-class
-  open class func belong(_ term: Term ) -> Goal {
+  public class func belong(_ term: Term ) -> Goal {
         return Boolean.isTrue(Boolean.True())
   }
 
   //// Boolean check if a term belongs to an ADT (used by ADTManager)
   //// TODO Implement in each ADT sub-class
-  open func check(_ term: Term) -> Bool{
+  public func check(_ term: Term) -> Bool{
     return false
   }
 
   //// Function to nicely print a TERM belonging to an ADT
   //// TODO Implement in each ADT sub-class
-  open func pprint(_ term: Term) -> String{
+  public func pprint(_ term: Term) -> String{
     return ""
   }
 
   //// Retrive axioms for an operation
-  public func get_axioms(_ name: String) -> [Rule]{
+  public func get_axioms(_ name: OperatorFootprint) -> [Rule]{
     return self._axioms[name]!
   }
 
   //// Shortcut to retrive axioms
-  public func a(_ name: String) -> [Rule] {
+  public func a(_ name: OperatorFootprint) -> [Rule] {
     return self.get_axioms(name)
   }
 
+  //// Super shuortcut:
+  public func a(_ name: String) -> [Rule]{
+    for (of,a) in self._axioms{
+      if of.name == name{
+        return a
+      }
+    }
+    return []
+  }
 
   //// Internal use only
-  public func add_generator(_ name: String, _ generator: @escaping((Term...)->Term), arity: Int = 0){
+  internal func add_generator(_ name: String, _ generator: @escaping((Term...)->Term), arity: Int = 0){
     self._generators[name] = generator
     self._gen_arity[name] = arity
   }
 
   //// Internal use only
-  public func add_operator(_ name: String, _ oper: @escaping((Term...)->Term), _ axioms: [Rule], arity: Int = 2){
-    self._operators[name] = oper
-    self._arity[name] = arity
-    self._axioms[name] = axioms
+  internal func add_operator(_ name: String, _ oper: @escaping((Term...)->Term), _ axioms: [Rule], _ types: [String]){
+    let ofoot = OperatorFootprint(name, types)
+    self._operators[ofoot] = oper
+    self._axioms[ofoot] = axioms
   }
 
-  public func remove_operator(_ name: String){
+  internal func remove_operator(_ name: OperatorFootprint){
     self._operators[name] = nil
   }
 
   //// Retrive operator generator
-  public func get_operator(_ name: String)-> ((Term...)->Term){
+  public func get_operator(_ name: OperatorFootprint)-> ((Term...)->Term){
     return  self._operators[name]!
   }
 
   //// Shortcut to retrive an operator generator
-  public func o(_ name: String)-> ((Term...)->Term){
+  public func o(_ name: OperatorFootprint)-> ((Term...)->Term){
     return self.get_operator(name)
   }
 
