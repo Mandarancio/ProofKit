@@ -62,7 +62,7 @@ public class Marking : ADT {
     }
 
     public static func to_array(_ marking: Term) -> [Int] {
-      if let map = (marking as? Map) {
+      if let map = (value(marking) as? Map) {
         if map["value"] != nil && map["rest"] != nil{
           let val = Nat.to_int(map["value"]!)
           var rest_array = to_array(map["rest"]!)
@@ -78,7 +78,7 @@ public class Marking : ADT {
     }
 
     public static func to_string(_ marking: Term) -> String {
-      if let map = (marking as? Map) {
+      if let map = (value(marking) as? Map) {
         if map["value"] != nil && map["rest"] != nil{
           let val_str = Nat.to_string(map["value"]!)
           let rest_str = to_string(map["rest"]!)
@@ -159,7 +159,7 @@ public class Petrinet : ADT {
     }
 
   public static func to_matrix(_ net: Term) -> DynamicMatrix {
-    if let map = (net as? Map) {
+    if let map = (value(net) as? Map) {
       if map["from_place"] != nil && map["to_trans"] != nil && map["weight"] != nil && map["net"] != nil {
         let p = Nat.to_int(map["from_place"]!)
         let t = Nat.to_int(map["to_trans"]!)
@@ -176,7 +176,7 @@ public class Petrinet : ADT {
     if net.equals(Petrinet.null()) {
         return "null_petrinet"
     }
-    else if let map = (net as? Map) {
+    else if let map = (value(net) as? Map) {
       if map["from_place"] != nil && map["to_trans"] != nil && map["weight"] != nil && map["net"] != nil {
         let p_str = Nat.to_string(map["from_place"]!)
         let t_str = Nat.to_string(map["to_trans"]!)
