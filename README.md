@@ -131,6 +131,53 @@ print("\(ADTs.pprit(t))") //// 1 + 1
 
 ```
 
+### How to create an ADT?
+
+You can see an exemple at **Source/ADTDemo**  
+First create a file with the name of your adt.
+You have a typical example at **Source/ADTDemo/char.swift**  
+Two mains steps when you create your own ADT:  
+- Create **Generators**
+- Create **Operators**   
+
+You have to add this in ```public init()``` and create a function
+for each **generator** and **operator**.  
+
+Moreover you have to override some basics functions for the inheritance if you want that your ADT works!
+This functions are:
+- **belong** (Goal to know if a term belong to this adt)
+- **check** (Simple check to check if a term is of this adt type)
+- **pprint** (Print nicely your term)
+
+Nice you have your ADT, but it's not the end! We have seen above the **ADTManager**.
+You have to add all of your ADT in this **ADTManager**. You can do it easily as follows:
+```swift
+var adtm = ADTManager.instance()
+// Then you add your new adt to the manager
+adtm["char"] = Char()
+```
+You have created a key in your adtm where you have added your adt.
+If you want to add your ADT, go to **Source/ProofKitLib/adtmanager.swift**
+and complete:
+ ```swift
+fileprivate init(){
+  self["yourNameAdt"] = YourAdt()
+}
+```
+
+You have a simple example how ADTManager works at **Source/ADTDemo/main.swift**.
+You can make tests with your own ADT that you can add into an ADTManager to use it.  
+Now you can easily use and test your ADT. Use your ADT to create your variable and use the ADTManager to evaluate operations.
+
+```swift
+// Example:
+let a = Char.a()
+let b = Char.b()
+var op = Char.eq(a, b)
+var r = adtm.eval(op)
+print("\(adtm.pprint(op)) => \(adtm.pprint(r))")
+```
+
 ### Universal Evaluator
 
 A simple inner most universal evaluator is implemented. To use it:
