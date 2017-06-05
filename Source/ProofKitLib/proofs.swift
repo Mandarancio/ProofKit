@@ -65,7 +65,7 @@ public struct Proof {
         subs_term = generator(variable)
       }
       let lhs = Proof.substitution(conjecture, variable, subs_term)
-      let nr = proof(lhs)
+      let nr = proof(conjecture)
       if !lhs.equals(nr){
         throw ProofError.InductionFail
       }

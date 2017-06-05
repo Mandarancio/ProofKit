@@ -3,9 +3,6 @@ import LogicKit
 public let vNil = Value("nil")
 public let vFail = Value("fail")
 
-enum ProofError : Error {
-case InductionFail
-}
 
 public func variables(_ a: Term)-> [Variable]{
   var l : [Variable] = []
