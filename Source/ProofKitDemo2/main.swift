@@ -51,3 +51,17 @@ print(res)
 let res2 = adtm.eval(Petrinet.is_triggerable(net, Nat.n(1), mark))
 
 print(res2)
+
+
+print("\n ------ FARKAS ------ \n")
+
+let dynMat = DynamicMatrix(
+          [
+            [-1, 1, 1, -1],
+            [1, -1, -1, 1],
+            [0, 0, 1, 0],
+            [1, 0, 0, -1],
+            [-1, 0, 0, 1]
+          ])
+
+print(dynMat.get_p_invariants())
