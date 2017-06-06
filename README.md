@@ -14,6 +14,7 @@ or
 ./buildandrun.sh
 ```
 
+
 ## Current Status
 Currently implemented ADT and Operators
 
