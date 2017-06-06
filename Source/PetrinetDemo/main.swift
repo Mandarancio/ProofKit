@@ -27,20 +27,19 @@ let net = NicePetrinet(adtm:ADTm) +
               OutputEdge(t:"T1", p:"P2", weight:2)
 
 
- print(nice_net.to_string())
-/*
- let mat = Petrinet.to_matrix(net)
- print(mat.to_string())
+ print(net.to_string())
 
- let mark = Marking.next_place(Nat.n(0), Marking.next_place(Nat.n(1), Marking.next_place(Nat.n(0), Marking.null())))
+ let mark = NiceMarking(onPetrinet:net)
+ mark["P0"] = 0
+ mark["P1"] = 1
+ mark["P2"] = 0
 
- print(Marking.to_string(mark))
- print(Marking.to_array(mark))
+print(mark.to_string())
 
- let res = ADTm.eval(Marking.has_enough(mark, Integer.n(1), Nat.n(1)))
- print(ADTm.pprint(res))
- let res2 = ADTm.eval(Petrinet.is_triggerable(net, Nat.n(1), mark))
- print(ADTm.pprint(res2))*/
+print(mark.has_enough(p:"P1", weight:1))
+
+print(net.is_triggerable(t:"T1", marking:mark))
+
  print("\n ------ FARKAS ------ \n")
 
  let dynMat = DynamicMatrix(

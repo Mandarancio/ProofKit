@@ -6,12 +6,12 @@ public class NiceMarking {
   private var onPetrinet : NicePetrinet
   private var tokens : [String:UInt]
 
-  init(onPetrinet: NicePetrinet){
+  public init(onPetrinet: NicePetrinet){
     self.onPetrinet = onPetrinet
     self.tokens = [:]
   }
 
-  subscript(str: String) -> UInt? {
+  public subscript(str: String) -> UInt? {
     get {
       return tokens[str]
     }
@@ -48,6 +48,11 @@ public class NiceMarking {
     //TODO do better
       return Marking.to_string(as_term())
     }
+
+  public func has_enough(p:String, weight:UInt) -> Bool{
+    let res = onPetrinet.adtm.eval(Marking.has_enough(as_term(), Integer.n(Int(onPetrinet.get_place_index(p:p))), Nat.n(Int(weight))))
+    return Boolean.to_bool(res)
+  }
 }
 
 
