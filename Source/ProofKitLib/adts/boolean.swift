@@ -65,6 +65,13 @@ public class Boolean : ADT {
           return term === Boolean.True() || term === Boolean.False()
     }
 
+    public override func to_bool(_ term: Term) -> Bool{
+      if term.equals(Boolean.True()){
+        return true
+      }
+      return false
+    }
+
     public override func pprint(_ term: Term) -> String{
       if term.equals(Boolean.True()){
         return "true"
