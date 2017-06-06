@@ -100,6 +100,7 @@ public class Marking : ADT {
 
 
 public class Petrinet : ADT {
+
     public init(){
       super.init("petrinet")
       self.add_generator("null", Petrinet.null)

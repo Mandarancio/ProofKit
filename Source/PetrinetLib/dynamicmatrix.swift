@@ -23,6 +23,9 @@ public class DynamicMatrix {
   }
 
   public func dim() -> (Int, Int){
+    if data.count == 0 {
+      return (0, 0)
+    }
     return (data.count, data[0].count)
   }
 
@@ -152,7 +155,6 @@ public class DynamicMatrix {
       farkMat[(i, col)] = 1
     }
 
-
     //Main alg loop
     for i in 0 ... (m-1) {
       n = farkMat.dim().0
@@ -189,6 +191,12 @@ public class DynamicMatrix {
         }
       }
     }
+
+    //if n == 0, we can already return an empty array
+    if n == 0 {
+      return []
+    }
+
     //Delete first m columns
     for _ in 0 ... (m-1) {
       farkMat.delete_column(0)
