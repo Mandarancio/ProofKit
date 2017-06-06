@@ -188,7 +188,7 @@ public class Petrinet : ADT {
         let t_str = Nat.to_string(map["to_trans"]!)
         let w_str = Integer.to_string(map["weight"]!)
         let net_str = to_string(map["net"]!)
-        return "add_edge(p:\(p_str), t:\(t_str), w:\(w_str), \(net_str))"
+        return "add_edge(p:\(p_str), t:\(t_str), w:\(w_str),\n\(net_str))"
       }
     }
     return ""

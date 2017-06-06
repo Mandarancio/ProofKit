@@ -524,7 +524,7 @@ public class Integer: ADT{
   }
 
   public static func to_string(_ term: Term) -> String {
-    if let map = (term as? Map){
+    if let map = (value(term) as? Map){
       if map["a"] != nil && map["b"] != nil {
         let pos = Nat.to_string(map["a"]!)
         let neg = Nat.to_string(map["b"]!)
