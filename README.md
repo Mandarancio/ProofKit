@@ -70,7 +70,7 @@ And finaly your code in ```main.swift```:
 
 ```swift
 import LogicKit
-import ProofKitLib
+import ProofKit
 
 let x = Variable(named: "x")
 let y = Variable(named: "y")
@@ -95,7 +95,7 @@ x: 5, y: 5
 x: 6, y: 4
 x: 7, y: 3
 x: 8, y: 2
-x: 9, y: 1 
+x: 9, y: 1
 ```
 
 ## Rule
