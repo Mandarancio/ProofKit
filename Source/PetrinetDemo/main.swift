@@ -46,8 +46,9 @@ ADTm["marking"] = Marking()
              [-1, 1, 1, -1],
              [1, -1, -1, 1],
              [0, 0, 1, 0],
-             [1, 0, 0, -1],
-             [-1, 0, 0, 1]
+             [1, -1, 1, -1],
+             [-1, 1, -1, 1]
            ])
 
  print(dynMat.get_p_invariants())
+ print(dynMat.get_t_invariants())
