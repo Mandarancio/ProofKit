@@ -82,7 +82,7 @@ public class Sequence : ADT {
 
 
   public class override func belong(_ x: Term) -> Goal{
-    return (x === Sequence.empty() || delayed(fresh {y in fresh{w in fresh{z in x === Sequence.cons(y,w,z) && Sequence.belong(z)}}}))
+    return (x === Sequence.empty() || delayed(fresh {y in fresh{w in fresh{z in x === Sequence.cons(y,w,z) && Nat.belong(w) && Sequence.belong(z)}}}))
   }
 
   public override func pprint(_ t: Term) -> String{
