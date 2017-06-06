@@ -6,15 +6,15 @@ Proof verifier based on LogicKit
 ## To compile and run
 Few helper script are avaiable:
 ```bash
-./build.sh
-./run.sh
-```
-or
-```bash
-./buildandrun.sh
+swift build
 ```
 
-## Current Status
+To run the demos:
+```bash
+.build/debug/DEMO_NAME
+```
+
+## Implemented ADTs
 Currently implemented ADT and Operators
 
 |ADT|Generators|Constructor|Operators|
@@ -26,7 +26,7 @@ Currently implemented ADT and Operators
 |[Set](https://en.wikipedia.org/wiki/Set_%28abstract_data_type%29)|```empty() cons(first, rest)```|```n([Term])```|```union(x,y) subSet(x,y) intersection(x,y) difference(x,y)  contains(x,y) size(x) rest(x) first(x) removeOne(x,y) removeAll(x,y) eq(x,y) norm(x) insert(x,y)```|
 |Sequence|```empty(), cons(value,index,rest)```|```n([Term])```|```push(value,rest), getAt(sequence, index), setAt(sequence, index, value) size(sequence)```|
 
-Equational Proofs:
+## Implemented Proofs:
 
 |Name|Call|Status|
 |----|----|------:|
@@ -35,40 +35,93 @@ Equational Proofs:
 |transitivity |```Proof.transitivity(Rule, Rule) -> Rule```| **tested**|
 |substitution|```Proof.substitution(Rule, Variable, Term) -> Rule```| **tested**|
 |substitutivity|```Proof.substitutivity((Term...)->Term, [Term], [Term]) -> Rule```| **tested**|
-|cut|```Proof.cut(Rule, Rule) -> Rule```| implemented |
-|inductive|-| - |
+|inductive|```Proof.inductive(Rule, Variable, ADT, [String:(Rule...)->Rule])```| - |
 
-## Operator
+## Your first code
+Write your first code is simple, your project structure should be something like that:
 
-This *struct* is just an helper to uniform the way operators are implemented. The choosen structure is a **Map** with the operation name and the left and right operands.
-To create a generic operator:
-```swift
-let r : Term = Operator.n(Nat.n(1), Nat.n(2), "+") ////1 + 2
 ```
-However each adts will implement its operator generator (based on this one) for more uniformity.
+|-- package.swift
+|-+ Source
+  |-+ Demo
+    |-- main.swift
+```
+
+The file ```package.swift``` should look like:
+
+```swift
+import PackageDescription
+
+let package = Package(
+    name: "YOUR_PROJECT_NAME",
+    targets: [
+   	  Target(name: "Demo"), // or whatever is your project name
+      ],
+    dependencies: [
+        .Package(url: "https://github.com/kyouko-taiga/LogicKit",
+                 majorVersion: 0),
+        .Package(url: "https://github.com/Dexter/ProofKit",
+                 majorVersion: 0),
+    ]
+)
+```
+
+And finaly your code in ```main.swift```:
+
+```swift
+import LogicKit
+import ProofKitLib
+
+let x = Variable(named: "x")
+let y = Variable(named: "y")
+
+let goal = (x < Nat.self && y < Nat.self) => ((x + y) <-> Nat.n(10))
+for solution in solve(goal).prefix(10)
+{
+  let rsolution = solution.reified()
+  print("x: \(ADTm.pprint(rsolution[x])), y: \(ADTm.pprint(rsolution[y]))")
+}
+```
+
+Once compiled and executed the output should be:
+
+```
+x: 0, y: 10
+x: 1, y: 9
+x: 2, y: 8
+x: 3, y: 7
+x: 4, y: 6
+x: 5, y: 5
+x: 6, y: 4
+x: 7, y: 3
+x: 8, y: 2
+x: 9, y: 1 
+```
 
 ## Rule
 The *struct* **Rule** is the container of **axioms** and future **theorems**. Is composed in left and right components (both Term) and implement both a function to applay the rule and one to *pretty print* it.
 To create a rule simply:
 
 ```swift
-let r = Rule(
-  Nat.add(Variable(named: "x"), Nat.zero()), // left component
-  Variable(named: "x"), // right component
-  Boolean.True() // optional Boolean condition
-)
+ 1> let r = Rule(
+      Nat.add(Variable(named: "x"), Nat.zero()), // left component
+      Variable(named: "x"), // right component
+      Boolean.True() // optional Boolean condition (default: Boolean.True())
+    )
 ```
 
-Use a rule it:
+Print the rule:
 
 ```swift
-// pretty print it
-print(r.pprint()) // print => x + 0 = x
-
-// create gaol to applay rule
-let g : Goal = r.applay(Nat.add(Nat.n(4),Nat.zero()), Variable(named: x))
-let res : Term = get_result(g,x) //function solve goal and return the substitution of x
-// res => Nat.n(4)
+ 2> print(r)
+x + 0 = x
+```
+Apply it:
+```swift
+ 3> let g : Goal = r.applay(Nat.n(4) + Nat.zero(), Variable(named: x)) // create goal (4+0) to applay rule
+ 4> let res : Term = get_result(g,x) //function solve goal and return the substitution of x
+ 5> print(ADTm.pprint(res))
+4
 ```
 
 ## ADT
@@ -90,14 +143,14 @@ public class Boolean : ADT {
       self.add_operator("not", Boolean.not, [
         Rule(Boolean.not(Boolean.False()),Boolean.True()),
         Rule(Boolean.not(Boolean.True()),Boolean.False())
-      ], arity: 1)
+      ], ["boolean"])
     }
     public static func True(_:Term...) -> Term{
-      return Value<Bool>(true)
+      return new_term(Value<Bool>(false), "boolean")
     }
 
     public static func False(_:Term...) -> Term{
-      return Value<Bool>(false)
+      return new_term(Value<Bool>(false), "boolean")
     }
 
     public static func not(_ operands: Term...)->Term{
@@ -105,10 +158,6 @@ public class Boolean : ADT {
     }
 }
 ```
-
-### Evaluator
-
-The ```eval``` method is a simple function to evaluate the generator of the type to be able to evaluate nested operations.
 
 ## ADTManager
 
@@ -127,10 +176,11 @@ ADTm["boolean"] = Boolean() // to add adt
 To pretty print any term:
 
 ```swift
-let nat : ADT = ADTm["nat"] // to get adt
-let t = nat["+"](nat["succ"](nat["zero"]()),nat["succ"](nat["zero"]))
-print("\(ADTm.pprit(t))") //// 1 + 1
-
+let t = Nat.n(1) + Nat.n(1)
+print("\(ADTm.pprit(t))")
+//// 1 + 1
+print(t)
+//// [type: operator, name: "+", 0: [type: nat, value: [succ: [type: nat, value: 0]]]....
 ```
 
 ## How to create an ADT?
@@ -157,14 +207,6 @@ You have to add all of your ADT in this **ADTManager**. You can do it easily as 
 // Then you add your new adt to the manager
 ADTm["char"] = Char()
 ```
-You have created a key in your adtm where you have added your adt.
-If you want to add your ADT, go to **Source/ProofKitLib/adtmanager.swift**
-and complete:
- ```swift
-fileprivate init(){
-  self["yourNameAdt"] = YourAdt()
-}
-```
 
 You have a simple example how ADTManager works at **Source/ADTDemo/main.swift**.
 You can make tests with your own ADT that you can add into an ADTManager to use it.
@@ -172,11 +214,13 @@ Now you can easily use and test your ADT. Use your ADT to create your variable a
 
 ```swift
 // Example:
+
 let a = Char.a()
 let b = Char.b()
-var op = Char.eq(a, b)
-var r = adtm.eval(op)
-print("\(adtm.pprint(op)) => \(adtm.pprint(r))")
+var op = a == b
+var r = ADTm.eval(op)
+print("\(ADTm.pprint(op)) => \(ADTm.pprint(r))")
+// a == b => false
 ```
 
 ### Universal Evaluator
@@ -184,7 +228,7 @@ print("\(adtm.pprint(op)) => \(adtm.pprint(r))")
 A simple inner most universal evaluator is implemented. To use it:
 
 ```swift
-let operation : Term = ADTm["nat"]["*"](Nat.n(2),Nat.n(3))
+let operation : Term = Nat.n(2) * Nat.n(3)
 let result : Term = ADTm.eval(operation)
 print(" \(ADTm.pprint(operation)) => \(ADTm.pprint(result))")
 //// 2 * 3 => 6
@@ -192,7 +236,7 @@ print(" \(ADTm.pprint(operation)) => \(ADTm.pprint(result))")
 
 To be able to perform any type of computation it trys to solve the inner most operation first using the operation axioms and the generator evaluator.
 
-## Equational Proof
+## Proofs
 
 Now we have all ADT that we need and we can use it for proofs.
 Firstly, you have several examples avaible in **Source/EqProofDemo**.
@@ -204,8 +248,8 @@ If you want to create your own induction proof, here are the steps to follow:
 1. You just have to specify axioms that you will need.
 
  ```swift
-  let ax0 = adtm["nat"].a("+")[0]
-  let ax1 = adtm["nat"].a("+")[1]
+  let ax0 = ADTm["nat"].a("+")[0]
+  let ax1 = ADTm["nat"].a("+")[1]
  ```
 2. Write the conjecture you want to verify.
 
@@ -223,7 +267,7 @@ the higher rank. Here we have just one generator!
  ```swift
  // Initial case
  func zero_proof(t: Rule...)->Rule{
-   let ax0 = adtm["nat"].a("+")[0]
+   let ax0 = ADTm["nat"].a("+")[0]
    // s(0)+0 = s(0)
    return Proof.substitution(ax0, Variable(named: "x"), Nat.succ(x: Nat.zero()))
  }
@@ -231,7 +275,7 @@ the higher rank. Here we have just one generator!
 ```swift
 // Higher rank
  func succ_proof(t: Rule...)->Rule{
-   let ax1 = adtm["nat"].a("+")[1]
+   let ax1 = ADTm["nat"].a("+")[1]
    // s(0) + s(y) = s(s(0) + y)
    let t2 = Proof.substitution(ax1, Variable(named: "x"), Nat.succ(x: Nat.zero()))
    // s(s(0) + x) = s(s(x))
@@ -245,7 +289,7 @@ the higher rank. Here we have just one generator!
 
  ```swift
  do {
-   let teo = try Proof.inductive(conj, Variable(named: "x"), adtm["nat"], [
+   let teo = try Proof.inductive(conj, Variable(named: "x"), ADTm["nat"], [
      "zero": zero_proof,
      "succ": succ_proof
    ])
@@ -259,7 +303,30 @@ the higher rank. Here we have just one generator!
 
  Great! Now you can see "true" if all are good!
 
-## LogicKit Integration
+## Syntattic Sugar
+
+LogicKit integration:
+
+|Syntax| Semantic|
+|---|---|
+|```Term ∈ ADT.Type: Goal```|  Term in ADT|
+|```Term < ADT.Type: Goal```|  Term in ADT|
+|```Goal => Goal: Goal```| Goal such that Goal |
+|```Term <-> Term: Goal```| evalue(Term) equal to evalue(Term) |
+
+Mathematical operations:
+
+|Operation| Symbol| Supported types|
+|---------|:-----:|----------------|
+|sum      |+      |Nat, Integer    |
+|diffrence|-      |Nat, Integer    |
+|multiply |*      |Nat, Integer    |
+|divide   |/      |Nat, Integer    |
+|equal    |==     |All types       |
+|great    |>      |Nat, Integer    |
+|less     |<      |Nat, Integer    |
+|and      |&amp;&amp;|Boolean      |
+|or       |       |Boolean         |
 
 Using LogicKit and the ```ADTm.geval()``` method is possible to evaluate simple logic expressions:
 
@@ -278,7 +345,16 @@ for sol in solve(goal){
 
 ```
 
-## Example
+Resulting in:
+
+```
+ x: 0, y: 6
+ x: 1, y: 5
+ x: 2, y: 4
+```
+
+
+<!-- ## Example
 
 A simple example using only the ADTManager and applaying one axiom:
 
@@ -294,8 +370,4 @@ results in:
 ```
 axiom 1: $1 + succ($2) = succ($1 + $2)
 2 + 1 => succ(2 + 0)
-```
-
-
-## Notes
-Performance difference in function goal is around ~2.5x faster without typing.
+``` -->
