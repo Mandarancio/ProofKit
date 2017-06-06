@@ -1,3 +1,5 @@
+
+[![Build Status](https://travis-ci.org/Dexter9313/ProofKit.svg?branch=master)](https://travis-ci.org/Dexter9313/ProofKit)
 # ProofKit
 Proof verifier based on LogicKit
 
@@ -71,7 +73,7 @@ let res : Term = get_result(g,x) //function solve goal and return the substituti
 
 ## ADT
 
-All ADTs extend the base *class* **ADT**, this contains both generator, opertors generator and operators axioms as well as some basic helpers such a chek type and a *pretty print* function.
+All ADTm extend the base *class* **ADT**, this contains both generator, opertors generator and operators axioms as well as some basic helpers such a chek type and a *pretty print* function.
 
 To access to axioms, generators and operators there are always two method a long and a shortcut, e.g. ```get_generator("name")``` and ```g("name")```.
 
@@ -112,36 +114,36 @@ The ```eval``` method is a simple function to evaluate the generator of the type
 
 Finally to manage the *ADT* and have the possibility to mixit togheter in the future we use an **ADTManager**. This is composed by a dictionary of ADT and some helper function (such as the *pretty printer*).
 
-To avoid the creation of multiple ADTManager, there is a single ADTManager (as the constructor is private) instance called **ADTs**.
+To avoid the creation of multiple ADTManager, there is a single ADTManager (as the constructor is private) instance called **ADTm**.
 
-To get or add an ADT from the instance **ADTs**:
+To get or add an ADT from the instance **ADTm**:
 
 ```swift
-let nat : ADT = ADTs["nat"] // to get adt
+let nat : ADT = ADTm["nat"] // to get adt
 /// or
-ADTs["boolean"] = Boolean() // to add adt
+ADTm["boolean"] = Boolean() // to add adt
 ```
 
 To pretty print any term:
 
 ```swift
-let nat : ADT = ADTs["nat"] // to get adt
+let nat : ADT = ADTm["nat"] // to get adt
 let t = nat["+"](nat["succ"](nat["zero"]()),nat["succ"](nat["zero"]))
-print("\(ADTs.pprit(t))") //// 1 + 1
+print("\(ADTm.pprit(t))") //// 1 + 1
 
 ```
 
 ## How to create an ADT?
 
-You can see an exemple at **Source/ADTDemo**  
+You can see an exemple at **Source/ADTDemo**
 First create a file with the name of your adt.
-You have a typical example at **Source/ADTDemo/char.swift**  
-Two mains steps when you create your own ADT:  
+You have a typical example at **Source/ADTDemo/char.swift**
+Two mains steps when you create your own ADT:
 - Create **Generators**
-- Create **Operators**   
+- Create **Operators**
 
 You have to add this in ```public init()``` and create a function
-for each **generator** and **operator**.  
+for each **generator** and **operator**.
 
 Moreover you have to override some basics functions for the inheritance if you want that your ADT works!
 This functions are:
@@ -152,9 +154,8 @@ This functions are:
 Nice you have your ADT, but it's not the end! We have seen above the **ADTManager**.
 You have to add all of your ADT in this **ADTManager**. You can do it easily as follows:
 ```swift
-var adtm = ADTManager.instance()
 // Then you add your new adt to the manager
-adtm["char"] = Char()
+ADTm["char"] = Char()
 ```
 You have created a key in your adtm where you have added your adt.
 If you want to add your ADT, go to **Source/ProofKitLib/adtmanager.swift**
@@ -166,7 +167,7 @@ fileprivate init(){
 ```
 
 You have a simple example how ADTManager works at **Source/ADTDemo/main.swift**.
-You can make tests with your own ADT that you can add into an ADTManager to use it.  
+You can make tests with your own ADT that you can add into an ADTManager to use it.
 Now you can easily use and test your ADT. Use your ADT to create your variable and use the ADTManager to evaluate operations.
 
 ```swift
@@ -183,9 +184,9 @@ print("\(adtm.pprint(op)) => \(adtm.pprint(r))")
 A simple inner most universal evaluator is implemented. To use it:
 
 ```swift
-let operation : Term = ADTs["nat"]["*"](Nat.n(2),Nat.n(3))
-let result : Term = ADTs.eval(operation)
-print(" \(ADTs.pprint(operation)) => \(ADTs.pprint(result))")
+let operation : Term = ADTm["nat"]["*"](Nat.n(2),Nat.n(3))
+let result : Term = ADTm.eval(operation)
+print(" \(ADTm.pprint(operation)) => \(ADTm.pprint(result))")
 //// 2 * 3 => 6
 ```
 
@@ -194,9 +195,9 @@ To be able to perform any type of computation it trys to solve the inner most op
 ## Equational Proof
 
 Now we have all ADT that we need and we can use it for proofs.
-Firstly, you have several examples avaible in **Source/EqProofDemo**.  
+Firstly, you have several examples avaible in **Source/EqProofDemo**.
 When you want to verify a proof, you need to write all the steps.
-For classical proof you just have to follow the example that are avaible.  
+For classical proof you just have to follow the example that are avaible.
 
 If you want to create your own induction proof, here are the steps to follow:
 
@@ -206,7 +207,7 @@ If you want to create your own induction proof, here are the steps to follow:
   let ax0 = adtm["nat"].a("+")[0]
   let ax1 = adtm["nat"].a("+")[1]
  ```
-2. Write the conjecture you want to verify.  
+2. Write the conjecture you want to verify.
 
  ```swift
  // We try to proof that succ(0) + x = suc(x)
@@ -258,17 +259,37 @@ the higher rank. Here we have just one generator!
 
  Great! Now you can see "true" if all are good!
 
+## LogicKit Integration
+
+Using LogicKit and the ```ADTm.geval()``` method is possible to evaluate simple logic expressions:
+
+```swift
+let x = Variable(named: "x")
+let y = Variable(named: "y")
+let z = Variable(named: "z")
+
+let op = Nat.lt(Nat.add(x, y), Nat.n(9))
+
+// x,y in Nat such that (x+y) < 9
+let goal = Nat.belong(x) && Nat.belong(y) && ADTm.geval(operation: op, result: z) && z === Boolean.True()
+
+for sol in solve(goal){
+  let rsol = sol.reified()
+  print(" x: \(ADTm.pprint(rsol[x]), y: \(ADTm.pprint(rsol[y]))")
+}
+
+```
 
 ## Example
 
 A simple example using only the ADTManager and applaying one axiom:
 
 ```swift
-let o = ADTs["nat"]["+"](Nat.n(2), Nat.n(1))
-print(" axiom 1: \(ADTs["nat"].a("+")[1].pprint())")
-let g : Goal = ADTs["nat"].a("+")[1].applay(o,x) //applay axiom 1
+let o = ADTm["nat"]["+"](Nat.n(2), Nat.n(1))
+print(" axiom 1: \(ADTm["nat"].a("+")[1].pprint())")
+let g : Goal = ADTm["nat"].a("+")[1].applay(o,x) //applay axiom 1
 let res : Term = get_result(g,x) //function solve goal and return the substitution of x
-print(" \(ADTs.pprint(o)) => \(ADTs.pprint(res))")
+print(" \(ADTm.pprint(o)) => \(ADTm.pprint(res))")
 ```
 
 results in:

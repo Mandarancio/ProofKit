@@ -15,18 +15,17 @@ extension ADTTests {
 
 class ADTTests: XCTestCase {
 
-  let adt : ADTManager = ADTManager.instance()
 
   internal func TAssert(_ a: Term,_ b: Term){
-    let msg = "\(adt.pprint(a)) == \(adt.pprint(b))"
+    let msg = "\(ADTm.pprint(a)) == \(ADTm.pprint(b))"
     print(msg)
-    XCTAssertTrue(adt.eval(a).equals(adt.eval(b)), msg)
+    XCTAssertTrue(ADTm.eval(a).equals(ADTm.eval(b)), msg)
   }
 
   internal func FAssert(_ a: Term,_ b: Term){
-    let msg = "\(adt.pprint(a)) != \(adt.pprint(b))"
+    let msg = "\(ADTm.pprint(a)) != \(ADTm.pprint(b))"
     print(msg)
-    XCTAssertFalse(adt.eval(a).equals(adt.eval(b)),msg)
+    XCTAssertFalse(ADTm.eval(a).equals(ADTm.eval(b)),msg)
   }
 
 

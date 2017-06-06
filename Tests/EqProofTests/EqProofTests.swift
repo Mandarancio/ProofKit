@@ -13,12 +13,11 @@ extension EqProofTests {
 
 class EqProofTests: XCTestCase {
 
-  let adt : ADTManager = ADTManager.instance()
 
   internal func tassert(_ a: Term,_ b: Term){
-    let msg = "\(adt.pprint(a)) == \(adt.pprint(b))"
+    let msg = "\(ADTm.pprint(a)) == \(ADTm.pprint(b))"
     print(msg)
-    XCTAssertTrue(adt.eval(a).equals(adt.eval(b)), msg)
+    XCTAssertTrue(ADTm.eval(a).equals(ADTm.eval(b)), msg)
   }
 
   internal func TAssert(_ a: Rule, _ b: Rule){
@@ -38,7 +37,7 @@ class EqProofTests: XCTestCase {
    }
 
   func testZeroSumIdentity(){
-    let nat = adt["nat"]
+    let nat = ADTm["nat"]
     // -- x + 0 = x
     let t1 = nat.a("+")[0]
     print("t1 - nat.+.ax[0]\n\t\(t1)")
@@ -82,15 +81,15 @@ class EqProofTests: XCTestCase {
     self.TAssert(t, Rule(Variable(named:"x"), Variable(named:"x")))
 
     print("Can apply substitution")
-    t = Proof.substitution(adt["nat"].a("+")[0], Variable(named:"x"), Nat.zero())
+    t = Proof.substitution(ADTm["nat"].a("+")[0], Variable(named:"x"), Nat.zero())
     self.TAssert(t, Rule(Nat.add(Nat.zero(), Nat.zero()), Nat.zero()))
 
     print("Can apply substitution")
-    t = Proof.substitution(adt["nat"].a("+")[0], Variable(named:"x"), Nat.succ(x:Variable(named: "y")))
+    t = Proof.substitution(ADTm["nat"].a("+")[0], Variable(named:"x"), Nat.succ(x:Variable(named: "y")))
     self.TAssert(t, Rule(Nat.add(Nat.succ(x: Variable(named: "y")), Nat.zero()), Nat.succ(x: Variable(named: "y"))))
 
     print("Can apply substitutivity")
-    t = Proof.substitutivity(Nat.succ, [adt["nat"].a("+")[0]])
+    t = Proof.substitutivity(Nat.succ, [ADTm["nat"].a("+")[0]])
     self.TAssert(t, Rule(
       Nat.succ(x: Nat.add(Variable(named:"x"), Nat.zero())),
       Nat.succ(x: Variable(named:"x"))

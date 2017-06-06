@@ -11,7 +11,6 @@ extension ProofKitLibTests {
 
 class ProofKitLibTests: XCTestCase {
 
-  let adt : ADTManager = ADTManager.instance()
 
 
 
