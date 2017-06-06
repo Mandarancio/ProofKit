@@ -266,12 +266,10 @@ Using LogicKit and the ```ADTm.geval()``` method is possible to evaluate simple 
 ```swift
 let x = Variable(named: "x")
 let y = Variable(named: "y")
-let z = Variable(named: "z")
 
-let op = Nat.lt(Nat.add(x, y), Nat.n(9))
-
-// x,y in Nat such that (x+y) < 9
-let goal = Nat.belong(x) && Nat.belong(y) && ADTm.geval(operation: op, result: z) && z === Boolean.True()
+// x,y ∈ Nat => (x+y) < 9 && x<y
+let goal = x ∈ Nat.self &&  y ∈ Nat.self => (x+y) <-> Nat.n(6) && (x<y) <-> Boolean.True()
+// NOTE < can be used instead of ∈
 
 for sol in solve(goal){
   let rsol = sol.reified()
