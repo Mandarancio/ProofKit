@@ -59,7 +59,8 @@ public struct ADTManager{
   public func geval (operation: Term, result: Term) -> Goal {
     return inEnvironment { state in
         let x = self.replace(operation, state)
-        return self.eval(x) === result
+        let y = self.replace(result, state)
+        return self.eval(x) === self.eval(y)
      }
   }
 
@@ -141,4 +142,53 @@ public struct ADTManager{
 
     return "?"
   }
+}
+
+infix operator =>: ComparisonPrecedence
+infix operator ∈: ComparisonPrecedence
+
+public func =>(left: Term, right: Term)-> Goal  {
+  return ADTm.geval(operation: left,result: right)
+}
+
+public func ∈(left: Term, right: ADT.Type)->Goal{
+  return right.belong(left)
+}
+
+public func +(left: Term, right: Term)-> Term{
+  return Operator.n("+", left, right)
+}
+
+public func -(left: Term, right: Term)-> Term{
+  return Operator.n("+", left, right)
+}
+
+public func *(left: Term, right: Term)-> Term{
+  return Operator.n("*", left, right)
+}
+
+public func /(left: Term, right: Term)-> Term{
+  return Operator.n("/", left, right)
+}
+
+
+public func >(left: Term, right: Term)-> Term{
+  return Operator.n(">", left, right)
+}
+
+public func <(left: Term, right: Term)-> Term{
+  return Operator.n("<", left, right)
+}
+
+public func ==(left: Term, right: Term)-> Term{
+  return Operator.n("==", left, right)
+}
+
+public func ||(left: Term, right: Term)-> Term{
+  return Operator.n("or", left, right)
+}
+
+
+public func &&(left: Term, right: Term)-> Term{
+  return Operator.n("and", left, right)
 }
