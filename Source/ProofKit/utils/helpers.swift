@@ -1,5 +1,4 @@
 import LogicKit
-import Foundation
 
 public let vNil = Value("nil")
 public let vFail = Value("fail")
@@ -205,13 +204,4 @@ public func /(left: Term, right: [Variable:Variable])->Term{
 
 public func *(left: Term, right: [Variable:Variable])->Term{
   return apply_subst_table(left, reverse_subs_table(right))
-}
-
-
-
-//Date to milliseconds
-internal func mills() -> Int {
-    let currentDate = Date()
-    let since1970 = currentDate.timeIntervalSince1970
-    return Int(since1970 * 1000)
 }

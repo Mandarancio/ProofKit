@@ -11,7 +11,7 @@ let package = Package(
     dependencies: [
         .Package(url: "https://github.com/kyouko-taiga/LogicKit",
                  majorVersion: 0),
-        .Package(url: "https://github.com/Mandarancio/ProofKit",
+        .Package(url: "../",
                  majorVersion: 0),
     ]
 )

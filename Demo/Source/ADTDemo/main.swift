@@ -1,5 +1,5 @@
 import LogicKit
-import ProofKitLib
+import ProofKit
 
 // How to use your new ADT?
 // Simple: you need the instance of the ADTManager class

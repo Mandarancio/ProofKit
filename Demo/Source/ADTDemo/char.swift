@@ -1,5 +1,5 @@
 import LogicKit
-import ProofKitLib
+import ProofKit
 
 // A Simple custom ADT: Char
 class Char: ADT{

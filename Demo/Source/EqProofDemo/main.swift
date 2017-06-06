@@ -1,5 +1,5 @@
 import LogicKit
-import ProofKitLib
+import ProofKit
 
 
 print("Test Equational Proof Demo")

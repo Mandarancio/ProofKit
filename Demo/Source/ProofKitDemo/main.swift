@@ -1,5 +1,5 @@
 import LogicKit
-import ProofKitLib
+import ProofKit
 import Foundation
 
 //Date to milliseconds

@@ -1,8 +1,6 @@
 import LogicKit
 
 public var ADTm : ADTManager = ADTManager()
-public var op_time = 0
-public var s_time = 0
 
 //// To be used to store all the ADTs
 public struct ADTManager{
@@ -72,18 +70,13 @@ public struct ADTManager{
         let k : Term = Operator.eval(op)
         let footprint = Operator.get_footprint(k)
 
-        let tk = mills()
         var axioms = self.opers[footprint]
 
         if axioms == nil {
           axioms = self.find_polyoper(footprint)
         }
-
-        op_time += (mills()-tk)
         if  axioms!.count > 0{
-          let tk = mills()
           let res = resolve(k, axioms!)
-          s_time += (mills()-tk)
           if res.equals(op){
             return op
           }
