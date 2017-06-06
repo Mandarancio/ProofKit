@@ -2,7 +2,7 @@ import LogicKit
 import ProofKitLib
 import PetrinetLib
 
-// var adtm = ADTManager.instance()
+// using petrinets ADTs
 ADTm["petrinet"] = Petrinet()
 ADTm["marking"] = Marking()
 /*
@@ -11,22 +11,24 @@ ADTm["marking"] = Marking()
   -w->  edge with weight w
 
   this example is this net :
- [0]-1->|0|<-1-[1]-1->|1|-2->[2]
-    <-2-
+ [P0]-1->|T0|<-1-[P1]-1->|T1|-2->[P2]
+     <-2-
  */
 
  print("\n--------PETRINET---------\n")
 
- let net = Petrinet.add_edge(Nat.n(0), Nat.n(0), Integer.n(1),
-           Petrinet.add_edge(Nat.n(0), Nat.n(0), Integer.n(-2),
-           Petrinet.add_edge(Nat.n(1), Nat.n(0), Integer.n(1),
-           Petrinet.add_edge(Nat.n(1), Nat.n(1), Integer.n(1),
-           Petrinet.add_edge(Nat.n(2), Nat.n(1), Integer.n(-2),
-           Petrinet.null()
-           )))))
+let net = NicePetrinet(adtm:ADTm) +
+              Place("P0") + Place("P1") + Place("P2") +
+              Transition("T0") + Transition("T1") +
+              InputEdge(p:"P0", t:"T0", weight:1) +
+              InputEdge(p:"P1", t:"T0", weight:1) +
+              InputEdge(p:"P1", t:"T1", weight:1) +
+              OutputEdge(t:"T0", p:"P0", weight:2) +
+              OutputEdge(t:"T1", p:"P2", weight:2)
 
- print(Petrinet.to_string(net))
 
+ print(nice_net.to_string())
+/*
  let mat = Petrinet.to_matrix(net)
  print(mat.to_string())
 
@@ -38,7 +40,7 @@ ADTm["marking"] = Marking()
  let res = ADTm.eval(Marking.has_enough(mark, Integer.n(1), Nat.n(1)))
  print(ADTm.pprint(res))
  let res2 = ADTm.eval(Petrinet.is_triggerable(net, Nat.n(1), mark))
- print(ADTm.pprint(res2))
+ print(ADTm.pprint(res2))*/
  print("\n ------ FARKAS ------ \n")
 
  let dynMat = DynamicMatrix(

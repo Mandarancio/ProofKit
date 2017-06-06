@@ -112,6 +112,10 @@ public class NicePetrinet {
         return Petrinet.to_matrix(term)
   }
 
+  public func as_term() -> Term {
+    return self.term
+  }
+
   public func to_string() -> String {
     //TODO do better
     return Petrinet.to_string(as_term())
@@ -124,44 +128,54 @@ public class NicePetrinet {
 
 }
 
-struct InputEdge {
-  var p:String
-  var t:String
-  var weight:UInt
+public struct InputEdge {
+  public var p:String
+  public var t:String
+  public var weight:UInt
+  public init(p:String, t:String, weight:UInt) {
+    self.p = p
+    self.t = t
+    self.weight = weight
+  }
 }
 
-struct OutputEdge {
-  var t:String
-  var p:String
-  var weight:UInt
+public struct OutputEdge {
+  public var t:String
+  public var p:String
+  public var weight:UInt
+  public init(t:String, p:String, weight:UInt) {
+    self.t = t
+    self.p = p
+    self.weight = weight
+  }
 }
 
-struct Place {
-  var p_str:String
-  init(_ p:String) {p_str=p}
+public struct Place {
+  public var p_str:String
+  public init(_ p:String) {p_str=p}
 }
 
-struct Transition {
-  var t_str:String
-  init(_ t:String) {t_str=t}
+public struct Transition {
+  public var t_str:String
+  public init(_ t:String) {t_str=t}
 }
 
-func <<(_ net:NicePetrinet, _ p:Place) -> NicePetrinet {
+public func +(_ net:NicePetrinet, _ p:Place) -> NicePetrinet {
   net.add_place(p:p.p_str)
   return net
 }
 
-func <<(_ net:NicePetrinet, _ t:Transition) -> NicePetrinet {
+public func +(_ net:NicePetrinet, _ t:Transition) -> NicePetrinet {
   net.add_transition(t:t.t_str)
   return net
 }
 
-func <<(_ net:NicePetrinet, _ edge:InputEdge) -> NicePetrinet {
+public func +(_ net:NicePetrinet, _ edge:InputEdge) -> NicePetrinet {
   net.add_input_edge(p:edge.p, t:edge.t, weight:edge.weight)
   return net
 }
 
-func <<(_ net:NicePetrinet, _ edge:OutputEdge) -> NicePetrinet {
+public func +(_ net:NicePetrinet, _ edge:OutputEdge) -> NicePetrinet {
   net.add_output_edge(t:edge.t, p:edge.p, weight:edge.weight)
   return net
 }
