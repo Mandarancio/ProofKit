@@ -1,4 +1,4 @@
-# ProofKit
+# ProofKit [![Build Status](https://travis-ci.org/Dexter9313/ProofKit.svg?branch=master)](https://travis-ci.org/Dexter9313/ProofKit)
 Proof verifier based on LogicKit
 
 ## To compile and run
