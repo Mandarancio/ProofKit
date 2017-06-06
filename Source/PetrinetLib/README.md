@@ -1,4 +1,4 @@
-#PetrinetLib
+# PetrinetLib
 
 Small Library to manipulate Petri nets based on ProofKit to use ADTs as internal representation for proofs.
 
@@ -10,7 +10,7 @@ Currently implemented ADT and Operators
 |Marking|```null() next_place(p, m)```|```has_enough(m, w, p)```|
 |Petrinet|```null() add_edge(p,t,w,net)```|```is_triggerable(net, t, m)```|
 
-##Nice Petrinets and Nice Markings
+## Nice Petrinets and Nice Markings
 
 To avoid using directly complex ADTs, the user can use convenient classes : NicePetrinet and NiceMarking.
 
