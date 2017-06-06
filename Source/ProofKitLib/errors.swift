@@ -1,3 +1,3 @@
 public enum ProofError : Error {
-case InductionFail
+  case InductionFail
 }
