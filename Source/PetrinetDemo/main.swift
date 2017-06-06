@@ -36,9 +36,14 @@ let net = NicePetrinet(adtm:ADTm) +
 
 print(mark.to_string())
 
-print(mark.has_enough(p:"P1", weight:1))
+print(mark.has_enough(weight:1, p:"P1"))
 
 print(net.is_triggerable(t:"T1", marking:mark))
+
+//let variable = Variable(named:"t")
+//let res = ADTm.eval(Petrinet.is_triggerable(net.as_term(), variable, mark.as_term()))
+
+//print(res)
 
  print("\n ------ FARKAS ------ \n")
 

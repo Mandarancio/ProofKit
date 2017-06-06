@@ -49,8 +49,8 @@ public class NiceMarking {
       return Marking.to_string(as_term())
     }
 
-  public func has_enough(p:String, weight:UInt) -> Bool{
-    let res = onPetrinet.adtm.eval(Marking.has_enough(as_term(), Integer.n(Int(onPetrinet.get_place_index(p:p))), Nat.n(Int(weight))))
+  public func has_enough(weight:UInt, p:String) -> Bool{
+    let res = onPetrinet.adtm.eval(Marking.has_enough(as_term(), Integer.n(Int(weight)), Nat.n(Int(onPetrinet.get_place_index(p:p)))))
     return Boolean.to_bool(res)
   }
 }
