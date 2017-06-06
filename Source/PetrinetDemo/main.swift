@@ -42,7 +42,7 @@ print(net.is_triggerable(t:"T1", marking:mark))
 
 let v = Variable(named:"t")
 let g = v < Nat.self && Petrinet.is_triggerable(net.as_term(), v, mark.as_term()) <-> Boolean.True()
-for s in solve(g) {
+for s in solve(g).prefix(2) {
   print(ADTm.pprint(s.reified()[v]))
 }
 
