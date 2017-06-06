@@ -9,9 +9,9 @@ let package = Package(
       Target(name: "ADTDemo"),
     ],
     dependencies: [
-        .Package(url: "https://github.com/kyouko-taiga/LogicKit",
+      .Package(url: "https://github.com/kyouko-taiga/LogicKit",
                  majorVersion: 0),
-        .Package(url: "../",
+       .Package(url: "../",
                  majorVersion: 0),
     ]
 )

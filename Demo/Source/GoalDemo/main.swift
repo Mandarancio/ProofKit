@@ -1,5 +1,5 @@
 import LogicKit
-import ProofKitLib
+import ProofKit
 
 let x = Variable(named: "x")
 let y = Variable(named: "y")
