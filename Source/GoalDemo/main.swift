@@ -10,7 +10,7 @@ let z = Variable(named: "z")
 print(" ====== NET ======")
 print(ADTm.pprint((x + y) == Nat.n(6) && x < y))
 // x,y in Nat such that (x + y) = 6 && x < y
-let goal = x ∈ Nat.self &&  y ∈ Nat.self && (x+y) => Nat.n(6) && (x<y) => Boolean.True()
+let goal = x ∈ Nat.self &&  y ∈ Nat.self => (x+y) <-> Nat.n(6) && (x<y) <-> Boolean.True()
 print()
 var counter = 0
 for sol in solve(goal){
@@ -25,7 +25,7 @@ print("\n ====== SET ======")
 print(ADTm.pprint(Set.size(x) < Nat.n(8)))
 // simple test with Set
 // x in Set such that size(x)<8
-let lgoal = x ∈ Set.self && (Set.size(x) < Nat.n(8)) => Boolean.True()
+let lgoal = x ∈ Set.self => (Set.size(x) < Nat.n(8)) <-> Boolean.True()
 counter = 0
 print()
 for sol in solve(lgoal){

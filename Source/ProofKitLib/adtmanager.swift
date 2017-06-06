@@ -143,15 +143,36 @@ public struct ADTManager{
     return "?"
   }
 }
+precedencegroup SuchThatPrecendence {
+  lowerThan: LogicalConjunctionPrecedence
+}
 
-infix operator =>: ComparisonPrecedence
-infix operator ∈: ComparisonPrecedence
+precedencegroup GEvalPrecendece{
+  higherThan: SuchThatPrecendence, LogicalConjunctionPrecedence
+  lowerThan: AdditionPrecedence
+}
 
-public func =>(left: Term, right: Term)-> Goal  {
+
+// infix operator ∧: LogicalConjunctionPrecedence
+
+// infix operator ∨: LogicalConjunctionPrecedence
+infix operator <->: GEvalPrecendece
+infix operator ∈: AdditionPrecedence
+infix operator =>: SuchThatPrecendence
+
+public func =>(left: @escaping Goal, right: @escaping Goal)-> Goal{
+  return left && right
+}
+
+public func <->(left: Term, right: Term)-> Goal  {
   return ADTm.geval(operation: left,result: right)
 }
 
 public func ∈(left: Term, right: ADT.Type)->Goal{
+  return right.belong(left)
+}
+
+public func <(left: Term, right: ADT.Type)->Goal{
   return right.belong(left)
 }
 
