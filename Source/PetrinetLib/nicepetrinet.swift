@@ -122,8 +122,7 @@ public class NicePetrinet {
   }
 
   public func to_string() -> String {
-    //TODO do better
-    return Petrinet.to_string(as_term())
+    return Petrinet.to_nice_string(as_term(), places_indexes, transitions_indexes)
   }
 
   public func is_triggerable(t:String, marking:NiceMarking) -> Bool{

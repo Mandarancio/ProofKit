@@ -40,10 +40,11 @@ print(mark.has_enough(weight:1, p:"P1"))
 
 print(net.is_triggerable(t:"T1", marking:mark))
 
-//let variable = Variable(named:"t")
-//let res = ADTm.eval(Petrinet.is_triggerable(net.as_term(), variable, mark.as_term()))
-
-//print(res)
+let v = Variable(named:"t")
+let g = v < Nat.self && Petrinet.is_triggerable(net.as_term(), v, mark.as_term()) <-> Boolean.False()
+for s in solve(g) {
+  print(ADTm.pprint(s.reified()[v]))
+}
 
  print("\n ------ FARKAS ------ \n")
 

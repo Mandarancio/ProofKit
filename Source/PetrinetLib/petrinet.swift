@@ -186,9 +186,9 @@ public class Petrinet : ADT {
       if map["from_place"] != nil && map["to_trans"] != nil && map["weight"] != nil && map["net"] != nil {
         let p_str = Nat.to_string(map["from_place"]!)
         let t_str = Nat.to_string(map["to_trans"]!)
-        let w_str = Integer.to_string(map["weight"]!)
+        let w = Integer.to_int(map["weight"]!)
         let net_str = to_string(map["net"]!)
-        return "add_edge(p:\(p_str), t:\(t_str), w:\(w_str),\n\(net_str))"
+        return "add_edge(p:\(p_str), t:\(t_str), w:\(w),\n\(net_str))"
       }
     }
     return ""
@@ -200,5 +200,58 @@ public class Petrinet : ADT {
 
   public override func pprint(_ t: Term) -> String{
     return Petrinet.to_string(t)
+  }
+
+  public static func to_nice_string_edges(_ net: Term, _ p_indexes:[String:Int], _ t_indexes:[String:Int]) -> String {
+    if net.equals(Petrinet.null()) {
+        return ""
+    }
+    else if let map = (value(net) as? Map) {
+      if map["from_place"] != nil && map["to_trans"] != nil && map["weight"] != nil && map["net"] != nil {
+        let p = Nat.to_int(map["from_place"]!)
+        //clumsy
+        var p_str = ""
+        for (place,i) in p_indexes {
+          if i == p {
+            p_str = place
+            break
+          }
+        }
+        let t = Nat.to_int(map["to_trans"]!)
+        //clumsy
+        var t_str = ""
+        for (transition,i) in t_indexes {
+          if i == t {
+            t_str = transition
+            break
+          }
+        }
+        let w = Integer.to_int(map["weight"]!)
+        let net_str = to_nice_string_edges(map["net"]!, p_indexes, t_indexes)
+        if w < 0 {
+          return "out(p:\(p_str), t:\(t_str), w:\(-1*w))\n\(net_str)"
+        }
+        if w >= 0 {
+          return "int(p:\(p_str), t:\(t_str), w:\(w))\n\(net_str)"
+        }
+      }
+    }
+    return ""
+  }
+
+  public static func to_nice_string(_ net: Term, _ p_indexes:[String:Int], _ t_indexes:[String:Int]) -> String{
+    var str = "Places :\n"
+    for (place, _) in p_indexes {
+      str += place
+      str += ", "
+    }
+    str += "\nTransitions :\n"
+    for (transition, _) in t_indexes {
+      str += transition
+      str += ", "
+    }
+    str += "\nEdges :\n"
+    str += to_nice_string_edges(net, p_indexes, t_indexes)
+    return str
   }
 }
