@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Dexter9313/ProofKit.svg?branch=master)](https://travis-ci.org/Dexter9313/ProofKit)
+[![Build Status](https://travis-ci.org/Mandarancio/ProofKit.svg?branch=master)](https://travis-ci.org/Mandarancio/ProofKit)
 
 # ProofKit
 Proof verifier based on LogicKit
