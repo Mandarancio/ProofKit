@@ -1,5 +1,5 @@
 import XCTest
-@testable import ProofKitLibTests
+@testable import ProofKitTests
 @testable import ADTTests
 @testable import EqProofTests
 
