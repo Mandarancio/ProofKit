@@ -44,7 +44,7 @@ import PackageDescription
 let package = Package(
     name: "YOUR_PROJECT_NAME",
     targets: [
-   	  Target(name: "Demo"), // or whatever is your project name
+   	  Target(name: "YOUR_PROJECT_NAME"), // or whatever is your project name
       ],
     dependencies: [
         .Package(url: "https://github.com/kyouko-taiga/LogicKit",
@@ -72,7 +72,7 @@ for solution in solve(goal).prefix(11)
 }
 ```
 
-Once compiled and executed the output should be:
+Once compiled and executed (*remember*: the binary is located ```.build/debug/YOUR_PROJECT_NAME```) the output should be:
 
 ```
 x: 0, y: 10
