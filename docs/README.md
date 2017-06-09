@@ -89,7 +89,7 @@ x: 10, y: 0
 ```
 
 ## Advanced usage
-![Diagram](docs/diagram.png)
+![Diagram](diagram.png)
 
 ### Rule
 The *struct* **Rule** is the container of **axioms** and future **theorems**. Is composed in left and right components (both Term) and implement both a function to applay the rule and one to *pretty print* it.
