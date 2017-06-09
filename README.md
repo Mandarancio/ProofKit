@@ -317,7 +317,7 @@ Mathematical operations:
 |great    |>      |Nat, Integer    |
 |less     |<      |Nat, Integer    |
 |and      |&amp;&amp;|Boolean      |
-|or       |       |Boolean         |
+|or       |&#124;&#124;|Boolean         |
 
 Using LogicKit and the ```ADTm.geval()``` method is possible to evaluate simple logic expressions:
 
