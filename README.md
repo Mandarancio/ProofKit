@@ -329,7 +329,7 @@ let y = Variable(named: "y")
 let goal = x ∈ Nat.self &&  y ∈ Nat.self => (x+y) <-> Nat.n(6) && (x<y) <-> Boolean.True()
 // NOTE < can be used instead of ∈
 
-for sol in solve(goal){
+for sol in solve(goal).prefix(3){ // NOTE .prefix(N) is used to stop the research of possible solution after N found
   let rsol = sol.reified()
   print(" x: \(ADTm.pprint(rsol[x]), y: \(ADTm.pprint(rsol[y]))")
 }
