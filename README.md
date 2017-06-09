@@ -65,7 +65,7 @@ let x = Variable(named: "x")
 let y = Variable(named: "y")
 
 let goal = (x < Nat.self && y < Nat.self) => ((x + y) <-> Nat.n(10))
-for solution in solve(goal).prefix(10)
+for solution in solve(goal).prefix(11)
 {
   let rsolution = solution.reified()
   print("x: \(ADTm.pprint(rsolution[x])), y: \(ADTm.pprint(rsolution[y]))")
@@ -85,6 +85,7 @@ x: 6, y: 4
 x: 7, y: 3
 x: 8, y: 2
 x: 9, y: 1
+x: 10, y: 0
 ```
 
 ## Advanced usage
