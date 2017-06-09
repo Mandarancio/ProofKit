@@ -3,6 +3,9 @@
 # ProofKit
 ADT toolkit and Proof verifier based on [LogicKit](https://github.com/kyouko-taiga/LogicKit).
 
+**Project WIKI**: [link](https://github.com/Mandarancio/ProofKit/wiki)
+
+
 ## Implemented ADTs
 Currently implemented ADT and Operators
 
