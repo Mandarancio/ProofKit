@@ -1,18 +1,7 @@
 [![Build Status](https://travis-ci.org/Mandarancio/ProofKit.svg?branch=master)](https://travis-ci.org/Mandarancio/ProofKit)
 
 # ProofKit
-Proof verifier based on LogicKit
-
-## To compile and run
-Few helper script are avaiable:
-```bash
-swift build
-```
-
-To run the demos:
-```bash
-.build/debug/DEMO_NAME
-```
+ADT toolkit and Proof verifier based on [LogicKit](https://github.com/kyouko-taiga/LogicKit).
 
 ## Implemented ADTs
 Currently implemented ADT and Operators
@@ -60,7 +49,7 @@ let package = Package(
     dependencies: [
         .Package(url: "https://github.com/kyouko-taiga/LogicKit",
                  majorVersion: 0),
-        .Package(url: "https://github.com/Dexter/ProofKit",
+        .Package(url: "https://github.com/Mandarancio/ProofKit",
                  majorVersion: 0),
     ]
 )
@@ -98,7 +87,9 @@ x: 8, y: 2
 x: 9, y: 1
 ```
 
-## Rule
+## Advanced usage
+
+### Rule
 The *struct* **Rule** is the container of **axioms** and future **theorems**. Is composed in left and right components (both Term) and implement both a function to applay the rule and one to *pretty print* it.
 To create a rule simply:
 
@@ -124,7 +115,7 @@ Apply it:
 4
 ```
 
-## ADT
+### ADT
 
 All ADTm extend the base *class* **ADT**, this contains both generator, opertors generator and operators axioms as well as some basic helpers such a chek type and a *pretty print* function.
 
@@ -159,7 +150,7 @@ public class Boolean : ADT {
 }
 ```
 
-## ADTManager
+### ADTManager
 
 Finally to manage the *ADT* and have the possibility to mixit togheter in the future we use an **ADTManager**. This is composed by a dictionary of ADT and some helper function (such as the *pretty printer*).
 
@@ -183,7 +174,7 @@ print(t)
 //// [type: operator, name: "+", 0: [type: nat, value: [succ: [type: nat, value: 0]]]....
 ```
 
-## How to create an ADT?
+### How to create an ADT?
 
 You can see an exemple at **Source/ADTDemo**
 First create a file with the name of your adt.
@@ -223,7 +214,7 @@ print("\(ADTm.pprint(op)) => \(ADTm.pprint(r))")
 // a == b => false
 ```
 
-### Universal Evaluator
+#### Universal Evaluator
 
 A simple inner most universal evaluator is implemented. To use it:
 
@@ -236,7 +227,7 @@ print(" \(ADTm.pprint(operation)) => \(ADTm.pprint(result))")
 
 To be able to perform any type of computation it trys to solve the inner most operation first using the operation axioms and the generator evaluator.
 
-## Proofs
+### Proofs
 
 Now we have all ADT that we need and we can use it for proofs.
 Firstly, you have several examples avaible in **Source/EqProofDemo**.
