@@ -10,11 +10,11 @@ ADTm["char"] = Char()
 // Example:
 let a = Char.a()
 let b = Char.b()
-var op = Char.eq(a, b)
+var op = a == b
 var r = ADTm.eval(op)
 print("\(ADTm.pprint(op)) => \(ADTm.pprint(r))")
 
 // Counter-Example:
-op = Char.eq(a, a)
+op = a ==  a
 r = ADTm.eval(op)
 print("\(ADTm.pprint(op)) => \(ADTm.pprint(r))")
