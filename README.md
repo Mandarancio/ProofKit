@@ -45,9 +45,6 @@ import PackageDescription
 
 let package = Package(
     name: "YOUR_PROJECT_NAME",
-    targets: [
-   	  Target(name: "YOUR_PROJECT_NAME"), // or whatever is your project name
-      ],
     dependencies: [
         .Package(url: "https://github.com/kyouko-taiga/LogicKit",
                  majorVersion: 0),
