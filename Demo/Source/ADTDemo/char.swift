@@ -40,11 +40,6 @@ class Char: ADT{
     return term === Char.a() || term === Char.b() || term === Char.c()
   }
 
-  // Simple check to check if a term is of this adt type (Boolean result)
-  public override func check(_ term: Term) -> Bool{
-    return term.equals(Char.a()) || term.equals(Char.b()) || term.equals(Char.c())
-  }
-
   // Print nicely your term
   public override func pprint(_ term: Term) -> String{
     if let v = (term as? Value<String>){
