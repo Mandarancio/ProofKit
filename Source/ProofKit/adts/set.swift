@@ -220,17 +220,6 @@ public class Set : ADT {
     return Operator.n("subSet",terms[0], terms[1])
   }
 
-
-  public override func check(_ term: Term) -> Bool{
-    if term.equals(Set.empty()){
-      return true
-    }
-    if let m = (term as? Map){
-      return m["rest"] != nil && m["first"] != nil
-    }
-    return false
-  }
-
   public class override func belong(_ x: Term) -> Goal{
     return (x === Set.empty() || delayed(fresh {y in fresh{w in x === Set.cons(y,w) && Set.belong(w)}}))
   }

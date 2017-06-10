@@ -108,14 +108,4 @@ public class Sequence : ADT {
     return s + "]"
   }
 
-  public override func check(_ term: Term) -> Bool{
-    if term.equals(Sequence.empty()){
-      return true
-    }
-    if let m = (term as? Map){
-      return m["rest"] != nil && m["data"] != nil && m["index"] != nil
-    }
-    return false
-  }
-
 }

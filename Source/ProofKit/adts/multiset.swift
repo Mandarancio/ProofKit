@@ -173,14 +173,4 @@ public class Multiset : ADT {
       }
       return s + "]"
     }
-
-    public override func check(_ term: Term) -> Bool{
-      if term.equals(Multiset.empty()){
-        return true
-      }
-      if let m = (term as? Map){
-        return m["rest"] != nil && m["first"] != nil
-      }
-      return false
-    }
 }

@@ -65,7 +65,6 @@ open   class ADT{
   }
 
   //// Boolean check if a term belongs to an ADT (used by ADTManager)
-  //// TODO Implement in each ADT sub-class
   open func check(_ term: Term) -> Bool{
     return type(term) == self._name
   }
@@ -73,6 +72,18 @@ open   class ADT{
   //// Function to nicely print a TERM belonging to an ADT
   //// TODO Implement in each ADT sub-class
   open func pprint(_ term: Term) -> String{
+    if let v = (term as? Variable){
+      return v.name
+    }
+    if let v = (term as? Value<String>){
+      return v.wrapped
+    }
+    if let v = (term as? Value<Int>){
+      return "\(v.wrapped)"
+    }
+    if let v = (term as? Map){
+      return v.description
+    }
     return ""
   }
 

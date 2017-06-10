@@ -197,15 +197,6 @@ public class Nat: ADT{
     return Nat.to_string(term)
   }
 
-  public override func check(_ term: Term) -> Bool{
-    if term.equals( Nat.zero()){
-      return true
-    }
-    if let m = (term as? Map){
-      return m["succ"] != nil
-    }
-    return false
-  }
 
   static public func to_string(_ x: Term) -> String{
    	if x.equals(Nat.zero()){
@@ -532,13 +523,6 @@ public class Integer: ADT{
       }
     }
     return ""
-  }
-
-  public override func check(_ term: Term) -> Bool{
-    if let map = (term as? Map) {
-      return map["a"] != nil && map["b"] != nil
-    }
-    return false
   }
 
   public class override func belong(_ x: Term) -> Goal{

@@ -81,8 +81,4 @@ public class Boolean : ADT {
       }
       return "?"
     }
-
-    public override func check(_ term: Term) -> Bool{
-      return term.equals(Boolean.False()) || term.equals(Boolean.True())
-    }
 }
