@@ -5,7 +5,6 @@ ADT toolkit and Proof verifier based on [LogicKit](https://github.com/kyouko-tai
 
 **Project WIKI**: [link](https://github.com/Mandarancio/ProofKit/wiki)
 
-
 ## Implemented ADTs
 Currently implemented ADT and Operators
 
@@ -89,7 +88,7 @@ x: 10, y: 0
 ```
 
 ## Advanced usage
-![Diagram](diagram.png)
+![Diagram](docs/diagram.png)
 
 ### Rule
 The *struct* **Rule** is the container of **axioms** and future **theorems**. Is composed in left and right components (both Term) and implement both a function to applay the rule and one to *pretty print* it.
@@ -175,6 +174,19 @@ print("\(ADTm.pprit(t))")
 print(t)
 //// [type: operator, name: "+", 0: [type: nat, value: [succ: [type: nat, value: 0]]]....
 ```
+#### Universal Evaluator
+
+A simple inner most universal evaluator is implemented. To use it:
+
+```swift
+let operation : Term = Nat.n(2) * Nat.n(3)
+let result : Term = ADTm.eval(operation)
+print(" \(ADTm.pprint(operation)) => \(ADTm.pprint(result))")
+//// 2 * 3 => 6
+```
+
+To be able to perform any type of computation it trys to solve the inner most operation first using the operation axioms and the generator evaluator.
+
 
 ### How to create an ADT?
 
@@ -216,18 +228,6 @@ print("\(ADTm.pprint(op)) => \(ADTm.pprint(r))")
 // a == b => false
 ```
 
-#### Universal Evaluator
-
-A simple inner most universal evaluator is implemented. To use it:
-
-```swift
-let operation : Term = Nat.n(2) * Nat.n(3)
-let result : Term = ADTm.eval(operation)
-print(" \(ADTm.pprint(operation)) => \(ADTm.pprint(result))")
-//// 2 * 3 => 6
-```
-
-To be able to perform any type of computation it trys to solve the inner most operation first using the operation axioms and the generator evaluator.
 
 ### Proofs
 
@@ -294,7 +294,7 @@ the higher rank. Here we have just one generator!
  }
  ```
 
- Great! Now you can see "true" if all are good!
+If the induction doesn't fail it means that your conjecture has been verified!
 
 ## Syntattic Sugar
 
@@ -345,22 +345,3 @@ Resulting in:
  x: 1, y: 5
  x: 2, y: 4
 ```
-
-
-<!-- ## Example
-
-A simple example using only the ADTManager and applaying one axiom:
-
-```swift
-let o = ADTm["nat"]["+"](Nat.n(2), Nat.n(1))
-print(" axiom 1: \(ADTm["nat"].a("+")[1].pprint())")
-let g : Goal = ADTm["nat"].a("+")[1].applay(o,x) //applay axiom 1
-let res : Term = get_result(g,x) //function solve goal and return the substitution of x
-print(" \(ADTm.pprint(o)) => \(ADTm.pprint(res))")
-```
-
-results in:
-```
-axiom 1: $1 + succ($2) = succ($1 + $2)
-2 + 1 => succ(2 + 0)
-``` -->
