@@ -5,6 +5,8 @@ ADT toolkit and Proof verifier based on [LogicKit](https://github.com/kyouko-tai
 
 **Project WIKI**: [link](https://github.com/Mandarancio/ProofKit/wiki)
 
+**PetriKit Lib**: [link](https://github.com/Dexter9313/PetriNetLib)
+
 ## Implemented ADTs
 Currently implemented ADT and Operators
 
