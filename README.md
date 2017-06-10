@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Mandarancio/ProofKit.svg?branch=master)](https://travis-ci.org/Mandarancio/ProofKit) [![Coverage Status](https://coveralls.io/repos/github/Mandarancio/ProofKit/badge.svg?branch=master)](https://coveralls.io/github/Mandarancio/ProofKit?branch=master)
+[![Build Status](https://travis-ci.org/Mandarancio/ProofKit.svg?branch=master)](https://travis-ci.org/Mandarancio/ProofKit)
 
 # ProofKit
 ADT toolkit and Proof verifier based on [LogicKit](https://github.com/kyouko-taiga/LogicKit).
