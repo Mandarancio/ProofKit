@@ -171,7 +171,7 @@ To pretty print any term:
 
 ```swift
 let t = Nat.n(1) + Nat.n(1)
-print("\(ADTm.pprit(t))")
+print("\(ADTm.pprint(t))")
 //// 1 + 1
 print(t)
 //// [type: operator, name: "+", 0: [type: nat, value: [succ: [type: nat, value: 0]]]....
