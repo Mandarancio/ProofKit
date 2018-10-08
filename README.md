@@ -140,7 +140,7 @@ public class Boolean : ADT {
       ], ["boolean"])
     }
     public static func True(_:Term...) -> Term{
-      return new_term(Value<Bool>(false), "boolean")
+      return new_term(Value<Bool>(true), "boolean")
     }
 
     public static func False(_:Term...) -> Term{
