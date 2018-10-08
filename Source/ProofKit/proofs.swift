@@ -25,7 +25,7 @@ public struct Proof {
     return Rule(vNil,vNil)
   }
 
-  public static func substitutivity(_ operation: (Term...)->Term, _ rules: [Rule])->Rule{
+  public static func substitutivity(_ operation: @escaping (Term...)->Term, _ rules: [Rule])->Rule{
     //TODO Replace this horrible cast
     typealias Function = ([Term]) -> Term
     let operation_c = unsafeBitCast(operation, to: Function.self)
