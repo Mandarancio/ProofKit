@@ -56,7 +56,7 @@ let package = Package(
 )
 ```
 
-And finaly your code in ```main.swift```:
+And finally your code in ```main.swift```:
 
 ```swift
 import LogicKit
