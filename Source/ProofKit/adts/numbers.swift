@@ -215,7 +215,7 @@ public class Nat: ADT{
           }
           return "succ(\(k))"
         }
-        if f[0].characters.count == 0 {
+        if f[0].count == 0 {
      		   return "succ("+f[1]+")"
         }
         if let i = (Int(f[0])){
