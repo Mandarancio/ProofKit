@@ -65,11 +65,11 @@ class EqProofTests: XCTestCase {
     let c_proof = Rule(Nat.add(Variable(named: "z"), Nat.succ(x: Variable(named:"y"))), Nat.succ(x: Nat.add(Variable(named:"z"), Variable(named: "y"))))
     self.TAssert(a_proof, b_proof)
     self.FAssert(a_proof, c_proof)
-    // rifexivity
+    // reflexivity
     print("can apply reflexivity")
     var t = Proof.reflexivity(Boolean.not(Variable(named: "x")))
     self.TAssert(t, Rule(Boolean.not(Variable(named: "y")),Boolean.not(Variable(named: "y"))))
-    // simmetry
+    // symmetry
     print("can apply symmetry")
     t = Proof.symmetry(Rule(Boolean.True(), Boolean.not(Boolean.False())))
     self.TAssert(t, Rule(Boolean.not(Boolean.False()), Boolean.True()))

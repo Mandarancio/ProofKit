@@ -1,5 +1,4 @@
 import LogicKit
-// TODO refactor the names of method of Rule (h_lTerm, h_rTerm,...)
 // RULE IDENTIFIER COUNTER
 internal var rule_counter = 0;
 
@@ -19,7 +18,7 @@ internal func uvariables(_ v: [Variable:Variable])->[Variable:Variable]{
   return vx
 }
 
-//// Proved tehorem and axioms data struct
+//// Proved theorem and axioms data struct
 public struct Rule {
 
   public init(_ lT : Term,_ rT: Term, _ condition: Term = Boolean.True()){
@@ -74,7 +73,7 @@ public struct Rule {
     self._r_variables = reverse_subs_table(self._variables)
   }
 
-  //// Applay axiom to term t and result in r
+  //// Apply axiom to term t and result in r
   public func apply(_ t: Term, _ r: Term)->Goal{
     let x = Variable(named: "cond.x")
     let c = get_result(_condition === x && self._lTerm === t && self._rTerm === r, x)
