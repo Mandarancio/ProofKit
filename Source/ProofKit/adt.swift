@@ -87,17 +87,17 @@ open   class ADT{
     return ""
   }
 
-  //// Retrive axioms for an operation
+  //// Retrieve axioms for an operation
   public func get_axioms(_ name: OperatorFootprint) -> [Rule]{
     return self._axioms[name]!
   }
 
-  //// Shortcut to retrive axioms
+  //// Shortcut to retrieve axioms
   public func a(_ name: OperatorFootprint) -> [Rule] {
     return self.get_axioms(name)
   }
 
-  //// Super shuortcut:
+  //// Super shortcut:
   public func a(_ name: String) -> [Rule]{
     for (of,a) in self._axioms{
       if of.name == name{
@@ -124,17 +124,17 @@ open   class ADT{
     self._operators[name] = nil
   }
 
-  //// Retrive operator generator
+  //// Retrieve operator generator
   public func get_operator(_ name: OperatorFootprint)-> ((Term...)->Term){
     return  self._operators[name]!
   }
 
-  //// Shortcut to retrive an operator generator
+  //// Shortcut to retrieve an operator generator
   public func o(_ name: OperatorFootprint)-> ((Term...)->Term){
     return self.get_operator(name)
   }
 
-  //// Retrive adt generator
+  //// Retrieve adt generator
   public func get_generator(_ name: String) -> ((Term...)->Term) {
     return self._generators[name]!
   }
