@@ -56,7 +56,7 @@ let package = Package(
 )
 ```
 
-And finaly your code in ```main.swift```:
+And finally your code in ```main.swift```:
 
 ```swift
 import LogicKit
@@ -93,7 +93,7 @@ x: 10, y: 0
 ![Diagram](docs/diagram.png)
 
 ### Rule
-The *struct* **Rule** is the container of **axioms** and future **theorems**. Is composed in left and right components (both Term) and implement both a function to applay the rule and one to *pretty print* it.
+The *struct* **Rule** is the container of **axioms** and future **theorems**. Is composed in left and right components (both Term) and implement both a function to apply the rule and one to *pretty print* it.
 To create a rule simply:
 
 ```swift
@@ -112,7 +112,7 @@ x + 0 = x
 ```
 Apply it:
 ```swift
- 3> let g : Goal = r.applay(Nat.n(4) + Nat.zero(), Variable(named: x)) // create goal (4+0) to applay rule
+ 3> let g : Goal = r.apply(Nat.n(4) + Nat.zero(), Variable(named: x)) // create goal (4+0) to applay rule
  4> let res : Term = get_result(g,x) //function solve goal and return the substitution of x
  5> print(ADTm.pprint(res))
 4
@@ -122,12 +122,12 @@ Apply it:
 
 All ADTm extend the base *class* **ADT**, this contains both generator, opertors generator and operators axioms as well as some basic helpers such a chek type and a *pretty print* function.
 
-To access to axioms, generators and operators there are always two method a long and a shortcut, e.g. ```get_generator("name")``` and ```g("name")```.
+To access to axioms, generators and operators there are always two methods, a long and a shortcut, e.g. ```get_generator("name")``` and ```g("name")```.
 
 For both **generators** and **operators** is possible to access just using ```["name"]```.
 
 Adding operators and axioms is possible **only internally**.
-A simple example is a semplfied version of the boolean adt:
+A simple example is a simplify version of the boolean adt:
 ```swift
 public class Boolean : ADT {
     public init(){
@@ -155,7 +155,7 @@ public class Boolean : ADT {
 
 ### ADTManager
 
-Finally to manage the *ADT* and have the possibility to mixit togheter in the future we use an **ADTManager**. This is composed by a dictionary of ADT and some helper function (such as the *pretty printer*).
+Finally to manage the *ADT* and have the possibility to mixit together in the future we use an **ADTManager**. This is composed by a dictionary of ADT and some helper function (such as the *pretty printer*).
 
 To avoid the creation of multiple ADTManager, there is a single ADTManager (as the constructor is private) instance called **ADTm**.
 
