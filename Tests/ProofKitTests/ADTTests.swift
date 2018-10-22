@@ -3,36 +3,39 @@ import LogicKit
 @testable import ProofKit
 
 extension ADTTests {
-    static var allTests : [(String, (ADTTests) -> () throws -> Void)] {
-        return [
-            ("testBool", testBool),
-            ("testNat", testNat),
-            ("testInt", testInt),
-            ("testMultiset", testMultiset)
-        ]
-    }
+  static var allTests : [(String, (ADTTests) -> () throws -> Void)] {
+    return [
+      ("testBool", testBool),
+      ("testNat", testNat),
+      ("testInt", testInt),
+      ("testSetNeedForEqual", testSetNeedForEqual),
+      ("testSetEqual", testSetEqual),
+      ("testSet", testSet),
+      ("testMultiset", testMultiset)
+    ]
+  }
 }
 
 class ADTTests: XCTestCase {
-
-
+  
+  
   internal func TAssert(_ a: Term,_ b: Term){
     let msg = "\(ADTm.pprint(a)) == \(ADTm.pprint(b))"
     print(msg)
     XCTAssertTrue(ADTm.eval(a).equals(ADTm.eval(b)), msg)
   }
-
+  
   internal func FAssert(_ a: Term,_ b: Term){
     let msg = "\(ADTm.pprint(a)) != \(ADTm.pprint(b))"
     print(msg)
     XCTAssertFalse(ADTm.eval(a).equals(ADTm.eval(b)),msg)
   }
-
-
+  
+  
   override func setUp() {
     super.setUp()
-   }
-
+  }
+  
   func testBool(){
     // true != false
     self.FAssert(Boolean.True(),Boolean.False())
@@ -59,7 +62,7 @@ class ADTTests: XCTestCase {
     // false or false == false
     self.TAssert(Boolean.or(Boolean.False(), Boolean.False()),Boolean.False())
   }
-
+  
   func testNat() {
     // x + 0 == x
     self.TAssert(Nat.add(Nat.n(5),Nat.zero()),Nat.n(5))
@@ -106,7 +109,7 @@ class ADTTests: XCTestCase {
     // div(22/5) = 4
     self.TAssert(Nat.div(Nat.n(22),Nat.n(5)), Nat.n(4))
   }
-
+  
   func testInt(){
     // (3,0)+(2,0) = +5
     self.TAssert(Integer.add(Integer.n(3),Integer.n(2)), Integer.n(5))
@@ -193,7 +196,82 @@ class ADTTests: XCTestCase {
     integer2 = Integer.int(c, d)
     self.TAssert(Integer.div(integer1, integer2), Integer.n(-1))
   }
+  
+  func testSetNeedForEqual(){
+    // Functions are needed for Set.eq
+    
+    let s1 = Set.n([Nat.n(1), Nat.n(10)])
+    let s2 = Set.n([Nat.n(1)])
+    
+    // Contains
+    self.TAssert(Set.contains(s1, Nat.n(10)), Boolean.True())
+    self.TAssert(Set.contains(s1, Nat.n(99)), Boolean.False())
+    self.TAssert(Set.contains(Set.empty(), Nat.n(4)), Boolean.False())
 
+    //removeOne
+    self.TAssert(Set.removeOne(s1, Nat.n(10)), s2)
+    self.TAssert(Set.removeOne(s2, Nat.n(1)), Set.empty())
+    self.TAssert(Set.removeOne(Set.empty(), Nat.n(1)), Set.empty())
+    self.TAssert(Set.removeOne(s1, Set.empty()), s1)
+    
+  }
+  
+  func testSetEqual(){
+    // Test operator equal for
+    
+    let s1 = Set.n([Nat.n(1), Nat.n(2), Nat.n(10)])
+    let s2 = Set.n([Nat.n(1), Nat.n(2)])
+    let s3 = Set.n([Nat.n(1), Nat.n(10), Nat.n(2)])
+    
+    // Control equal
+    self.TAssert(Set.eq(Set.empty(), s1), Boolean.False())
+    self.TAssert(Set.eq(s1, Set.empty()), Boolean.False())
+    self.TAssert(Set.eq(s1, s1), Boolean.True())
+    self.TAssert(Set.eq(s1, s2), Boolean.False())
+    self.TAssert(Set.eq(s1, s3), Boolean.True())
+    self.TAssert(Set.eq(Set.empty(), Set.empty()), Boolean.True())
+    
+  }
+  
+  func testSet(){
+    // Need Set.eq to work !
+    // We don't mind about order in a Set
+    
+    let s1 = Set.n([Nat.n(1), Nat.n(2), Nat.n(4), Nat.n(10)])
+    let s2 = Set.n([Nat.n(1), Nat.n(2)])
+    let s3 = Set.n([Nat.n(20), Nat.n(30)])
+    let s4 = Set.n([Nat.n(1), Nat.n(2), Nat.n(20), Nat.n(30)])
+    
+    // Insert
+    // insert(10, {1,2}) = {1, 2, 10}
+    self.TAssert(Set.eq(Set.insert(Nat.n(10), s2), Set.n([Nat.n(10), Nat.n(1), Nat.n(2)])), Boolean.True())
+    // insert(2, {}) = {2}
+    self.TAssert(Set.eq(Set.insert(Nat.n(2), Set.empty()), Set.n([Nat.n(2)])), Boolean.True())
+    // insert(10, {1, 2, 4, 10}) = {1, 2, 4, 10}
+    self.TAssert(Set.insert(Nat.n(10), s1), s1)
+
+    // Union
+    // union({1,2,4,10}, {1,2}) = {1,2,4,10}
+    self.TAssert(Set.eq(Set.union(s1,s2), s1), Boolean.True())
+    // union({1,2},{20,30}) = {1,2,20,30}
+    self.TAssert(Set.eq(Set.union(s2,s3), s4), Boolean.True())
+    
+    // Intersection
+    // intersection({1,2,4,10}, {1,2}) = {1,2}
+    self.TAssert(Set.eq(Set.intersection(s1,s2), s2), Boolean.True())
+    // intersection({1,2},{20,30}) = {}
+    self.TAssert(Set.eq(Set.intersection(s2,s3), Set.empty()), Boolean.True())
+    
+    // Difference
+    // diff({1,2,4,10}, {1,2}) = {4,10}
+    self.TAssert(Set.eq(Set.diff(s1,s2), Set.n([Nat.n(4), Nat.n(10)])), Boolean.True())
+    // diff({1,2},{20,30}) = {1,2}
+    self.TAssert(Set.eq(Set.diff(s2,s3), s2), Boolean.True())
+    // diff({}, {1,2}) = {}
+    self.TAssert(Set.eq(Set.diff(Set.empty(), s2), Set.empty()), Boolean.True())
+    
+  }
+  
   func testMultiset(){
     //////////////
     var b1 = Multiset.n([Nat.n(1), Nat.n(2),Nat.n(4)])
@@ -209,5 +287,5 @@ class ADTTests: XCTestCase {
     // [1,1,2,4] removeAll 1 === [2,4]
     self.TAssert(Multiset.removeAll(b1,Nat.n(1)),b2)
   }
-
+  
 }

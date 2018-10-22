@@ -8,6 +8,55 @@ public class Set : ADT {
     
     self.add_generator("empty", Set.empty)
     self.add_generator("cons", Set.cons, arity:2)
+    self.add_operator("contains", Set.contains, [
+      Rule(Set.contains(Set.empty(), Variable(named: "x")), Boolean.False()),
+      Rule(
+        Set.contains(Set.cons(Variable(named: "x"), Variable(named: "rest")), Variable(named: "x")),
+        Boolean.True()
+      ),
+      Rule(
+        Set.contains(Set.cons(Variable(named: "x"), Variable(named: "rest")), Variable(named: "y")),
+        Set.contains(Variable(named: "rest"), Variable(named: "y"))
+      )
+      ], ["set", "any"])
+    self.add_operator("removeOne", Set.removeOne,[
+      Rule(
+        Set.removeOne(Variable(named:"x"),Set.empty()),
+        Variable(named:"x")
+      ),
+      Rule(
+        Set.removeOne(Set.empty(),Variable(named:"element")),
+        Set.empty()
+      ),
+      Rule(
+        Set.removeOne(Set.cons(Variable(named:"element"),Variable(named:"rest")), Variable(named:"element")),
+        Variable(named: "rest")
+      ),
+      Rule(
+        Set.removeOne(Set.cons(Variable(named:"first"),Variable(named:"rest")), Variable(named:"element")),
+        Set.cons(Variable(named:"first"), Set.removeOne(Variable(named:"rest"),Variable(named:"element")))
+      )
+      ], ["set", "any"])
+    self.add_operator("==", Set.eq,[
+      Rule(
+        Set.eq(Set.empty(), Set.empty()),
+        Boolean.True()
+      ),
+      Rule(
+        Set.eq(Set.cons(Variable(named: "x"), Variable(named: "rest")), Variable(named: "set")),
+        Boolean.False(),
+        Boolean.not(Set.contains(Variable(named: "set"), Variable(named: "x")))
+      ),
+      Rule(
+        Set.eq(Variable(named: "set"), Set.cons(Variable(named: "x"), Variable(named: "rest"))),
+        Boolean.False(),
+        Boolean.not(Set.contains(Variable(named: "set"), Variable(named: "x")))
+      ),
+      Rule(
+        Set.eq(Set.cons(Variable(named: "x"), Variable(named: "rest")), Variable(named: "set")),
+        Set.eq(Variable(named: "rest"), Set.removeOne(Variable(named: "set"), Variable(named: "x")))
+      ),
+      ], ["set", "set"])
     self.add_operator("insert", Set.insert, [
       Rule(
         Set.insert(Variable(named: "element"), Set.empty()),
@@ -86,33 +135,6 @@ public class Set : ADT {
         Set.cons(Variable(named:"sn.1.$0"),Set.removeAll(Variable(named:"sn.1.$1"),Variable(named:"sn.1.$0")))
       )
       ], ["set"])
-    self.add_operator("==", Set.eq,[
-      Rule(
-        Set.eq(Set.empty(),Set.empty()),
-        Boolean.True()
-      ),
-      Rule(
-        Set.eq(Set.cons(Variable(named: "x"), Variable(named: "rest")), Variable(named: "set")),
-        Boolean.False(),
-        Boolean.not(Set.contains(Variable(named: "set"), Variable(named: "x")))
-      ),
-      Rule(
-        Set.eq(Set.cons(Variable(named: "x"), Variable(named: "rest")), Variable(named: "set")),
-        Set.eq(Variable(named:"rest"), Set.removeOne(Variable(named:"set"), Variable(named:"x"))),
-        Set.contains(Variable(named: "set"), Variable(named: "x"))
-      )
-      ], ["set", "set"])
-    self.add_operator("contains", Set.contains, [
-      Rule(Set.contains(Set.empty(), Variable(named: "x")), Boolean.False()),
-      Rule(
-        Set.contains(Set.cons(Variable(named: "x"), Variable(named: "rest")), Variable(named: "x")),
-        Boolean.True()
-      ),
-      Rule(
-        Set.contains(Set.cons(Variable(named: "x"), Variable(named: "rest")), Variable(named: "y")),
-        Set.contains(Variable(named: "rest"), Variable(named: "y"))
-      )
-      ], ["set", "any"])
     self.add_operator("size", Set.size, [
       Rule(Set.size(Set.empty()), Nat.zero()),
       Rule(
@@ -134,24 +156,6 @@ public class Set : ADT {
         Variable(named: "x")
       )
       ], ["set"])
-    self.add_operator("removeOne", Set.removeOne,[
-      Rule(
-        Set.removeOne(Variable(named:"x"),Set.empty()),
-        Variable(named:"x")
-      ),
-      Rule(
-        Set.removeOne(Set.empty(),Variable(named:"element")),
-        Set.empty()
-      ),
-      Rule(
-        Set.removeOne(Set.cons(Variable(named:"element"),Variable(named:"rest")), Variable(named:"element")),
-        Variable(named: "rest")
-      ),
-      Rule(
-        Set.removeOne(Set.cons(Variable(named:"first"),Variable(named:"rest")), Variable(named:"element")),
-        Set.cons(Variable(named:"first"), Set.removeOne(Variable(named:"rest"),Variable(named:"element")))
-      )
-      ], ["set", "any"])
     self.add_operator("removeAll",Set.removeAll, [
       Rule(
         Set.removeAll(Variable(named:"x"), Set.empty()),
