@@ -204,26 +204,31 @@ class ADTTests: XCTestCase {
     let s2 = Set.n([Nat.n(1)])
     
     // Contains
+    // contains({1,10}, 10) = True
     self.TAssert(Set.contains(s1, Nat.n(10)), Boolean.True())
+    // contains({1,10}, 99) = False
     self.TAssert(Set.contains(s1, Nat.n(99)), Boolean.False())
+    // contains({}, 4) = False
     self.TAssert(Set.contains(Set.empty(), Nat.n(4)), Boolean.False())
 
     //removeOne
+    // contains({1,10}, 10) = {1}
     self.TAssert(Set.removeOne(s1, Nat.n(10)), s2)
+    // contains({1}, 1) = {}
     self.TAssert(Set.removeOne(s2, Nat.n(1)), Set.empty())
+    // contains({}, 1) = {}
     self.TAssert(Set.removeOne(Set.empty(), Nat.n(1)), Set.empty())
-    self.TAssert(Set.removeOne(s1, Set.empty()), s1)
     
   }
   
   func testSetEqual(){
-    // Test operator equal for
+    // Test operator equal (Need for testSet)
     
     let s1 = Set.n([Nat.n(1), Nat.n(2), Nat.n(10)])
     let s2 = Set.n([Nat.n(1), Nat.n(2)])
     let s3 = Set.n([Nat.n(1), Nat.n(10), Nat.n(2)])
     
-    // Control equal
+    // Equal
     self.TAssert(Set.eq(Set.empty(), s1), Boolean.False())
     self.TAssert(Set.eq(s1, Set.empty()), Boolean.False())
     self.TAssert(Set.eq(s1, s1), Boolean.True())
@@ -269,6 +274,20 @@ class ADTTests: XCTestCase {
     self.TAssert(Set.eq(Set.diff(s2,s3), s2), Boolean.True())
     // diff({}, {1,2}) = {}
     self.TAssert(Set.eq(Set.diff(Set.empty(), s2), Set.empty()), Boolean.True())
+    
+    // Subset
+    // subSet({1,2}, {1,2,4,10}) = True
+    self.TAssert(Set.subSet(s2,s1), Boolean.True())
+    // subSet({},{1,2,4,10}) = True
+    self.TAssert(Set.subSet(Set.empty(), s1), Boolean.True())
+    // subSet({}, {1,2}) = False
+    self.TAssert(Set.subSet(s1, Set.empty()), Boolean.False())
+    
+    // Size
+    // size({1,2}) = 2
+    self.TAssert(Set.size(s2), Nat.n(2))
+    // size({}) = 0
+    self.TAssert(Set.size(Set.empty()), Nat.zero())
     
   }
   

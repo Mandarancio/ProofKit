@@ -125,16 +125,6 @@ public class Set : ADT {
         Boolean.and(Set.contains(Variable(named: "subset.1.$2"),  Variable(named: "subset.1.$0")),Set.subSet( Variable(named: "subset.1.$1"), Variable(named: "subset.1.$2")))
       )
       ], ["set", "set"])
-    self.add_operator("norm", Set.norm,[
-      Rule(
-        Set.norm(Set.empty()),
-        Set.empty()
-      ),
-      Rule(
-        Set.norm(Set.cons(Variable(named:"sn.1.$0"),Variable(named:"sn.1.$1"))),
-        Set.cons(Variable(named:"sn.1.$0"),Set.removeAll(Variable(named:"sn.1.$1"),Variable(named:"sn.1.$0")))
-      )
-      ], ["set"])
     self.add_operator("size", Set.size, [
       Rule(Set.size(Set.empty()), Nat.zero()),
       Rule(
@@ -142,36 +132,46 @@ public class Set : ADT {
         Nat.succ(x: Set.size(Variable(named:"rest")))
       )
       ], ["set"])
-    self.add_operator("rest", Set.rest, [
-      Rule(Set.rest(Set.empty()), Set.empty()),
-      Rule(
-        Set.rest(Set.cons(Variable(named: "x"), Variable(named: "rest"))),
-        Variable(named: "rest")
-      )
-      ], ["set"])
-    self.add_operator("first", Set.first, [
-      Rule(Set.first(Set.empty()), vNil),
-      Rule(
-        Set.first(Set.cons(Variable(named: "x"), Variable(named: "rest"))),
-        Variable(named: "x")
-      )
-      ], ["set"])
-    self.add_operator("removeAll",Set.removeAll, [
-      Rule(
-        Set.removeAll(Variable(named:"x"), Set.empty()),
-        Variable(named:"x")
-      ),
-      Rule(
-        Set.removeAll(Variable(named:"set"), Variable(named:"element")),
-        Variable(named:"set"),
-        Boolean.not(Set.contains(Variable(named:"set"), Variable(named:"element")))
-      ),
-      Rule(
-        Set.removeAll(Variable(named:"set"), Variable(named:"element")),
-        Set.removeAll(Set.removeOne(Variable(named:"set"),Variable(named:"element")),Variable(named:"element")),
-        Set.contains(Variable(named:"set"), Variable(named:"element"))
-      )
-      ], ["set", "any"])
+//    self.add_operator("norm", Set.norm,[
+//      Rule(
+//        Set.norm(Set.empty()),
+//        Set.empty()
+//      ),
+//      Rule(
+//        Set.norm(Set.cons(Variable(named:"sn.1.$0"),Variable(named:"sn.1.$1"))),
+//        Set.cons(Variable(named:"sn.1.$0"),Set.removeAll(Variable(named:"sn.1.$1"),Variable(named:"sn.1.$0")))
+//      )
+//      ], ["set"])
+//    self.add_operator("rest", Set.rest, [
+//      Rule(Set.rest(Set.empty()), Set.empty()),
+//      Rule(
+//        Set.rest(Set.cons(Variable(named: "x"), Variable(named: "rest"))),
+//        Variable(named: "rest")
+//      )
+//      ], ["set"])
+//    self.add_operator("first", Set.first, [
+//      Rule(Set.first(Set.empty()), Value("lol")),
+//      Rule(
+//        Set.first(Set.cons(Variable(named: "x"), Variable(named: "rest"))),
+//        Variable(named: "x")
+//      )
+//      ], ["set"])
+//    self.add_operator("removeAll",Set.removeAll, [
+//      Rule(
+//        Set.removeAll(Variable(named:"x"), Set.empty()),
+//        Variable(named:"x")
+//      ),
+//      Rule(
+//        Set.removeAll(Variable(named:"set"), Variable(named:"element")),
+//        Variable(named:"set"),
+//        Boolean.not(Set.contains(Variable(named:"set"), Variable(named:"element")))
+//      ),
+//      Rule(
+//        Set.removeAll(Variable(named:"set"), Variable(named:"element")),
+//        Set.removeAll(Set.removeOne(Variable(named:"set"),Variable(named:"element")),Variable(named:"element")),
+//        Set.contains(Variable(named:"set"), Variable(named:"element"))
+//      )
+//      ], ["set", "any"])
   }
   public static func empty(_ :Term...) -> Term{
     return new_term(Value<String>("Set.tail"),"set")
@@ -191,29 +191,15 @@ public class Set : ADT {
     return Operator.n("size",terms[0])
   }
   
-  public static func rest(_ terms: Term...)->Term{
-    return Operator.n("rest", terms[0])
-  }
-  
-  public static func first(_ terms: Term...)-> Term{
-    return Operator.n("first", terms[0])
-  }
-  
   public static func removeOne(_ terms: Term...)->Term{
     return Operator.n("removeOne",terms[0], terms[1])
   }
-  public static func removeAll(_ terms: Term...)->Term{
-    return Operator.n("removeAll", terms[0],terms[1])
-  }
-  
+
   public class func eq(_ terms: Term...)-> Term
   {
     return Operator.n("==",terms[0],terms[1])
   }
-  
-  public static func norm(_ terms: Term...)-> Term{
-    return Operator.n("norm",terms[0])
-  }
+
   public static func insert(_ terms: Term...)->Term{
     return Operator.n("insert",terms[0], terms[1])
   }
@@ -233,6 +219,20 @@ public class Set : ADT {
   public static func subSet(_ terms: Term...)->Term{
     return Operator.n("subSet",terms[0], terms[1])
   }
+  
+  //  public static func rest(_ terms: Term...)->Term{
+  //    return Operator.n("rest", terms[0])
+  //  }
+  //
+  //  public static func first(_ terms: Term...)-> Term{
+  //    return Operator.n("first", terms[0])
+  //  }
+  //  public static func norm(_ terms: Term...)-> Term{
+  //    return Operator.n("norm",terms[0])
+  //  }
+  //  public static func removeAll(_ terms: Term...)->Term{
+  //    return Operator.n("removeAll", terms[0],terms[1])
+  //  }
   
   public class override func belong(_ x: Term) -> Goal{
     return (x === Set.empty() || delayed(fresh {y in fresh{w in x === Set.cons(y,w) && Set.belong(w)}}))
