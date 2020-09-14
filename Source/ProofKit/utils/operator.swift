@@ -1,4 +1,4 @@
-import LogicKit
+import SwiftKanren
 
 ////
 public struct OperatorFootprint {
@@ -28,14 +28,13 @@ extension OperatorFootprint: CustomStringConvertible {
 }
 
 extension OperatorFootprint: Hashable {
-  public var hashValue: Int {
-    var hash = name.hashValue
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(name)
     for ty in types{
       if ty != "any"{
-        hash = hash ^ ty.hashValue
+        hasher.combine(ty.hashValue)
       }
     }
-    return hash
   }
 
   public static func == (lhs: OperatorFootprint, rhs: OperatorFootprint) -> Bool {

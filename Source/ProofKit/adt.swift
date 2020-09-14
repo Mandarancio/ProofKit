@@ -1,4 +1,4 @@
-import LogicKit
+import SwiftKanren
 
 enum MyError : Error {
     case RuntimeError(String)

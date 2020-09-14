@@ -1,4 +1,4 @@
-import LogicKit
+import SwiftKanren
 
 public let vNil = Value("nil")
 public let vFail = Value("fail")

@@ -1,4 +1,5 @@
-import LogicKit
+import SwiftKanren
+
 public class Boolean : ADT {
     public init(){
       super.init("bool")

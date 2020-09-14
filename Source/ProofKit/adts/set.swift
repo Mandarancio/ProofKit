@@ -1,4 +1,4 @@
-import LogicKit
+import SwiftKanren
 
 //// SET
 //// https://en.wikipedia.org/wiki/Set_(abstract_data_type)

@@ -1,4 +1,4 @@
-import LogicKit
+import SwiftKanren
 
 precedencegroup SuchThatPrecendence {
   lowerThan: LogicalConjunctionPrecedence

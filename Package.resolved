@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SwiftKanren",
+        "repositoryURL": "https://github.com/damdamo/SwiftKanren.git",
+        "state": {
+          "branch": "master",
+          "revision": "300de98c58bd92fda6533e23dac076baec837721",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

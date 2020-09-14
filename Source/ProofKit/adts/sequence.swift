@@ -1,4 +1,4 @@
-import LogicKit
+import SwiftKanren
 
 public class Sequence : ADT {
   public init(){
