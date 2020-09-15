@@ -80,6 +80,7 @@ class EqProofTests: XCTestCase {
     print("can apply transitivity")
     self.TAssert(t, Rule(Variable(named:"x"), Variable(named:"x")))
 
+    // transitivity(Rule(x+y,2*y,x==y), Rule(2*x,2+2,x==2)) -> Rule(x+y,2+2,and(x==y, x==2))
     let t2 = Rule(
       Nat.add(Variable(named: "x"), Variable(named: "y")),
       Nat.mul(Nat.n(2), Variable(named: "x")),
