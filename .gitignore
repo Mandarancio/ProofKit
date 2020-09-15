@@ -67,3 +67,8 @@ fastlane/test_output
 Packages/
 Package.pins
 .~*
+
+.DS_Store
+*.xcodeproj
+.build
+Package.resolved
