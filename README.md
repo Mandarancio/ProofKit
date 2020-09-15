@@ -31,27 +31,27 @@ Currently implemented ADT and Operators
 |inductive|```Proof.inductive(Rule, Variable, ADT, [String:(Rule...)->Rule])```| - |
 
 ## Your first code
-Write your first code is simple, your project structure should be something like that:
-
-```
-|-- package.swift
-|-+ Source
-  |-+ Demo
-    |-- main.swift
-```
-
-The file ```package.swift``` should look like:
+Write your first code is simple, just import ```ProofKit``` inside your ```package.swift```:
 
 ```swift
 import PackageDescription
 
 let package = Package(
-    name: "YOUR_PROJECT_NAME",
+    name: "YourPackageName",
     dependencies: [
-        .Package(url: "https://github.com/kyouko-taiga/LogicKit",
-                 majorVersion: 0),
-        .Package(url: "https://github.com/Mandarancio/ProofKit",
-                 majorVersion: 0),
+        // Dependencies declare other packages that this package depends on.
+        .package(
+            url: "https://github.com/Mandarancio/ProofKit.git",
+            .branch("master")
+        ),
+    ],
+    targets: [
+        .target(
+            name: "YourPackageName",
+            dependencies: ["ProofKit"]),
+        .testTarget(
+            name: "YourPackageNameTests",
+            dependencies: ["YourPackageName"]),
     ]
 )
 ```
@@ -59,13 +59,13 @@ let package = Package(
 And finally your code in ```main.swift```:
 
 ```swift
-import LogicKit
+import SwiftKanren
 import ProofKit
 
 let x = Variable(named: "x")
 let y = Variable(named: "y")
 
-let goal = (x < Nat.self && y < Nat.self) => ((x + y) <-> Nat.n(10))
+let goal = (x < Nat.self && y < Nat.self) => ((x + y) <-> Nat.n(5))
 for solution in solve(goal).prefix(11)
 {
   let rsolution = solution.reified()
@@ -76,17 +76,12 @@ for solution in solve(goal).prefix(11)
 Once compiled and executed (*remember*: the binary is located ```.build/debug/YOUR_PROJECT_NAME```) the output should be:
 
 ```
-x: 0, y: 10
-x: 1, y: 9
-x: 2, y: 8
-x: 3, y: 7
-x: 4, y: 6
-x: 5, y: 5
-x: 6, y: 4
-x: 7, y: 3
-x: 8, y: 2
-x: 9, y: 1
-x: 10, y: 0
+x: 0, y: 5
+x: 1, y: 4
+x: 2, y: 3
+x: 3, y: 2
+x: 4, y: 1
+x: 5, y: 0
 ```
 
 ## Advanced usage
