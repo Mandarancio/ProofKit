@@ -80,6 +80,24 @@ class EqProofTests: XCTestCase {
     print("can apply transitivity")
     self.TAssert(t, Rule(Variable(named:"x"), Variable(named:"x")))
 
+    let t2 = Rule(
+      Nat.add(Variable(named: "x"), Variable(named: "y")),
+      Nat.mul(Nat.n(2), Variable(named: "x")),
+      Nat.eq(Variable(named: "x"), Variable(named: "y"))
+    )
+    let t3 = Rule(
+      Nat.mul(Nat.n(2), Variable(named: "x")),
+      Nat.add(Nat.n(2), Nat.n(2)),
+      Nat.eq(Variable(named: "x"), Nat.n(2))
+    )
+    t = Proof.transitivity(t2, t3)
+    let resExpected = Rule(
+      Nat.add(Variable(named: "x"), Variable(named: "y")),
+      Nat.add(Nat.n(2), Nat.n(2)),
+      Boolean.and(Nat.eq(Variable(named: "x"), Variable(named: "y")), Nat.eq(Variable(named: "x"), Nat.n(2)))
+    )
+    self.TAssert(t, resExpected)
+
     print("Can apply substitution")
     t = Proof.substitution(ADTm["nat"].a("+")[0], Variable(named:"x"), Nat.zero())
     self.TAssert(t, Rule(Nat.add(Nat.zero(), Nat.zero()), Nat.zero()))
