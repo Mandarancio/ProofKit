@@ -1,6 +1,6 @@
 import XCTest
-import LogicKit
-@testable import ProofKit
+import SwiftKanren
+import ProofKit
 
 extension ADTTests {
   static var allTests : [(String, (ADTTests) -> () throws -> Void)] {

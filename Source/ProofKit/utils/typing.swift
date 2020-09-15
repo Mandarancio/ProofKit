@@ -1,5 +1,4 @@
-import LogicKit
-
+import SwiftKanren
 
 public func new_term(_ term: Term, _ type: String) -> Term{
   return Map([

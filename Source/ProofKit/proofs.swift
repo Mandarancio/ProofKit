@@ -1,5 +1,4 @@
-import LogicKit
-
+import SwiftKanren
 
 //// namespace containing all the operations to prove an axiom
 public struct Proof {

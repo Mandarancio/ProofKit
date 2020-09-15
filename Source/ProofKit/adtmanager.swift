@@ -1,5 +1,4 @@
-import LogicKit
-
+import SwiftKanren
 public var ADTm : ADTManager = ADTManager()
 
 //// To be used to store all the ADTs

@@ -1,4 +1,4 @@
-import LogicKit
+import SwiftKanren
 import Foundation
 
 public class Nat: ADT{

@@ -1,4 +1,5 @@
-import LogicKit
+import SwiftKanren
+
 // RULE IDENTIFIER COUNTER
 internal var rule_counter = 0;
 
