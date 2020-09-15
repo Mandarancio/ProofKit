@@ -1,12 +1,8 @@
 import XCTest
-@testable import ProofKitTests
-@testable import ADTTests
-@testable import EqProofTests
 
+import ProofKitTests
 
+var tests = [XCTestCaseEntry]()
+tests += ProofKitTests.__allTests()
 
-XCTMain([
-	 testCase(ProofKitLibTests.allTests),
-     testCase(ADTTests.allTests),
-     testCase(EqProofTests.allTests)
-])
+XCTMain(tests)
