@@ -24,16 +24,6 @@ public class Nat: ADT{
         Nat.add(Variable(named: "x"), Nat.mul(Variable(named: "x"), Variable(named: "y")))
       )
     ],["nat", "nat"])
-    self.add_operator("pre", Nat.pre,[
-      Rule(
-        Nat.pre(Nat.zero()),
-        Nat.zero()
-      ),
-      Rule(
-        Nat.pre(Nat.succ(x: Variable(named: "x"))),
-        Variable(named: "x")
-      )
-    ],["nat"])
     self.add_operator("-", Nat.sub,[
       Rule(
         Nat.sub(Variable(named: "x"), Nat.zero()),
@@ -44,8 +34,8 @@ public class Nat: ADT{
         Nat.zero()
       ),
       Rule(
-        Nat.sub(Variable(named: "x"), Nat.succ(x: Variable(named: "y"))),
-        Nat.pre(Nat.sub(Variable(named: "x"), Variable(named: "y")))
+        Nat.sub(Nat.succ(x: Variable(named: "x")), Nat.succ(x: Variable(named: "y"))),
+        Nat.sub(Variable(named: "x"), Variable(named: "y"))
       )
     ],["nat", "nat"])
     self.add_operator("<", Nat.lt,[
@@ -115,18 +105,26 @@ public class Nat: ADT{
     ],["nat", "nat"])
     self.add_operator("gcd", Nat.gcd,[
       Rule(
-        Nat.gcd(Variable(named: "x"), Variable(named: "y")),
-        Variable(named: "x"),
-        Nat.eq(Variable(named: "y"), Nat.zero())
+        Nat.gcd(Nat.zero(), Variable(named: "x")),
+        vFail
+      ),
+      Rule(
+        Nat.gcd(Variable(named: "x"), Nat.zero()),
+        vFail
+      ),
+      Rule(
+        Nat.gcd(Variable(named: "x"), Variable(named: "x")),
+        Variable(named: "x")
       ),
       Rule(
         Nat.gcd(Variable(named: "x"), Variable(named: "y")),
-        Variable(named: "y"),
-        Nat.eq(Nat.mod(Variable(named: "x"), Variable(named: "y")), Nat.zero())
+        Nat.gcd(Nat.sub(Variable(named: "x"), Variable(named: "y")), Variable(named: "y")),
+        Nat.gt(Variable(named: "x"), Variable(named: "y"))
       ),
       Rule(
         Nat.gcd(Variable(named: "x"), Variable(named: "y")),
-        Nat.gcd(Variable(named: "y"), Nat.mod(Variable(named: "x"), Variable(named: "y")))
+        Nat.gcd(Variable(named: "x"), Nat.sub(Variable(named: "y"), Variable(named: "x"))),
+        Nat.gt(Variable(named: "y"), Variable(named: "x"))
       )
     ],["nat", "nat"])
     self.add_operator("/", Nat.div,[
@@ -237,9 +235,6 @@ public class Nat: ADT{
   public static func mul(_ operands: Term...)-> Term{
     return Operator.n("*",operands[0], operands[1])
   }
-  public static func pre(_ operands: Term...) -> Term{
-    return Operator.n("pre", operands[0])
-  }
   public static func sub(_ operands: Term...) -> Term{
     return Operator.n("-", operands[0], operands[1])
   }
@@ -268,6 +263,20 @@ public class Integer: ADT{
   public init(){
     super.init("int")
     self.add_generator("int", Integer.int)
+    self.add_operator("normalize", Integer.normalize, [
+      Rule(
+        Integer.normalize(Integer.int(Nat.zero(), Variable(named: "x"))),
+        Integer.int(Nat.zero(), Variable(named: "x"))
+      ),
+      Rule(
+        Integer.normalize(Integer.int(Variable(named: "x"), Nat.zero())),
+        Integer.int(Variable(named: "x"), Nat.zero())
+      ),
+      Rule(
+        Integer.normalize(Integer.int(Nat.succ(x: Variable(named: "x")), Nat.succ(x: Variable(named: "y")))),
+        Integer.normalize(Integer.int(Variable(named: "x"), Variable(named: "y")))
+      )
+    ], ["int"])
     self.add_operator("+", Integer.add, [
       Rule(
         Integer.add(
@@ -306,28 +315,6 @@ public class Integer: ADT{
           Integer.int(Variable(named: "a"),Variable(named: "b"))
         ),
         Nat.sub(Variable(named: "a"),Variable(named: "b"))
-      )
-    ], ["int"])
-    self.add_operator("normalize", Integer.normalize, [
-      Rule(
-        Integer.normalize(
-          Integer.int(Variable(named: "a"),Variable(named: "b"))
-        ),
-        Integer.int(Variable(named: "a"),Variable(named: "b")),
-        Boolean.or(
-          Nat.eq(Variable(named: "a"), Nat.zero()),
-          Nat.eq(Variable(named: "b"), Nat.zero())
-        )
-      ),
-      Rule(
-        Integer.normalize(
-          Integer.int(Variable(named: "a"),Variable(named: "b"))
-        ),
-        Integer.normalize(
-          Integer.int(
-            Nat.pre(Variable(named: "a")), Nat.pre(Variable(named: "b"))
-          )
-        )
       )
     ], ["int"])
     self.add_operator("*", Integer.mul, [
@@ -406,6 +393,10 @@ public class Integer: ADT{
     ], ["int", "int"])
     self.add_operator("sign", Integer.sign, [
       Rule(
+        Integer.sign(Integer.int(Variable(named: "a"), Variable(named: "a"))),
+        Boolean.True()
+      ),
+      Rule(
         Integer.sign(
           Integer.int(Variable(named: "a"),Variable(named: "b"))
         ),
@@ -418,6 +409,11 @@ public class Integer: ADT{
     //Condition for the division is a simple xor which verify
     //a < b xor c < d
     self.add_operator("/", Integer.div, [
+      Rule(
+        Integer.div(Variable(named: "x"), Variable(named: "y")),
+        vFail,
+        Integer.eq(Integer.n(0), Integer.normalize(Variable(named: "y")))
+      ),
       Rule(
         Integer.div(
           Integer.int(Variable(named: "a"),Variable(named: "b")),
