@@ -29,7 +29,7 @@ public class Multiset : ADT {
         Rule(Multiset.size(Multiset.empty()), Nat.zero()),
         Rule(
           Multiset.size(Multiset.cons(Variable(named: "x"), Variable(named: "rest"))),
-          Nat.succ(x: Multiset.size(Variable(named:"rest")))
+          Nat.succ(Multiset.size(Variable(named:"rest")))
         )
       ], ["multiset"])
       self.add_operator("rest", Multiset.rest, [

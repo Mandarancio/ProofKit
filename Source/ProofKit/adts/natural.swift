@@ -11,8 +11,8 @@ public class Nat: ADT{
     self.add_operator("+", Nat.add, [
       Rule(Nat.add(Variable(named: "x"), Nat.zero()),
                   Variable(named: "x")),
-             Rule(Nat.add(Variable(named: "x"), Nat.succ(x: Variable(named: "y"))),
-                  Nat.succ(x: Nat.add(Variable(named: "x"),Variable(named:"y"))))
+             Rule(Nat.add(Variable(named: "x"), Nat.succ(Variable(named: "y"))),
+                  Nat.succ(Nat.add(Variable(named: "x"),Variable(named:"y"))))
     ],["nat", "nat"])
     self.add_operator("*", Nat.mul,[
       Rule(
@@ -20,7 +20,7 @@ public class Nat: ADT{
         Nat.zero()
       ),
       Rule(
-        Nat.mul(Variable(named: "x"), Nat.succ(x: Variable(named: "y"))),
+        Nat.mul(Variable(named: "x"), Nat.succ(Variable(named: "y"))),
         Nat.add(Variable(named: "x"), Nat.mul(Variable(named: "x"), Variable(named: "y")))
       )
     ],["nat", "nat"])
@@ -34,7 +34,7 @@ public class Nat: ADT{
         Nat.zero()
       ),
       Rule(
-        Nat.sub(Nat.succ(x: Variable(named: "x")), Nat.succ(x: Variable(named: "y"))),
+        Nat.sub(Nat.succ(Variable(named: "x")), Nat.succ(Variable(named: "y"))),
         Nat.sub(Variable(named: "x"), Variable(named: "y"))
       )
     ],["nat", "nat"])
@@ -48,7 +48,7 @@ public class Nat: ADT{
         Boolean.True()
       ),
       Rule(
-        Nat.lt(Nat.succ(x: Variable(named: "x")), Nat.succ(x: Variable(named: "y"))),
+        Nat.lt(Nat.succ(Variable(named: "x")), Nat.succ(Variable(named: "y"))),
         Nat.lt(Variable(named: "x"), Variable(named: "y"))
       )
     ],["nat", "nat"])
@@ -62,7 +62,7 @@ public class Nat: ADT{
         Boolean.True()
       ),
       Rule(
-        Nat.gt(Nat.succ(x: Variable(named: "x")), Nat.succ(x: Variable(named: "y"))),
+        Nat.gt(Nat.succ(Variable(named: "x")), Nat.succ(Variable(named: "y"))),
         Nat.gt(Variable(named: "x"), Variable(named: "y"))
       )
     ],["nat", "nat"])
@@ -80,7 +80,7 @@ public class Nat: ADT{
         Boolean.False()
       ),
       Rule(
-        Nat.eq(Nat.succ(x: Variable(named: "x")), Nat.succ(x:  Variable(named: "y"))),
+        Nat.eq(Nat.succ(Variable(named: "x")), Nat.succ(Variable(named: "y"))),
         Nat.eq(Variable(named: "x"), Variable(named: "y"))
       )
     ],["nat", "nat"])
@@ -140,7 +140,7 @@ public class Nat: ADT{
       Rule(
         Nat.div(Variable(named: "x"), Variable(named: "y")),
         Nat.succ(
-          x: Nat.div(
+          Nat.div(
             Nat.sub(
               Variable(named: "x"),
               Variable(named: "y")
@@ -162,7 +162,7 @@ public class Nat: ADT{
     return new_term(Value<Int>(0),"nat")
   }
 
-  static public func succ(x: Term...) -> Term {
+  static public func succ(_ x: Term...) -> Term {
     return new_term(Map(["succ": x[0]]),"nat")
   }
 
@@ -172,7 +172,7 @@ public class Nat: ADT{
     }
     var t = Nat.zero()
     for _ in 1..<x+1 {
-      t = Nat.succ(x: t)
+      t = Nat.succ(t)
     }
     return t
   }
@@ -188,7 +188,7 @@ public class Nat: ADT{
   }
 
   public class override func belong(_ x: Term) -> Goal{
-    return (x === Nat.zero() || delayed(fresh {y in x === Nat.succ(x:y) && Nat.belong(y)}))
+    return (x === Nat.zero() || delayed(fresh {y in x === Nat.succ(y) && Nat.belong(y)}))
   }
 
   public override func pprint(_ term: Term) -> String{

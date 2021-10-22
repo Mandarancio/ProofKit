@@ -15,7 +15,7 @@ public class Integer: ADT{
         Integer.int(Variable(named: "x"), Nat.zero())
       ),
       Rule(
-        Integer.normalize(Integer.int(Nat.succ(x: Variable(named: "x")), Nat.succ(x: Variable(named: "y")))),
+        Integer.normalize(Integer.int(Nat.succ(Variable(named: "x")), Nat.succ(Variable(named: "y")))),
         Integer.normalize(Integer.int(Variable(named: "x"), Variable(named: "y")))
       )
     ], ["int"])

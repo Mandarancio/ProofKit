@@ -12,7 +12,7 @@ public class Sequence : ADT {
       ),
       Rule(
         Sequence.push(Variable(named:"push.1.$0"), Sequence.cons(Variable(named:"push.1.$1"), Variable(named:"push.1.$2"), Variable(named:"push.1.$3"))),
-        Sequence.cons(Variable(named:"push.1.$0"), Nat.succ(x:Variable(named:"push.1.$2")), Sequence.cons(Variable(named:"push.1.$1"), Variable(named:"push.1.$2"), Variable(named:"push.1.$3")))
+        Sequence.cons(Variable(named:"push.1.$0"), Nat.succ(Variable(named:"push.1.$2")), Sequence.cons(Variable(named:"push.1.$1"), Variable(named:"push.1.$2"), Variable(named:"push.1.$3")))
       )
     ],["any", "sequence"])
     self.add_operator("get", Sequence.getAt,[
