@@ -8,6 +8,22 @@ public class Multiset : ADT {
 
       self.add_generator("empty", Multiset.empty)
       self.add_generator("cons", Multiset.cons, arity:2)
+      self.add_operator("==",Multiset.eq,[
+        Rule(
+          Multiset.eq(Variable(named:"x"),Variable(named:"x")),
+          Boolean.True()
+        ),
+        Rule(
+          Multiset.eq(Multiset.cons(Variable(named:"first"),Variable(named:"rest")),Variable(named:"rhs")),
+          Boolean.False(),
+          Boolean.or(Boolean.not(Multiset.contains(Variable(named:"rhs"), Variable(named:"first"))), Boolean.not(Nat.eq(Nat.add(Multiset.size(Variable(named:"rest")),Nat.n(1)), Multiset.size(Variable(named:"rhs")))))
+        ),
+        Rule(
+          Multiset.eq(Multiset.cons(Variable(named:"first"),Variable(named:"rest")),Variable(named:"rhs")),
+          Multiset.eq(Variable(named:"rest"), Multiset.removeOne(Variable(named:"rhs"), Variable(named:"first"))),
+          Boolean.and(Multiset.contains(Variable(named:"rhs"), Variable(named:"first")), Nat.eq(Nat.add(Multiset.size(Variable(named:"rest")),Nat.n(1)), Multiset.size(Variable(named:"rhs"))))
+        )
+      ], ["multiset", "multiset"])
       self.add_operator("concat", Multiset.concat, [
         Rule(Multiset.concat(Multiset.empty(),Variable(named: "x")),Variable(named: "x")),
         Rule(
@@ -48,11 +64,7 @@ public class Multiset : ADT {
       ], ["multiset"])
       self.add_operator("removeOne", Multiset.removeOne,[
         Rule(
-          Multiset.removeOne(Variable(named:"x"),Multiset.empty()),
-          Variable(named:"x")
-        ),
-        Rule(
-          Multiset.removeOne(Multiset.empty(),Variable(named:"element")),
+          Multiset.removeOne(Multiset.empty(), Variable(named:"element")),
           Multiset.empty()
         ),
         Rule(
@@ -80,22 +92,6 @@ public class Multiset : ADT {
           Multiset.contains(Variable(named:"set"), Variable(named:"element"))
         )
       ], ["multiset", "any"])
-      self.add_operator("==",Multiset.eq,[
-        Rule(
-          Multiset.eq(Variable(named:"x"),Variable(named:"x")),
-          Boolean.True()
-        ),
-        Rule(
-          Multiset.eq(Multiset.cons(Variable(named:"first"),Variable(named:"rest")),Variable(named:"rhs")),
-          Boolean.False(),
-          Boolean.or(Boolean.not(Multiset.contains(Variable(named:"rhs"), Variable(named:"first"))), Boolean.not(Nat.eq(Nat.add(Multiset.size(Variable(named:"rest")),Nat.n(1)), Multiset.size(Variable(named:"rhs")))))
-        ),
-        Rule(
-          Multiset.eq(Multiset.cons(Variable(named:"first"),Variable(named:"rest")),Variable(named:"rhs")),
-          Multiset.eq(Variable(named:"rest"), Multiset.removeOne(Variable(named:"rhs"), Variable(named:"first"))),
-          Boolean.and(Multiset.contains(Variable(named:"rhs"), Variable(named:"first")), Nat.eq(Nat.add(Multiset.size(Variable(named:"rest")),Nat.n(1)), Multiset.size(Variable(named:"rhs"))))
-        )
-      ], ["multiset", "multiset"])
     }
 
     public static func empty(_ :Term...) -> Term{
