@@ -129,7 +129,7 @@ public class Set : ADT {
       Rule(Set.size(Set.empty()), Nat.zero()),
       Rule(
         Set.size(Set.cons(Variable(named: "x"), Variable(named: "rest"))),
-        Nat.succ(x: Set.size(Variable(named:"rest")))
+        Nat.succ(Set.size(Variable(named:"rest")))
       )
       ], ["set"])
 //    self.add_operator("norm", Set.norm,[

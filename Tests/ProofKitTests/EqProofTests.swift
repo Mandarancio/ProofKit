@@ -54,15 +54,15 @@ class EqProofTests: XCTestCase {
     let t5 = Proof.transitivity (t3, t4)
     print("t5 - transitivity[t3,t4]\n\t\(t5)")
     self.TAssert(t5, Rule(
-      Nat.add(Variable(named: "a"), Nat.succ(x: Nat.zero())),
-      Nat.succ(x: Variable(named:"a"))
+      Nat.add(Variable(named: "a"), Nat.succ(Nat.zero())),
+      Nat.succ(Variable(named:"a"))
     ))
   }
 
   func testEquationalProof(){
     let a_proof = Rule(Nat.add(Variable(named: "x"), Nat.zero()), Variable(named:"x"))
     let b_proof = Rule(Nat.add(Variable(named: "z"), Nat.zero()), Variable(named:"z"))
-    let c_proof = Rule(Nat.add(Variable(named: "z"), Nat.succ(x: Variable(named:"y"))), Nat.succ(x: Nat.add(Variable(named:"z"), Variable(named: "y"))))
+    let c_proof = Rule(Nat.add(Variable(named: "z"), Nat.succ(Variable(named:"y"))), Nat.succ(Nat.add(Variable(named:"z"), Variable(named: "y"))))
     self.TAssert(a_proof, b_proof)
     self.FAssert(a_proof, c_proof)
     // reflexivity
@@ -104,14 +104,14 @@ class EqProofTests: XCTestCase {
     self.TAssert(t, Rule(Nat.add(Nat.zero(), Nat.zero()), Nat.zero()))
 
     print("Can apply substitution")
-    t = Proof.substitution(ADTm["nat"].a("+")[0], Variable(named:"x"), Nat.succ(x:Variable(named: "y")))
-    self.TAssert(t, Rule(Nat.add(Nat.succ(x: Variable(named: "y")), Nat.zero()), Nat.succ(x: Variable(named: "y"))))
+    t = Proof.substitution(ADTm["nat"].a("+")[0], Variable(named:"x"), Nat.succ(Variable(named: "y")))
+    self.TAssert(t, Rule(Nat.add(Nat.succ(Variable(named: "y")), Nat.zero()), Nat.succ(Variable(named: "y"))))
 
     print("Can apply substitutivity")
     t = Proof.substitutivity(Nat.succ, [ADTm["nat"].a("+")[0]])
     self.TAssert(t, Rule(
-      Nat.succ(x: Nat.add(Variable(named:"x"), Nat.zero())),
-      Nat.succ(x: Variable(named:"x"))
+      Nat.succ(Nat.add(Variable(named:"x"), Nat.zero())),
+      Nat.succ(Variable(named:"x"))
     ))
 
     // print("Can apply cut")

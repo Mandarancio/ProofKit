@@ -13,7 +13,7 @@ Currently implemented ADT and Operators
 |ADT|Generators|Constructor|Operators|
 |---|----------|-----------|---------|
 |Boolean|```True() False()```|```n(Bool)```|```not(x) and(x,y) or(x,y)```|
-|Nat|```zero() succ(x)```|```n(Int)```|```add(x,y) mul(x,y) pre(x) sub(x,y) div(x,y) mod(x) lt(x,y) gt(x,y) eq(x,y) gcd(x,y) ```|
+|Nat|```zero() succ(x)```|```n(Int)```|```add(x,y) mul(x,y) sub(x,y) div(x,y) mod(x) lt(x,y) gt(x,y) eq(x,y) gcd(x,y) ```|
 |Integer|```int(x,y)```|```n(Int)```|```add(x,y) mul(x,y) sub(x,y) div(x,y) abs(x), normalize(x) lt(x,y) gt(x,y) eq(x,y) sign(x) ```|
 |[Multiset](https://en.wikipedia.org/wiki/Linked_list)|```empty() cons(first, rest)```|```n([Term])```|```first(x) rest(x) contains(x,y) size(x) concat(x,y) removeOne(x,y) removeAll(x,y) eq(x,y)```|
 |[Set](https://en.wikipedia.org/wiki/Set_%28abstract_data_type%29)|```empty() cons(first, rest)```|```n([Term])```|```union(x,y) subSet(x,y) intersection(x,y) difference(x,y)  contains(x,y) size(x) removeOne(x,y) eq(x,y) insert(x,y)```|
