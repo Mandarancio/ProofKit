@@ -24,16 +24,21 @@ public func is_solvable(_ g :Goal)->Bool{
   return false
 }
 
+// The substitution table allows to anonymize parameters using a counter.
+// Thus, if we compare two rules, they can be equivalent without having same name parameters. (e.g.: x + y = y + x <=> y + x = x + y)
+// Such a counter  can be delicate to use, cause it depends on the order of the parameters.
+// Map is like a map, and there is no guarantee to browse elements in the same order between each run.
+// Fortunately, Swift Kanren keeps a trace using its keys. We can sort the dictionnary by its key to ensure the same order exploration between each iteration.
 internal func create_subst_table(_ l: Term, _ id: String, _ counter: inout Int, _ variables: inout [Variable:Variable]){
   if let lv = (l as? Variable){
     // let name = lv.name
     if variables[lv] == nil{
-      variables[lv] = Variable(named: "\(id)#\(counter)")
+      variables[lv] = Variable(named: "#\(counter)")
       counter += 1
     }
   }
   if let lm = (l as? Map){
-    for (_, v) in lm {
+    for (_, v) in lm.sorted(by: {$0.key  < $1.key}) {
       create_subst_table(v, id, &counter, &variables)
     }
   }
@@ -136,9 +141,7 @@ public func equivalence(_ a: Term, _ b: Term) ->Bool{
   if a.equals(b){
     return true
   }
-  if a is Variable && b is Variable{
-    return true
-  }
+  
   if a is Map && b is Map{
     let am = a as! Map
     let bm = b as! Map
